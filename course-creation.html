@@ -1,0 +1,2059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoLearn - Create New Course</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-tertiary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-cyan: #00ffff;
+            --accent-magenta: #ff00ff;
+            --accent-green: #00ff00;
+            --accent-yellow: #ffff00;
+            --accent-red: #ff3333;
+            --card-bg: rgba(30, 30, 30, 0.7);
+            --glow-shadow: 0 0 10px var(--accent-cyan);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 0, 0.05) 0%, transparent 30%);
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: var(--bg-secondary);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            border-right: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-header svg {
+            width: 30px;
+            height: 30px;
+        }
+        
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-magenta));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+        
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+            gap: 0.8rem;
+            border-left: 3px solid transparent;
+        }
+        
+        .menu-item:hover, .menu-item.active {
+            background-color: rgba(0, 255, 255, 0.1);
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+        }
+        
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .menu-category {
+            padding: 0.8rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+        }
+        
+        .user-profile {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            position: sticky;
+            bottom: 0;
+            background-color: var(--bg-secondary);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-magenta);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+        }
+        
+        .user-info {
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .user-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Content Area Styles */
+        .content-area {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+        
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent-magenta);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+        }
+        
+        .actions-group {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--accent-cyan), #0099cc);
+            color: black;
+        }
+        
+        .btn-primary:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
+        .btn-secondary {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-success {
+            background: linear-gradient(to right, var(--accent-green), #00cc00);
+            color: black;
+        }
+        
+        .btn-success:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(to right, var(--accent-red), #cc0000);
+            color: black;
+        }
+        
+        .btn-danger:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        
+        /* Course Creation Form */
+        .course-creation-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .form-section-title {
+            font-size: 1.3rem;
+            color: var(--accent-cyan);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group {
+            flex: 1;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-row .form-group {
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 5px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+        
+        .form-text {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* File Upload */
+        .thumbnail-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .thumbnail-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            background-color: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed rgba(0, 255, 255, 0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .thumbnail-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        
+        .thumbnail-placeholder {
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .upload-btn {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .upload-btn:hover {
+            background-color: rgba(0, 255, 255, 0.1);
+            border-color: var(--accent-cyan);
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        /* Tabs for Content Creation */
+        .tab-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab-list {
+            display: flex;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab-item {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            color: var(--text-secondary);
+        }
+        
+        .tab-item:hover {
+            color: var(--text-primary);
+            background-color: rgba(0, 255, 255, 0.05);
+        }
+        
+        .tab-item.active {
+            color: var(--accent-cyan);
+            border-bottom-color: var(--accent-cyan);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Course Structure */
+        .course-structure {
+            margin-bottom: 2rem;
+        }
+        
+        .section-container {
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 1rem 1.5rem;
+            background-color: rgba(0, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .section-number {
+            color: var(--accent-cyan);
+            margin-right: 0.5rem;
+        }
+        
+        .section-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .section-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0.3rem;
+            font-size: 0.9rem;
+        }
+        
+        .section-action-btn:hover {
+            color: var(--accent-cyan);
+        }
+        
+        .section-content {
+            padding: 1rem 1.5rem;
+            display: none;
+        }
+        
+        .section-content.active {
+            display: block;
+        }
+        
+        .section-form {
+            margin-bottom: 1.5rem;
+        }
+        
+        .lectures-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .lecture-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background-color: var(--bg-secondary);
+            border-radius: 5px;
+            margin-bottom: 0.8rem;
+            cursor: grab;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .lecture-item:hover {
+            border-color: rgba(0, 255, 255, 0.2);
+        }
+        
+        .lecture-drag-handle {
+            color: var(--text-secondary);
+            cursor: grab;
+            margin-right: 0.5rem;
+        }
+        
+        .lecture-title {
+            flex: 1;
+        }
+        
+        .lecture-type {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+            border-radius: 20px;
+            margin: 0 0.5rem;
+        }
+        
+        .type-video {
+            background-color: rgba(0, 255, 255, 0.1);
+            color: var(--accent-cyan);
+        }
+        
+        .type-text {
+            background-color: rgba(255, 0, 255, 0.1);
+            color: var(--accent-magenta);
+        }
+        
+        .type-quiz {
+            background-color: rgba(255, 255, 0, 0.1);
+            color: var(--accent-yellow);
+        }
+        
+        .type-assignment {
+            background-color: rgba(0, 255, 0, 0.1);
+            color: var(--accent-green);
+        }
+        
+        .lecture-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .add-lecture-btn {
+            width: 100%;
+            padding: 0.8rem;
+            text-align: center;
+            border: 2px dashed rgba(0, 255, 255, 0.2);
+            background-color: rgba(0, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .add-lecture-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+        
+        .add-section-btn {
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            border: 2px dashed rgba(0, 255, 255, 0.2);
+            background-color: rgba(0, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 2rem;
+        }
+        
+        .add-section-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+        
+        /* Course Settings */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-tertiary);
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--text-secondary);
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: rgba(0, 255, 255, 0.3);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+            background-color: var(--accent-cyan);
+        }
+        
+        .toggle-label {
+            margin-left: 3rem;
+            color: var(--text-secondary);
+        }
+        
+        input:checked ~ .toggle-label {
+            color: var(--text-primary);
+        }
+        
+        /* Pricing Options */
+        .pricing-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .pricing-option {
+            flex: 1;
+            background-color: var(--bg-tertiary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .pricing-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-color: rgba(0, 255, 255, 0.3);
+        }
+        
+        .pricing-option.selected {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
+        .price-type {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-cyan);
+        }
+        
+        .price-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .custom-price-input {
+            display: none;
+            margin-top: 1rem;
+        }
+        
+        .custom-price-input.active {
+            display: block;
+        }
+        
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        /* Add Lecture Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: var(--bg-secondary);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            transform: scale(0.9);
+            transition: all 0.3s;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            color: var(--accent-cyan);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-close:hover {
+            color: var(--accent-cyan);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        /* Rich Text Editor */
+        .rich-text-editor {
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background-color: var(--bg-tertiary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+        }
+        
+        .toolbar-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.3rem 0.5rem;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .toolbar-btn:hover {
+            background-color: rgba(0, 255, 255, 0.1);
+            color: var(--accent-cyan);
+        }
+        
+        .editor-content {
+            min-height: 200px;
+            padding: 1rem;
+            color: var(--text-primary);
+            background-color: var(--bg-tertiary);
+        }
+        
+        .toolbar-separator {
+            width: 1px;
+            height: 24px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 0 0.3rem;
+        }
+        
+        /* Video Upload Area */
+        .video-upload-area {
+            border: 2px dashed rgba(0, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            background-color: var(--bg-tertiary);
+            transition: all 0.3s;
+        }
+        
+        .video-upload-area:hover {
+            border-color: var(--accent-cyan);
+        }
+        
+        .video-preview {
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto 0;
+            border-radius: 8px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        /* Quiz Builder */
+        .quiz-builder {
+            margin-bottom: 1.5rem;
+        }
+        
+        .question-container {
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .question-number {
+            font-weight: bold;
+            color: var(--accent-cyan);
+        }
+        
+        .answer-option {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            background-color: var(--bg-secondary);
+            border-radius: 5px;
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .answer-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .answer-text {
+            flex: 1;
+        }
+        
+        .add-option-btn {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            text-align: center;
+            border: 1px dashed rgba(0, 255, 255, 0.2);
+            background-color: rgba(0, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        
+        .add-option-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+        
+        .add-question-btn {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            text-align: center;
+            border: 2px dashed rgba(0, 255, 255, 0.2);
+            background-color: rgba(0, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .add-question-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+        
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: visible;
+            }
+            
+            .sidebar-header {
+                justify-content: center;
+                padding: 1rem 0;
+            }
+            
+            .logo-text {
+                display: none;
+            }
+            
+            .menu-item span, .menu-category, .user-info {
+                display: none;
+            }
+            
+            .menu-item {
+                justify-content: center;
+                padding: 0.8rem 0;
+            }
+            
+            .user-profile {
+                justify-content: center;
+                padding: 1rem 0;
+            }
+            
+            .content-area {
+                margin-left: 70px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .pricing-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feFlood flood-color="#00ffff" flood-opacity="0.7" result="glow" />
+                        <feComposite in="glow" in2="blur" operator="in" result="softGlow" />
+                        <feComposite in="SourceGraphic" in2="softGlow" operator="over" />
+                    </filter>
+                </defs>
+                <rect width="64" height="64" rx="8" ry="8" fill="#121212" />
+                <path d="M18 16 L18 48 L26 48 L26 28 L38 48 L46 48 L46 16 L38 16 L38 36 L26 16 Z" 
+                    fill="#121212" 
+                    stroke="#00ffff" 
+                    stroke-width="2.5" 
+                    filter="url(#neonGlow)" />
+                <rect x="16" y="52" width="32" height="2" rx="1" ry="1" fill="#ff00ff" filter="url(#neonGlow)" />
+            </svg>
+            <span class="logo-text">NeoLearn</span>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item">
+                <i>📊</i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" class="menu-item active">
+                <i>📚</i>
+                <span>My Courses</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i>📝</i>
+                <span>Content Creation</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i>👨‍👩‍👧‍👦</i>
+                <span>Students</span>
+            </a>
+            
+            <div class="menu-category">Analytics</div>
+            <a href="#" class="menu-item">
+                <i>📈</i>
+                <span>Performance</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i>💰</i>
+                <span>Revenue</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i>💬</i>
+                <span>Feedback</span>
+            </a>
+            
+            <div class="menu-category">Account</div>
+            <a href="#" class="menu-item">
+                <i>⚙️</i>
+                <span>Settings</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i>🔔</i>
+                <span>Notifications</span>
+            </a>
+            <a href="#" class="menu-item">
+                <i>🚪</i>
+                <span>Logout</span>
+            </a>
+        </nav>
+        
+        <div class="user-profile">
+            <div class="user-avatar">DC</div>
+            <div class="user-info">
+                <div class="user-name">David Chen</div>
+                <div class="user-role">Instructor</div>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- Main Content Area -->
+    <main class="content-area">
+        <div class="top-bar">
+            <h1 class="page-title">Create New Course</h1>
+            
+            <div class="actions-group">
+                <button class="btn btn-secondary" id="save-draft-btn">
+                    <span>💾</span> Save Draft
+                </button>
+                <button class="btn btn-success" id="publish-btn">
+                    <span>🚀</span> Publish Course
+                </button>
+                <div class="notification-icon">
+                    <span>🔔</span>
+                    <span class="notification-count">3</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tab-container">
+            <div class="tab-list">
+                <div class="tab-item active" data-tab="course-info">Course Information</div>
+                <div class="tab-item" data-tab="course-content">Course Content</div>
+                <div class="tab-item" data-tab="course-settings">Settings & Pricing</div>
+            </div>
+            
+            <!-- Course Information Tab -->
+            <div class="tab-content active" id="course-info">
+                <div class="course-creation-card">
+                    <div class="form-section">
+                        <h3 class="form-section-title">Basic Information</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="course-title">Course Title*</label>
+                            <input type="text" class="form-control" id="course-title" placeholder="Enter a compelling title for your course">
+                            <div class="form-text">Your title should be clear, specific, and attention-grabbing (60 characters max)</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="course-subtitle">Course Subtitle*</label>
+                            <input type="text" class="form-control" id="course-subtitle" placeholder="A brief description that appears below your title">
+                            <div class="form-text">Use this space to highlight what students will learn (120 characters max)</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="course-description">Course Description*</label>
+                            <textarea class="form-control" id="course-description" placeholder="Provide a detailed description of your course"></textarea>
+                            <div class="form-text">Explain what students will learn, your teaching approach, and why they should take this course</div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="course-category">Course Category*</label>
+                                <select class="form-control" id="course-category">
+                                    <option value="">Select a category</option>
+                                    <option value="web-development">Web Development</option>
+                                    <option value="mobile-development">Mobile Development</option>
+                                    <option value="data-science">Data Science</option>
+                                    <option value="ai-ml">AI & Machine Learning</option>
+                                    <option value="design">Design</option>
+                                    <option value="business">Business</option>
+                                    <option value="marketing">Marketing</option>
+                                    <option value="lifestyle">Lifestyle</option>
+                                    <option value="photography">Photography</option>
+                                    <option value="music">Music</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="course-subcategory">Subcategory</label>
+                                <select class="form-control" id="course-subcategory">
+                                    <option value="">Select a subcategory</option>
+                                    <!-- Dynamic options will be loaded based on category selection -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="course-level">Course Level*</label>
+                                <select class="form-control" id="course-level">
+                                    <option value="">Select course level</option>
+                                    <option value="beginner">Beginner</option>
+                                    <option value="intermediate">Intermediate</option>
+                                    <option value="advanced">Advanced</option>
+                                    <option value="all-levels">All Levels</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="course-language">Course Language*</label>
+                                <select class="form-control" id="course-language">
+                                    <option value="english">English</option>
+                                    <option value="spanish">Spanish</option>
+                                    <option value="french">French</option>
+                                    <option value="german">German</option>
+                                    <option value="chinese">Chinese</option>
+                                    <option value="japanese">Japanese</option>
+                                    <option value="korean">Korean</option>
+                                    <option value="arabic">Arabic</option>
+                                    <option value="portuguese">Portuguese</option>
+                                    <option value="russian">Russian</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3 class="form-section-title">Course Thumbnail</h3>
+                        
+                        <div class="form-group">
+                            <div class="thumbnail-upload">
+                                <div class="thumbnail-preview">
+                                    <div class="thumbnail-placeholder">
+                                        <div class="upload-icon">🖼️</div>
+                                        <p>Upload a high-quality image that represents your course</p>
+                                        <p>Recommended size: 1280 x 720 pixels (16:9 ratio)</p>
+                                    </div>
+                                    <img id="thumbnail-img">
+                                </div>
+                                
+                                <div>
+                                    <button type="button" class="upload-btn" onclick="document.getElementById('thumbnail-upload').click()">
+                                        <span>📁</span> Choose Image
+                                    </button>
+                                    <input type="file" id="thumbnail-upload" class="file-input" accept="image/*" onchange="previewThumbnail(event)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3 class="form-section-title">Learning Objectives</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">What will students learn in this course?*</label>
+                            <div id="learning-objectives">
+                                <div class="form-group">
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <input type="text" class="form-control" placeholder="e.g., Build responsive websites using HTML, CSS, and JavaScript">
+                                        <button type="button" class="btn btn-danger" style="padding: 0.5rem;" title="Remove objective">✕</button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <input type="text" class="form-control" placeholder="e.g., Implement modern design patterns and best practices">
+                                        <button type="button" class="btn btn-danger" style="padding: 0.5rem;" title="Remove objective">✕</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="add-objective" class="btn btn-secondary" style="margin-top: 0.5rem;">
+                                <span>➕</span> Add Learning Objective
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3 class="form-section-title">Requirements</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">What are the prerequisites for taking this course?</label>
+                            <div id="course-requirements">
+                                <div class="form-group">
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <input type="text" class="form-control" placeholder="e.g., Basic understanding of HTML and CSS">
+                                        <button type="button" class="btn btn-danger" style="padding: 0.5rem;" title="Remove requirement">✕</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="add-requirement" class="btn btn-secondary" style="margin-top: 0.5rem;">
+                                <span>➕</span> Add Requirement
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-primary" id="next-to-content">Save & Continue</button>
+                </div>
+            </div>
+            
+            <!-- Course Content Tab -->
+            <div class="tab-content" id="course-content">
+                <div class="course-creation-card">
+                    <div class="form-section">
+                        <h3 class="form-section-title">Course Structure</h3>
+                        <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">
+                            Organize your course into sections and lectures. Drag and drop to reorder.
+                        </p>
+                        
+                        <div class="course-structure">
+                            <div class="section-container">
+                                <div class="section-header">
+                                    <div>
+                                        <span class="section-number">Section 1:</span>
+                                        <span>Introduction to the Course</span>
+                                    </div>
+                                    <div class="section-actions">
+                                        <button class="section-action-btn" title="Edit Section">✏️</button>
+                                        <button class="section-action-btn" title="Delete Section">🗑️</button>
+                                        <button class="section-action-btn toggle-section">▼</button>
+                                    </div>
+                                </div>
+                                <div class="section-content active">
+                                    <div class="section-form">
+                                        <div class="form-group">
+                                            <label class="form-label" for="section-title-1">Section Title</label>
+                                            <input type="text" class="form-control" id="section-title-1" value="Introduction to the Course">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="section-description-1">Section Description (Optional)</label>
+                                            <textarea class="form-control" id="section-description-1" placeholder="Brief overview of what this section covers"></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <label class="form-label">Lectures:</label>
+                                    <ul class="lectures-list">
+                                        <li class="lecture-item">
+                                            <span class="lecture-drag-handle">☰</span>
+                                            <span class="lecture-title">Welcome to the Course</span>
+                                            <span class="lecture-type type-video">Video</span>
+                                            <span style="color: var(--text-secondary);">5:20</span>
+                                            <div class="lecture-actions">
+                                                <button class="section-action-btn" title="Edit Lecture">✏️</button>
+                                                <button class="section-action-btn" title="Delete Lecture">🗑️</button>
+                                            </div>
+                                        </li>
+                                        <li class="lecture-item">
+                                            <span class="lecture-drag-handle">☰</span>
+                                            <span class="lecture-title">Course Overview</span>
+                                            <span class="lecture-type type-video">Video</span>
+                                            <span style="color: var(--text-secondary);">8:45</span>
+                                            <div class="lecture-actions">
+                                                <button class="section-action-btn" title="Edit Lecture">✏️</button>
+                                                <button class="section-action-btn" title="Delete Lecture">🗑️</button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    
+                                    <button class="add-lecture-btn" data-section="1">
+                                        <span>➕</span> Add Lecture
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="section-container">
+                                <div class="section-header">
+                                    <div>
+                                        <span class="section-number">Section 2:</span>
+                                        <span>Getting Started with the Basics</span>
+                                    </div>
+                                    <div class="section-actions">
+                                        <button class="section-action-btn" title="Edit Section">✏️</button>
+                                        <button class="section-action-btn" title="Delete Section">🗑️</button>
+                                        <button class="section-action-btn toggle-section">▼</button>
+                                    </div>
+                                </div>
+                                <div class="section-content">
+                                    <div class="section-form">
+                                        <div class="form-group">
+                                            <label class="form-label" for="section-title-2">Section Title</label>
+                                            <input type="text" class="form-control" id="section-title-2" value="Getting Started with the Basics">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="section-description-2">Section Description (Optional)</label>
+                                            <textarea class="form-control" id="section-description-2" placeholder="Brief overview of what this section covers"></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <label class="form-label">Lectures:</label>
+                                    <ul class="lectures-list">
+                                        <li class="lecture-item">
+                                            <span class="lecture-drag-handle">☰</span>
+                                            <span class="lecture-title">Setting Up Your Environment</span>
+                                            <span class="lecture-type type-video">Video</span>
+                                            <span style="color: var(--text-secondary);">12:30</span>
+                                            <div class="lecture-actions">
+                                                <button class="section-action-btn" title="Edit Lecture">✏️</button>
+                                                <button class="section-action-btn" title="Delete Lecture">🗑️</button>
+                                            </div>
+                                        </li>
+                                        <li class="lecture-item">
+                                            <span class="lecture-drag-handle">☰</span>
+                                            <span class="lecture-title">Understanding the Fundamentals</span>
+                                            <span class="lecture-type type-text">Text</span>
+                                            <span style="color: var(--text-secondary);">--</span>
+                                            <div class="lecture-actions">
+                                                <button class="section-action-btn" title="Edit Lecture">✏️</button>
+                                                <button class="section-action-btn" title="Delete Lecture">🗑️</button>
+                                            </div>
+                                        </li>
+                                        <li class="lecture-item">
+                                            <span class="lecture-drag-handle">☰</span>
+                                            <span class="lecture-title">Basic Concepts Quiz</span>
+                                            <span class="lecture-type type-quiz">Quiz</span>
+                                            <span style="color: var(--text-secondary);">5 Questions</span>
+                                            <div class="lecture-actions">
+                                                <button class="section-action-btn" title="Edit Lecture">✏️</button>
+                                                <button class="section-action-btn" title="Delete Lecture">🗑️</button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    
+                                    <button class="add-lecture-btn" data-section="2">
+                                        <span>➕</span> Add Lecture
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="add-section-btn">
+                            <span>➕</span> Add New Section
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-secondary" id="back-to-info">Back to Course Info</button>
+                    <button class="btn btn-primary" id="next-to-settings">Save & Continue</button>
+                </div>
+            </div>
+            
+            <!-- Course Settings Tab -->
+            <div class="tab-content" id="course-settings">
+                <div class="course-creation-card">
+                    <div class="form-section">
+                        <h3 class="form-section-title">Pricing</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Course Pricing Model*</label>
+                            
+                            <div class="pricing-options">
+                                <div class="pricing-option selected" data-price-type="free">
+                                    <div class="price-type">Free</div>
+                                    <div class="price-description">Make your course available to everyone at no cost</div>
+                                </div>
+                                
+                                <div class="pricing-option" data-price-type="one-time">
+                                    <div class="price-type">One-time Purchase</div>
+                                    <div class="price-description">Charge a single payment for lifetime access</div>
+                                </div>
+                                
+                                <div class="pricing-option" data-price-type="subscription">
+                                    <div class="price-type">Subscription</div>
+                                    <div class="price-description">Include in subscription plan or bundle</div>
+                                </div>
+                            </div>
+                            
+                            <div id="custom-price" class="custom-price-input">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label" for="course-price">Course Price ($)*</label>
+                                        <input type="number" class="form-control" id="course-price" min="0" step="0.01" placeholder="e.g., 19.99">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label" for="course-discount">Discounted Price ($)</label>
+                                        <input type="number" class="form-control" id="course-discount" min="0" step="0.01" placeholder="e.g., 14.99">
+                                        <div class="form-text">Optional: Offer a promotional discount</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3 class="form-section-title">Course Settings</h3>
+                        
+                        <div class="form-group">
+                            <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="drip-content">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <div>
+                                    <label class="form-label" style="margin-bottom: 0;">Drip Content</label>
+                                    <div class="form-text">Release content gradually over time</div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="download-enabled">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <div>
+                                    <label class="form-label" style="margin-bottom: 0;">Enable Content Downloads</label>
+                                    <div class="form-text">Allow students to download course materials</div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; margin-bottom: 1.5rem;">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="certificate-enabled" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <div>
+                                    <label class="form-label" style="margin-bottom: 0;">Course Certificate</label>
+                                    <div class="form-text">Issue a certificate upon course completion</div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center;">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="discussion-enabled" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <div>
+                                    <label class="form-label" style="margin-bottom: 0;">Discussion Forum</label>
+                                    <div class="form-text">Enable Q&A and discussion for this course</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3 class="form-section-title">Course Visibility</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Who can see this course?*</label>
+                            <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                                <div>
+                                    <input type="radio" id="visibility-public" name="visibility" value="public" checked>
+                                    <label for="visibility-public">Public (visible to everyone)</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="visibility-unlisted" name="visibility" value="unlisted">
+                                    <label for="visibility-unlisted">Unlisted (accessible only via direct link)</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="visibility-private" name="visibility" value="private">
+                                    <label for="visibility-private">Private (visible only to invited students)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button class="btn btn-secondary" id="back-to-content">Back to Course Content</button>
+                    <button class="btn btn-success" id="save-and-publish">Save & Publish</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Add Lecture Modal -->
+    <div class="modal-overlay" id="add-lecture-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Lecture</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="lecture-title">Lecture Title*</label>
+                    <input type="text" class="form-control" id="lecture-title" placeholder="Enter lecture title">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Lecture Type*</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-secondary lecture-type-btn active" data-type="video">
+                            <span>🎬</span> Video
+                        </button>
+                        <button class="btn btn-secondary lecture-type-btn" data-type="text">
+                            <span>📝</span> Text
+                        </button>
+                        <button class="btn btn-secondary lecture-type-btn" data-type="quiz">
+                            <span>📋</span> Quiz
+                        </button>
+                        <button class="btn btn-secondary lecture-type-btn" data-type="assignment">
+                            <span>📚</span> Assignment
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Video Content Tab -->
+                <div class="lecture-content-tab active" id="video-content">
+                    <div class="form-group">
+                        <label class="form-label">Upload Video*</label>
+                        <div class="video-upload-area">
+                            <div class="upload-icon" style="font-size: 2rem;">🎬</div>
+                            <p>Drag and drop your video file here or click to browse</p>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                                Supported formats: MP4, WebM, MOV (Max size: 2GB)
+                            </p>
+                            <button class="btn btn-secondary" style="margin-top: 1rem;">
+                                <span>📁</span> Choose Video
+                            </button>
+                            <input type="file" id="video-upload" class="file-input" accept="video/*">
+                        </div>
+                        <div class="video-preview">
+                            <video width="100%" controls>
+                                <source src="" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="video-description">Description (Optional)</label>
+                        <textarea class="form-control" id="video-description" placeholder="Enter a brief description of this video lecture"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Text Content Tab -->
+                <div class="lecture-content-tab" id="text-content">
+                    <div class="form-group">
+                        <label class="form-label">Text Content*</label>
+                        <div class="rich-text-editor">
+                            <div class="editor-toolbar">
+                                <button class="toolbar-btn" title="Bold">B</button>
+                                <button class="toolbar-btn" title="Italic">I</button>
+                                <button class="toolbar-btn" title="Underline">U</button>
+                                <div class="toolbar-separator"></div>
+                                <button class="toolbar-btn" title="Heading 1">H1</button>
+                                <button class="toolbar-btn" title="Heading 2">H2</button>
+                                <button class="toolbar-btn" title="Heading 3">H3</button>
+                                <div class="toolbar-separator"></div>
+                                <button class="toolbar-btn" title="Bulleted List">• List</button>
+                                <button class="toolbar-btn" title="Numbered List">1. List</button>
+                                <div class="toolbar-separator"></div>
+                                <button class="toolbar-btn" title="Insert Link">🔗</button>
+                                <button class="toolbar-btn" title="Insert Image">🖼️</button>
+                                <button class="toolbar-btn" title="Insert Code">{"}"</button>
+                            </div>
+                            <div class="editor-content" contenteditable="true">
+                                <p>Start typing your content here...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quiz Content Tab -->
+                <div class="lecture-content-tab" id="quiz-content">
+                    <div class="form-group">
+                        <label class="form-label">Quiz Instructions (Optional)</label>
+                        <textarea class="form-control" placeholder="Enter instructions for students"></textarea>
+                    </div>
+                    
+                    <div class="quiz-builder">
+                        <div class="question-container">
+                            <div class="question-header">
+                                <span class="question-number">Question 1</span>
+                                <button class="section-action-btn" title="Delete Question">🗑️</button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Question Text*</label>
+                                <input type="text" class="form-control" placeholder="Enter your question">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Answer Options*</label>
+                                <div class="answer-option">
+                                    <input type="radio" name="q1-correct" checked>
+                                    <input type="text" class="form-control answer-text" placeholder="Enter the correct answer">
+                                    <button class="section-action-btn" title="Delete Option">✕</button>
+                                </div>
+                                <div class="answer-option">
+                                    <input type="radio" name="q1-correct">
+                                    <input type="text" class="form-control answer-text" placeholder="Enter an incorrect answer">
+                                    <button class="section-action-btn" title="Delete Option">✕</button>
+                                </div>
+                                
+                                <button class="add-option-btn">
+                                    <span>➕</span> Add Answer Option
+                                </button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Explanation (Optional)</label>
+                                <textarea class="form-control" placeholder="Explain why the correct answer is right"></textarea>
+                            </div>
+                        </div>
+                        
+                        <button class="add-question-btn">
+                            <span>➕</span> Add Question
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Assignment Content Tab -->
+                <div class="lecture-content-tab" id="assignment-content">
+                    <div class="form-group">
+                        <label class="form-label">Assignment Instructions*</label>
+                        <textarea class="form-control" rows="5" placeholder="Provide detailed instructions for the assignment"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Submission Type*</label>
+                        <div style="display: flex; gap: 1rem;">
+                            <div>
+                                <input type="radio" id="submission-text" name="submission-type" value="text" checked>
+                                <label for="submission-text">Text Submission</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="submission-file" name="submission-type" value="file">
+                                <label for="submission-file">File Upload</label>
+                            </div>
+                            <div>
+                                <input type="radio" id="submission-both" name="submission-type" value="both">
+                                <label for="submission-both">Both</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Attachment Resources (Optional)</label>
+                        <button class="btn btn-secondary">
+                            <span>📎</span> Add Resource Files
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Grading Rubric (Optional)</label>
+                        <textarea class="form-control" rows="3" placeholder="Describe how the assignment will be graded"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary modal-close-btn">Cancel</button>
+                <button class="btn btn-primary" id="add-lecture-submit">Add Lecture</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Thumbnail Preview
+        function previewThumbnail(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('thumbnail-img');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.querySelector('.thumbnail-placeholder').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab Navigation
+            const tabItems = document.querySelectorAll('.tab-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabItems.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Remove active class from all tabs and contents
+                    tabItems.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to selected tab and content
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Learning Objectives
+            const addObjectiveBtn = document.getElementById('add-objective');
+            const learningObjectives = document.getElementById('learning-objectives');
+            
+            addObjectiveBtn.addEventListener('click', function() {
+                const objectiveDiv = document.createElement('div');
+                objectiveDiv.className = 'form-group';
+                objectiveDiv.innerHTML = `
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="text" class="form-control" placeholder="e.g., Master advanced JavaScript concepts">
+                        <button type="button" class="btn btn-danger" style="padding: 0.5rem;" title="Remove objective">✕</button>
+                    </div>
+                `;
+                learningObjectives.appendChild(objectiveDiv);
+                
+                // Add event listener to remove button
+                const removeBtn = objectiveDiv.querySelector('.btn-danger');
+                removeBtn.addEventListener('click', function() {
+                    objectiveDiv.remove();
+                });
+            });
+            
+            // Remove existing learning objectives
+            document.querySelectorAll('#learning-objectives .btn-danger').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.form-group').remove();
+                });
+            });
+            
+            // Course Requirements
+            const addRequirementBtn = document.getElementById('add-requirement');
+            const courseRequirements = document.getElementById('course-requirements');
+            
+            addRequirementBtn.addEventListener('click', function() {
+                const requirementDiv = document.createElement('div');
+                requirementDiv.className = 'form-group';
+                requirementDiv.innerHTML = `
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="text" class="form-control" placeholder="e.g., Intermediate JavaScript knowledge">
+                        <button type="button" class="btn btn-danger" style="padding: 0.5rem;" title="Remove requirement">✕</button>
+                    </div>
+                `;
+                courseRequirements.appendChild(requirementDiv);
+                
+                // Add event listener to remove button
+                const removeBtn = requirementDiv.querySelector('.btn-danger');
+                removeBtn.addEventListener('click', function() {
+                    requirementDiv.remove();
+                });
+            });
+            
+            // Remove existing course requirements
+            document.querySelectorAll('#course-requirements .btn-danger').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.form-group').remove();
+                });
+            });
+            
+            // Section toggling
+            const toggleSectionBtns = document.querySelectorAll('.toggle-section');
+            toggleSectionBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const sectionContent = this.closest('.section-header').nextElementSibling;
+                    sectionContent.classList.toggle('active');
+                    this.textContent = sectionContent.classList.contains('active') ? '▼' : '▲';
+                });
+            });
+            
+            // Section header click to toggle content
+            const sectionHeaders = document.querySelectorAll('.section-header');
+            sectionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    if (!event.target.classList.contains('section-action-btn')) {
+                        const sectionContent = this.nextElementSibling;
+                        const toggleBtn = this.querySelector('.toggle-section');
+                        sectionContent.classList.toggle('active');
+                        toggleBtn.textContent = sectionContent.classList.contains('active') ? '▼' : '▲';
+                    }
+                });
+            });
+            
+            // Add New Section
+            const addSectionBtn = document.querySelector('.add-section-btn');
+            const courseStructure = document.querySelector('.course-structure');
+            
+            addSectionBtn.addEventListener('click', function() {
+                const sectionCount = document.querySelectorAll('.section-container').length + 1;
+                
+                const sectionContainer = document.createElement('div');
+                sectionContainer.className = 'section-container';
+                sectionContainer.innerHTML = `
+                    <div class="section-header">
+                        <div>
+                            <span class="section-number">Section ${sectionCount}:</span>
+                            <span>New Section</span>
+                        </div>
+                        <div class="section-actions">
+                            <button class="section-action-btn" title="Edit Section">✏️</button>
+                            <button class="section-action-btn" title="Delete Section">🗑️</button>
+                            <button class="section-action-btn toggle-section">▼</button>
+                        </div>
+                    </div>
+                    <div class="section-content active">
+                        <div class="section-form">
+                            <div class="form-group">
+                                <label class="form-label" for="section-title-${sectionCount}">Section Title</label>
+                                <input type="text" class="form-control" id="section-title-${sectionCount}" value="New Section">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="section-description-${sectionCount}">Section Description (Optional)</label>
+                                <textarea class="form-control" id="section-description-${sectionCount}" placeholder="Brief overview of what this section covers"></textarea>
+                            </div>
+                        </div>
+                        
+                        <label class="form-label">Lectures:</label>
+                        <ul class="lectures-list">
+                        </ul>
+                        
+                        <button class="add-lecture-btn" data-section="${sectionCount}">
+                            <span>➕</span> Add Lecture
+                        </button>
+                    </div>
+                `;
+                
+                courseStructure.appendChild(sectionContainer);
+                
+                // Add event listeners to new section elements
+                const newToggleBtn = sectionContainer.querySelector('.toggle-section');
+                newToggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const sectionContent = this.closest('.section-header').nextElementSibling;
+                    sectionContent.classList.toggle('active');
+                    this.textContent = sectionContent.classList.contains('active') ? '▼' : '▲';
+                });
+                
+                const newHeader = sectionContainer.querySelector('.section-header');
+                newHeader.addEventListener('click', function() {
+                    if (!event.target.classList.contains('section-action-btn')) {
+                        const sectionContent = this.nextElementSibling;
+                        const toggleBtn = this.querySelector('.toggle-section');
+                        sectionContent.classList.toggle('active');
+                        toggleBtn.textContent = sectionContent.classList.contains('active') ? '▼' : '▲';
+                    }
+                });
+                
+                const newAddLectureBtn = sectionContainer.querySelector('.add-lecture-btn');
+                newAddLectureBtn.addEventListener('click', openAddLectureModal);
+                
+                const deleteBtn = sectionContainer.querySelector('.section-action-btn[title="Delete Section"]');
+                deleteBtn.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete this section and all its lectures?')) {
+                        sectionContainer.remove();
+                        // Update section numbers
+                        updateSectionNumbers();
+                    }
+                });
+            });
+            
+            // Update section numbers
+            function updateSectionNumbers() {
+                const sections = document.querySelectorAll('.section-container');
+                sections.forEach((section, index) => {
+                    const sectionNumber = section.querySelector('.section-number');
+                    sectionNumber.textContent = `Section ${index + 1}:`;
+                });
+            }
+            
+            // Add Lecture Modal
+            const addLectureBtns = document.querySelectorAll('.add-lecture-btn');
+            const addLectureModal = document.getElementById('add-lecture-modal');
+            const modalCloseBtn = document.querySelector('.modal-close');
+            const modalCloseFooterBtn = document.querySelector('.modal-close-btn');
+            
+            // Function to open add lecture modal
+            function openAddLectureModal() {
+                const sectionId = this.getAttribute('data-section');
+                addLectureModal.setAttribute('data-section', sectionId);
+                addLectureModal.classList.add('active');
+            }
+            
+            addLectureBtns.forEach(btn => {
+                btn.addEventListener('click', openAddLectureModal);
+            });
+            
+            modalCloseBtn.addEventListener('click', function() {
+                addLectureModal.classList.remove('active');
+            });
+            
+            modalCloseFooterBtn.addEventListener('click', function() {
+                addLectureModal.classList.remove('active');
+            });
+            
+            // Close modal if clicked outside
+            addLectureModal.addEventListener('click', function(e) {
+                if (e.target === addLectureModal) {
+                    addLectureModal.classList.remove('active');
+                }
+            });
+            
+            // Lecture Type Selection
+            const lectureTypeBtns = document.querySelectorAll('.lecture-type-btn');
+            const lectureContentTabs = document.querySelectorAll('.lecture-content-tab');
+            
+            lectureTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all type buttons
+                    lectureTypeBtns.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Show corresponding content tab
+                    const contentType = this.getAttribute('data-type');
+                    lectureContentTabs.forEach(tab => tab.classList.remove('active'));
+                    document.getElementById(`${contentType}-content`).classList.add('active');
+                });
+            });
+            
+            // Add Lecture Submission
+            const addLectureSubmitBtn = document.getElementById('add-lecture-submit');
+            
+            addLectureSubmitBtn.addEventListener('click', function() {
+                const sectionId = addLectureModal.getAttribute('data-section');
+                const lectureTitle = document.getElementById('lecture-title').value;
+                
+                if (!lectureTitle) {
+                    alert('Please enter a lecture title');
+                    return;
+                }
+                
+                const activeTypeBtn = document.querySelector('.lecture-type-btn.active');
+                const lectureType = activeTypeBtn.getAttribute('data-type');
+                
+                // Find the section to add the lecture to
+                const sectionContainer = document.querySelectorAll('.section-container')[parseInt(sectionId) - 1];
+                const lecturesList = sectionContainer.querySelector('.lectures-list');
+                
+                // Create new lecture item
+                const lectureItem = document.createElement('li');
+                lectureItem.className = 'lecture-item';
+                
+                // Set lecture duration or info based on type
+                let typeLabel, durationInfo;
+                
+                switch (lectureType) {
+                    case 'video':
+                        typeLabel = 'Video';
+                        durationInfo = '0:00'; // In a real app, this would be the actual video duration
+                        break;
+                    case 'text':
+                        typeLabel = 'Text';
+                        durationInfo = '--';
+                        break;
+                    case 'quiz':
+                        typeLabel = 'Quiz';
+                        durationInfo = '1 Question'; // In a real app, count actual questions
+                        break;
+                    case 'assignment':
+                        typeLabel = 'Assignment';
+                        durationInfo = '--';
+                        break;
+                }
+                
+                lectureItem.innerHTML = `
+                    <span class="lecture-drag-handle">☰</span>
+                    <span class="lecture-title">${lectureTitle}</span>
+                    <span class="lecture-type type-${lectureType}">${typeLabel}</span>
+                    <span style="color: var(--text-secondary);">${durationInfo}</span>
+                    <div class="lecture-actions">
+                        <button class="section-action-btn" title="Edit Lecture">✏️</button>
+                        <button class="section-action-btn" title="Delete Lecture">🗑️</button>
+                    </div>
+                `;
+                
+                lecturesList.appendChild(lectureItem);
+                
+                // Add event listener to delete button
+                const deleteBtn = lectureItem.querySelector('.section-action-btn[title="Delete Lecture"]');
+                deleteBtn.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete this lecture?')) {
+                        lectureItem.remove();
+                    }
+                });
+                
+                // Close the modal and reset form
+                addLectureModal.classList.remove('active');
+                document.getElementById('lecture-title').value = '';
+                document.querySelector('.editor-content').innerHTML = '<p>Start typing your content here...</p>';
+            });
+            
+            // Pricing Options
+            const pricingOptions = document.querySelectorAll('.pricing-option');
+            const customPriceDiv = document.getElementById('custom-price');
+            
+            pricingOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    pricingOptions.forEach(o => o.classList.remove('selected'));
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Show custom price input if one-time or subscription is selected
+                    const priceType = this.getAttribute('data-price-type');
+                    if (priceType === 'one-time' || priceType === 'subscription') {
+                        customPriceDiv.classList.add('active');
+                    } else {
+                        customPriceDiv.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Navigation between tabs using buttons
+            document.getElementById('next-to-content').addEventListener('click', function() {
+                document.querySelector('[data-tab="course-content"]').click();
+            });
+            
+            document.getElementById('back-to-info').addEventListener('click', function() {
+                document.querySelector('[data-tab="course-info"]').click();
+            });
+            
+            document.getElementById('next-to-settings').addEventListener('click', function() {
+                document.querySelector('[data-tab="course-settings"]').click();
+            });
+            
+            document.getElementById('back-to-content').addEventListener('click', function() {
+                document.querySelector('[data-tab="course-content"]').click();
+            });
+            
+            // Save Draft button
+            document.getElementById('save-draft-btn').addEventListener('click', function() {
+                alert('Course draft saved successfully!');
+            });
+            
+            // Publish button
+            document.getElementById('publish-btn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to publish this course? Once published, it will be visible to students.')) {
+                    alert('Course published successfully!');
+                }
+            });
+            
+            // Save and Publish button
+            document.getElementById('save-and-publish').addEventListener('click', function() {
+                if (confirm('Are you sure you want to publish this course? Once published, it will be visible to students.')) {
+                    alert('Course published successfully!');
+                    window.location.href = 'dashboard.html';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

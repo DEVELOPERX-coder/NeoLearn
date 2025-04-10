@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoLearn - Advanced Web Development</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-tertiary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent-cyan: #00ffff;
+            --accent-magenta: #ff00ff;
+            --accent-green: #00ff00;
+            --card-bg: rgba(30, 30, 30, 0.7);
+            --glow-shadow: 0 0 10px var(--accent-cyan);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 0, 0.05) 0%, transparent 30%);
+        }
+        
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+        
+        .logo svg {
+            width: 30px;
+            height: 30px;
+        }
+        
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-magenta));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+        
+        .back-to-courses {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .back-to-courses:hover {
+            text-shadow: 0 0 5px var(--accent-cyan);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+        
+        .notification-icon:hover {
+            color: var(--accent-cyan);
+        }
+        
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent-magenta);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--accent-magenta);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        /* Main Content Area */
+        .main-container {
+            display: flex;
+            flex: 1;
+        }
+        
+        /* Course Sidebar */
+        .course-sidebar {
+            width: 300px;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid rgba(0, 255, 255, 0.1);
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+            position: sticky;
+            top: 64px;
+        }
+        
+        .course-info {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .course-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .course-instructor {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .course-progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-percentage {
+            color: var(--accent-cyan);
+            font-weight: bold;
+        }
+        
+        .progress-container {
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-magenta));
+            width: 75%;
+        }
+        
+        .course-sections {
+            padding: 1rem 0;
+        }
+        
+        .section {
+            margin-bottom: 1rem;
+        }
+        
+        .section-header {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-primary);
+            border-left: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .section-header:hover {
+            background-color: rgba(0, 255, 255, 0.1);
+            border-left-color: var(--accent-cyan);
+        }
+        
+        .section-header.active {
+            background-color: rgba(0, 255, 255, 0.1);
+            border-left-color: var(--accent-cyan);
+        }
+        
+        .section-title {
+            font-weight: bold;
+        }
+        
+        .section-toggle {
+            transition: transform 0.3s;
+        }
+        
+        .section-toggle.open {
+            transform: rotate(180deg);
+        }
+        
+        .section-content {
+            display: none;
+            padding: 0 0 0.5rem 0;
+        }
+        
+        .section-content.open {
+            display: block;
+        }
+        
+        .lecture {
+            padding: 0.6rem 1.5rem 0.6rem 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            font-size: 0.9rem;
+        }
+        
+        .lecture:hover {
+            background-color: rgba(0, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+        
+        .lecture.active {
+            background-color: rgba(0, 255, 255, 0.1);
+            color: var(--accent-cyan);
+        }
+        
+        .lecture.completed::before {
+            content: "✓";
+            position: absolute;
+            left: 1.5rem;
+            color: var(--accent-green);
+        }
+        
+        .lecture-icon {
+            font-size: 1.1rem;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .lecture-title {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .lecture-duration {
+            font-size: 0.8rem;
+        }
+        
+        /* Content Area Styles */
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .content-header {
+            margin-bottom: 2rem;
+        }
+        
+        .content-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+        
+        .content-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .lecture-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .nav-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background-color: rgba(0, 255, 255, 0.05);
+            color: var(--accent-cyan);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-button:hover {
+            background-color: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 5px var(--accent-cyan);
+        }
+        
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .video-container {
+            background-color: var(--bg-tertiary);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            position: relative;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            background-color: var(--bg-tertiary);
+            background-image: radial-gradient(circle at center, rgba(0, 255, 255, 0.1) 0%, transparent 70%);
+        }
+        
+        .play-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(0, 255, 255, 0.1);
+            border: 2px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .play-icon:hover {
+            background-color: rgba(0, 255, 255, 0.2);
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--accent-cyan);
+        }
+        
+        .video-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .control-button {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--bg-secondary);
+            color: var(--text-secondary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .control-button:hover {
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .lecture-content {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .lecture-content h2 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+        }
+        
+        .lecture-content h3 {
+            color: var(--accent-magenta);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .lecture-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .lecture-content pre {
+            background-color: var(--bg-tertiary);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 3px solid var(--accent-cyan);
+        }
+        
+        .lecture-content code {
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--accent-cyan);
+        }
+        
+        .lecture-content ul,
+        .lecture-content ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        
+        .lecture-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .lecture-content a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .lecture-content a:hover {
+            text-shadow: 0 0 5px var(--accent-cyan);
+        }
+        
+        .lecture-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .mark-complete-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(to right, var(--accent-green), #00cc00);
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .mark-complete-btn:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .completed-tag {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background-color: rgba(0, 255, 0, 0.1);
+            color: var(--accent-green);
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        /* Discussion Section */
+        .discussion-section {
+            margin-top: 3rem;
+        }
+        
+        .discussion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .discussion-title {
+            font-size: 1.4rem;
+            color: var(--text-primary);
+        }
+        
+        .comment-form {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .comment-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            color: var(--text-primary);
+            resize: vertical;
+            margin-bottom: 1rem;
+            font-family: inherit;
+        }
+        
+        .comment-textarea:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 5px var(--accent-cyan);
+        }
+        
+        .comment-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .cancel-btn {
+            padding: 0.6rem 1.2rem;
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-secondary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cancel-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+        
+        .submit-btn {
+            padding: 0.6rem 1.2rem;
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-magenta));
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
+        .comment {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+        
+        .comment-author {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .author-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .author-name {
+            font-weight: bold;
+        }
+        
+        .author-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .comment-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .comment-content {
+            margin-bottom: 0.8rem;
+            line-height: 1.5;
+        }
+        
+        .comment-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            color: var(--accent-cyan);
+        }
+        
+        /* Responsive styles */
+        @media screen and (max-width: 1024px) {
+            .course-sidebar {
+                width: 250px;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .course-sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                top: 0;
+                border-right: none;
+            }
+            
+            .course-sections {
+                display: none;
+            }
+            
+            .course-sections.mobile-visible {
+                display: block;
+            }
+            
+            .toggle-sections {
+                display: block;
+                width: 100%;
+                padding: 0.8rem;
+                text-align: center;
+                background-color: var(--bg-tertiary);
+                color: var(--text-primary);
+                border: none;
+                cursor: pointer;
+            }
+            
+            .content-area {
+                padding: 1.5rem;
+            }
+            
+            .video-container {
+                aspect-ratio: 16 / 9;
+            }
+            
+            .lecture-nav {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="dashboard.html" class="logo">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feFlood flood-color="#00ffff" flood-opacity="0.7" result="glow" />
+                        <feComposite in="glow" in2="blur" operator="in" result="softGlow" />
+                        <feComposite in="SourceGraphic" in2="softGlow" operator="over" />
+                    </filter>
+                </defs>
+                <rect width="64" height="64" rx="8" ry="8" fill="#121212" />
+                <path d="M18 16 L18 48 L26 48 L26 28 L38 48 L46 48 L46 16 L38 16 L38 36 L26 16 Z" 
+                    fill="#121212" 
+                    stroke="#00ffff" 
+                    stroke-width="2.5" 
+                    filter="url(#neonGlow)" />
+                <rect x="16" y="52" width="32" height="2" rx="1" ry="1" fill="#ff00ff" filter="url(#neonGlow)" />
+            </svg>
+            <span class="logo-text">NeoLearn</span>
+        </a>
+        
+        <a href="dashboard.html" class="back-to-courses">
+            <span>◀</span> Back to Dashboard
+        </a>
+        
+        <div class="user-menu">
+            <div class="notification-icon">
+                <span>🔔</span>
+                <span class="notification-count">3</span>
+            </div>
+            <div class="user-avatar">JS</div>
+        </div>
+    </header>
+    
+    <div class="main-container">
+        <!-- Course Sidebar -->
+        <aside class="course-sidebar">
+            <div class="course-info">
+                <h2 class="course-title">Advanced Web Development</h2>
+                <div class="course-instructor">
+                    <span>👨‍🏫</span> David Chen
+                </div>
+                <div class="course-progress-info">
+                    <span>Your Progress</span>
+                    <span class="progress-percentage">75%</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+            
+            <button class="toggle-sections" style="display: none;">Toggle Course Content</button>
+            
+            <div class="course-sections">
+                <div class="section">
+                    <div class="section-header active">
+                        <span class="section-title">1. Introduction</span>
+                        <span class="section-toggle open">▼</span>
+                    </div>
+                    <div class="section-content open">
+                        <a href="#" class="lecture completed">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">Welcome to the Course</span>
+                            <span class="lecture-duration">5:20</span>
+                        </a>
+                        <a href="#" class="lecture completed">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">Course Overview</span>
+                            <span class="lecture-duration">8:45</span>
+                        </a>
+                        <a href="#" class="lecture completed">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">Setting Up Your Environment</span>
+                            <span class="lecture-duration">12:30</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-header active">
+                        <span class="section-title">2. Modern JavaScript Essentials</span>
+                        <span class="section-toggle open">▼</span>
+                    </div>
+                    <div class="section-content open">
+                        <a href="#" class="lecture completed">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">ES6+ Features Overview</span>
+                            <span class="lecture-duration">15:20</span>
+                        </a>
+                        <a href="#" class="lecture completed">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">Arrow Functions & Lexical Scoping</span>
+                            <span class="lecture-duration">18:10</span>
+                        </a>
+                        <a href="#" class="lecture active">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">Destructuring & Spread Operator</span>
+                            <span class="lecture-duration">20:45</span>
+                        </a>
+                        <a href="#" class="lecture">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">Promises & Async/Await</span>
+                            <span class="lecture-duration">25:15</span>
+                        </a>
+                        <a href="#" class="lecture">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">Modern JavaScript Modules</span>
+                            <span class="lecture-duration">16:40</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-title">3. Advanced CSS Techniques</span>
+                        <span class="section-toggle">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <a href="#" class="lecture">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">Flexbox Deep Dive</span>
+                            <span class="lecture-duration">22:15</span>
+                        </a>
+                        <a href="#" class="lecture">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">CSS Grid Layouts</span>
+                            <span class="lecture-duration">24:30</span>
+                        </a>
+                        <a href="#" class="lecture">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">CSS Variables & Functions</span>
+                            <span class="lecture-duration">18:45</span>
+                        </a>
+                        <a href="#" class="lecture">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">Responsive Design Strategies</span>
+                            <span class="lecture-duration">20:10</span>
+                        </a>
+                        <a href="#" class="lecture">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">CSS Animations & Transitions</span>
+                            <span class="lecture-duration">26:20</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-header">
+                        <span class="section-title">4. Frontend Frameworks</span>
+                        <span class="section-toggle">▼</span>
+                    </div>
+                    <div class="section-content">
+                        <a href="#" class="lecture">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">Introduction to React</span>
+                            <span class="lecture-duration">30:15</span>
+                        </a>
+                        <a href="#" class="lecture">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">React Components & Props</span>
+                            <span class="lecture-duration">28:40</span>
+                        </a>
+                        <a href="#" class="lecture">
+                            <span class="lecture-icon">📝</span>
+                            <span class="lecture-title">State Management with Hooks</span>
+                            <span class="lecture-duration">32:25</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Content Area -->
+        <main class="content-area">
+            <div class="content-header">
+                <h1 class="content-title">Destructuring & Spread Operator</h1>
+                <div class="content-meta">
+                    <span>Lecture 7 of 20</span>
+                    <span>Duration: 20:45</span>
+                </div>
+            </div>
+            
+            <div class="lecture-nav">
+                <button class="nav-button">
+                    <span>◀</span> Previous Lecture
+                </button>
+                <button class="nav-button">
+                    Next Lecture <span>▶</span>
+                </button>
+            </div>
+            
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <div class="play-icon">▶</div>
+                    <p>Click to play the video</p>
+                </div>
+            </div>
+            
+            <div class="video-controls">
+                <button class="control-button">
+                    <span>⏱️</span> Playback Speed
+                </button>
+                <button class="control-button">
+                    <span>📋</span> Show Transcripts
+                </button>
+                <button class="control-button">
+                    <span>📝</span> Take Notes
+                </button>
+                <button class="control-button">
+                    <span>💾</span> Download Resources
+                </button>
+            </div>
+            
+            <div class="lecture-content">
+                <h2>Destructuring & Spread Operator in Modern JavaScript</h2>
+                
+                <p>In this lecture, we'll explore two powerful features of modern JavaScript: Destructuring and the Spread/Rest Operator. These features allow for cleaner, more concise code that's easier to read and maintain.</p>
+                
+                <h3>Object Destructuring</h3>
+                
+                <p>Object destructuring allows you to extract values from objects and assign them to variables in a single statement:</p>
+                
+                <pre><code>// Before destructuring
+const user = {
+  name: 'John',
+  email: 'john@example.com',
+  role: 'developer',
+  skills: ['JavaScript', 'React', 'Node.js']
+};
+
+const name = user.name;
+const email = user.email;
+
+// With destructuring
+const { name, email, role = 'user' } = user;
+console.log(name, email, role); // 'John' 'john@example.com' 'developer'
+
+// Renaming variables
+const { name: userName, email: userEmail } = user;
+console.log(userName, userEmail); // 'John' 'john@example.com'
+
+// Nested destructuring
+const { skills: [primarySkill, secondarySkill] } = user;
+console.log(primarySkill, secondarySkill); // 'JavaScript' 'React'</code></pre>
+                
+                <h3>Array Destructuring</h3>
+                
+                <p>Array destructuring works similarly, but uses array position rather than property names:</p>
+                
+                <pre><code>// Basic array destructuring
+const colors = ['red', 'green', 'blue'];
+const [primaryColor, secondaryColor, tertiaryColor] = colors;
+console.log(primaryColor, secondaryColor); // 'red' 'green'
+
+// Skipping elements
+const [first, , third] = colors;
+console.log(first, third); // 'red' 'blue'
+
+// Default values
+const [main = 'black', accent = 'white'] = ['purple'];
+console.log(main, accent); // 'purple' 'white'
+
+// Swapping variables
+let a = 1;
+let b = 2;
+[a, b] = [b, a];
+console.log(a, b); // 2 1</code></pre>
+                
+                <h3>The Spread Operator (...)</h3>
+                
+                <p>The spread operator allows an iterable (like an array) to be expanded in places where zero or more arguments or elements are expected:</p>
+                
+                <pre><code>// Copying arrays
+const originalArray = [1, 2, 3];
+const copyArray = [...originalArray];
+console.log(copyArray); // [1, 2, 3]
+
+// Merging arrays
+const array1 = [1, 2, 3];
+const array2 = [4, 5, 6];
+const mergedArray = [...array1, ...array2];
+console.log(mergedArray); // [1, 2, 3, 4, 5, 6]
+
+// Spreading objects
+const defaultSettings = { theme: 'dark', fontSize: 16 };
+const userSettings = { fontSize: 20, showNotifications: true };
+const mergedSettings = { ...defaultSettings, ...userSettings };
+console.log(mergedSettings); 
+// { theme: 'dark', fontSize: 20, showNotifications: true }</code></pre>
+                
+                <h3>The Rest Parameter</h3>
+                
+                <p>The rest parameter syntax allows a function to accept an indefinite number of arguments as an array:</p>
+                
+                <pre><code>// Rest with arrays
+const [first, ...rest] = [1, 2, 3, 4, 5];
+console.log(first); // 1
+console.log(rest); // [2, 3, 4, 5]
+
+// Rest with objects
+const { name, email, ...otherProps } = user;
+console.log(otherProps); // { role: 'developer', skills: ['JavaScript', 'React', 'Node.js'] }
+
+// Rest parameters in functions
+function sum(...numbers) {
+  return numbers.reduce((total, number) => total + number, 0);
+}
+
+console.log(sum(1, 2, 3, 4, 5)); // 15</code></pre>
+                
+                <h3>Practical Applications</h3>
+                
+                <p>These features are especially useful in:</p>
+                
+                <ul>
+                    <li><strong>React props</strong> - Destructuring props for cleaner component code</li>
+                    <li><strong>API responses</strong> - Extracting only the data you need</li>
+                    <li><strong>Function parameters</strong> - Creating flexible function signatures</li>
+                    <li><strong>State management</strong> - Updating object state immutably</li>
+                </ul>
+                
+                <p>In the next section, we'll do some practical exercises to cement these concepts.</p>
+            </div>
+            
+            <div class="lecture-actions">
+                <button class="mark-complete-btn">
+                    <span>✓</span> Mark as Complete
+                </button>
+            </div>
+            
+            <div class="discussion-section">
+                <div class="discussion-header">
+                    <h2 class="discussion-title">Discussion (3 comments)</h2>
+                </div>
+                
+                <div class="comment-form">
+                    <textarea class="comment-textarea" placeholder="Add your comment or question..."></textarea>
+                    <div class="comment-actions">
+                        <button class="cancel-btn">Cancel</button>
+                        <button class="submit-btn">Post Comment</button>
+                    </div>
+                </div>
+                
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <div class="author-avatar">MJ</div>
+                            <div class="author-info">
+                                <div class="author-name">Maria Johnson</div>
+                                <div class="author-role">Student</div>
+                            </div>
+                        </div>
+                        <div class="comment-date">2 days ago</div>
+                    </div>
+                    <div class="comment-content">
+                        <p>This is really helpful! I've been confused about the difference between the spread and rest operators for a while, but your examples cleared it up. Could you explain more about when it's better to use object destructuring vs. dot notation?</p>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="action-btn">
+                            <span>👍</span> Helpful (5)
+                        </button>
+                        <button class="action-btn">
+                            <span>💬</span> Reply
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <div class="author-avatar">DC</div>
+                            <div class="author-info">
+                                <div class="author-name">David Chen</div>
+                                <div class="author-role">Instructor</div>
+                            </div>
+                        </div>
+                        <div class="comment-date">1 day ago</div>
+                    </div>
+                    <div class="comment-content">
+                        <p>Great question, Maria! Object destructuring is generally more concise when you need multiple properties from an object. It's especially useful in function parameters to clearly show what properties you're expecting. Dot notation is simpler for one-off property access or when you have dynamic property names. In React components, destructuring props is considered a best practice for readability.</p>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="action-btn">
+                            <span>👍</span> Helpful (3)
+                        </button>
+                        <button class="action-btn">
+                            <span>💬</span> Reply
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="comment">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <div class="author-avatar">TR</div>
+                            <div class="author-info">
+                                <div class="author-name">Tom Richards</div>
+                                <div class="author-role">Student</div>
+                            </div>
+                        </div>
+                        <div class="comment-date">8 hours ago</div>
+                    </div>
+                    <div class="comment-content">
+                        <p>I found a great use case for this just yesterday! I was working with a complex API response and used nested destructuring to get exactly what I needed in one line. It made my code so much cleaner.</p>
+                    </div>
+                    <div class="comment-actions">
+                        <button class="action-btn">
+                            <span>👍</span> Helpful (1)
+                        </button>
+                        <button class="action-btn">
+                            <span>💬</span> Reply
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle sections
+            const sectionHeaders = document.querySelectorAll('.section-header');
+            sectionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const toggle = this.querySelector('.section-toggle');
+                    toggle.classList.toggle('open');
+                    const content = this.nextElementSibling;
+                    content.classList.toggle('open');
+                });
+            });
+            
+            // Mobile toggle for course sections
+            const toggleButton = document.querySelector('.toggle-sections');
+            if (toggleButton) {
+                toggleButton.addEventListener('click', function() {
+                    const sections = document.querySelector('.course-sections');
+                    sections.classList.toggle('mobile-visible');
+                });
+            }
+            
+            // Mark as complete button
+            const completeButton = document.querySelector('.mark-complete-btn');
+            completeButton.addEventListener('click', function() {
+                this.innerHTML = '<span>✓</span> Completed';
+                this.disabled = true;
+                this.style.opacity = '0.7';
+                this.style.cursor = 'default';
+                
+                // Find the active lecture in sidebar and mark it as completed
+                const activeLecture = document.querySelector('.lecture.active');
+                if (activeLecture) {
+                    activeLecture.classList.add('completed');
+                }
+                
+                // Update progress
+                const progressBar = document.querySelector('.progress-bar');
+                const progressPercentage = document.querySelector('.progress-percentage');
+                progressBar.style.width = '80%';
+                progressPercentage.textContent = '80%';
+            });
+            
+            // Video placeholder click
+            const videoPlaceholder = document.querySelector('.video-placeholder');
+            videoPlaceholder.addEventListener('click', function() {
+                this.innerHTML = '<img src="/api/placeholder/1280/720" alt="Video" style="width:100%; height:100%; object-fit:cover;">';
+            });
+            
+            // Comment form
+            const commentForm = document.querySelector('.comment-form');
+            const submitBtn = commentForm.querySelector('.submit-btn');
+            const cancelBtn = commentForm.querySelector('.cancel-btn');
+            const textarea = commentForm.querySelector('.comment-textarea');
+            
+            submitBtn.addEventListener('click', function() {
+                const comment = textarea.value.trim();
+                if (comment) {
+                    alert('Comment submitted: ' + comment);
+                    textarea.value = '';
+                }
+            });
+            
+            cancelBtn.addEventListener('click', function() {
+                textarea.value = '';
+            });
+            
+            // Responsive adjustments
+            function handleResponsive() {
+                const toggleButton = document.querySelector('.toggle-sections');
+                if (window.innerWidth <= 768) {
+                    toggleButton.style.display = 'block';
+                } else {
+                    toggleButton.style.display = 'none';
+                    document.querySelector('.course-sections').classList.add('mobile-visible');
+                }
+            }
+            
+            handleResponsive();
+            window.addEventListener('resize', handleResponsive);
+        });
+    </script>
+</body>
+</html>
