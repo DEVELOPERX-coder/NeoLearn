@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - EduLearn</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="../../assets/css/auth.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header id="main-header">
+      <div class="container">
+        <div class="logo">
+          <h1><a href="../../index.html">EduLearn</a></h1>
+        </div>
+      </div>
+    </header>
+
+    <main class="auth-container">
+      <div class="auth-card">
+        <h2>Log In to Your Account</h2>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-input">
+              <input type="password" id="password" name="password" required />
+              <button type="button" class="toggle-password" tabindex="-1">
+                <i class="far fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-group remember-forgot">
+            <div>
+              <input type="checkbox" id="remember" name="remember" />
+              <label for="remember">Remember me</label>
+            </div>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+          </div>
+          <div class="form-error" id="loginError"></div>
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            id="loginButton"
+          >
+            Log In
+          </button>
+        </form>
+        <div class="auth-divider">
+          <span>OR</span>
+        </div>
+        <button class="btn btn-outline btn-block">
+          <i class="fab fa-google"></i> Continue with Google
+        </button>
+        <p class="auth-switch">
+          Don't have an account? <a href="register.html">Sign Up</a>
+        </p>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <p>&copy; 2025 EduLearn. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Check if user is already logged in
+        if (isAuthenticated()) {
+          redirectToDashboard();
+          return;
+        }
+
+        // Set up toggle password visibility
+        const togglePassword = document.querySelector(".toggle-password");
+        const passwordInput = document.getElementById("password");
+
+        togglePassword.addEventListener("click", () => {
+          const type =
+            passwordInput.getAttribute("type") === "password"
+              ? "text"
+              : "password";
+          passwordInput.setAttribute("type", type);
+          togglePassword.querySelector("i").classList.toggle("fa-eye");
+          togglePassword.querySelector("i").classList.toggle("fa-eye-slash");
+        });
+
+        // Handle login form submission
+        const loginForm = document.getElementById("loginForm");
+        const loginButton = document.getElementById("loginButton");
+        const loginError = document.getElementById("loginError");
+
+        loginForm.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          // Get form data
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          // Disable button and show loading state
+          loginButton.disabled = true;
+          loginButton.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+          loginError.textContent = "";
+
+          try {
+            // Call login API
+            await login({ email, password });
+
+            // Show success message
+            showNotification("Login successful! Redirecting...", "success");
+
+            // Redirect after a short delay
+            setTimeout(() => {
+              redirectToDashboard();
+            }, 1000);
+          } catch (error) {
+            // Show error message
+            loginError.textContent =
+              error.message || "Invalid email or password";
+
+            // Reset button
+            loginButton.disabled = false;
+            loginButton.innerHTML = "Log In";
+          }
+        });
+
+        // Forgot password handler
+        document
+          .querySelector(".forgot-password")
+          .addEventListener("click", (e) => {
+            e.preventDefault();
+            showNotification(
+              "Password reset functionality is not implemented in this demo.",
+              "info"
+            );
+          });
+      });
+
+      // Redirect to appropriate dashboard based on user role
+      function redirectToDashboard() {
+        const user = getUserFromLocalStorage();
+        const returnTo = getQueryParams().return_to;
+
+        if (returnTo) {
+          window.location.href = returnTo;
+          return;
+        }
+
+        if (user) {
+          if (user.role === "admin") {
+            window.location.href = "../admin/dashboard.html";
+          } else if (user.role === "instructor") {
+            window.location.href = "../dashboard/instructor.html";
+          } else {
+            window.location.href = "../dashboard/student.html";
+          }
+        } else {
+          window.location.href = "../../index.html";
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Course Editor - EduLearn</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="../../assets/css/dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Course Editor Styles */
+      .editor-container {
+        background-color: #f7f9fa;
+        min-height: calc(100vh - 80px);
+        padding: 30px 0;
+      }
+
+      .editor-header {
+        background-color: #fff;
+        padding: 20px 30px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .editor-title h1 {
+        font-size: 24px;
+        margin-bottom: 5px;
+      }
+
+      .editor-actions {
+        display: flex;
+        gap: 15px;
+      }
+
+      .editor-tabs {
+        display: flex;
+        background-color: #fff;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 30px;
+      }
+
+      .editor-tab {
+        padding: 15px 30px;
+        font-weight: 600;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        color: #666;
+      }
+
+      .editor-tab.active {
+        border-bottom-color: #5624d0;
+        color: #5624d0;
+      }
+
+      .editor-tab:hover {
+        color: #5624d0;
+      }
+
+      .tab-content {
+        display: none;
+        padding: 0 30px;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .editor-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        padding: 30px;
+        margin-bottom: 30px;
+      }
+
+      .editor-card h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .form-row {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus,
+      .form-group textarea:focus {
+        border-color: #5624d0;
+        outline: none;
+      }
+
+      .form-group textarea {
+        min-height: 150px;
+        resize: vertical;
+      }
+
+      .form-group .help-text {
+        font-size: 14px;
+        color: #666;
+        margin-top: 5px;
+      }
+
+      .form-error {
+        color: #f5222d;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .thumbnail-upload {
+        margin-top: 15px;
+      }
+
+      .thumbnail-preview {
+        width: 100%;
+        max-width: 300px;
+        height: 180px;
+        background-color: #f0f0f0;
+        border: 1px dashed #ccc;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: 15px;
+        overflow: hidden;
+      }
+
+      .thumbnail-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .thumbnail-placeholder {
+        color: #999;
+        text-align: center;
+      }
+
+      .thumbnail-placeholder i {
+        font-size: 48px;
+        margin-bottom: 10px;
+      }
+
+      .file-input-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+      }
+
+      .file-input-wrapper input[type="file"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+
+      /* Curriculum Editor */
+      .curriculum-container {
+        margin-bottom: 40px;
+      }
+
+      .curriculum-section {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 25px;
+      }
+
+      .section-header {
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 8px 8px 0 0;
+      }
+
+      .section-title {
+        font-weight: 600;
+        flex: 1;
+      }
+
+      .section-title-input {
+        flex: 1;
+        padding: 8px 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-right: 10px;
+      }
+
+      .section-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .section-content {
+        padding: 15px;
+      }
+
+      .lesson-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 15px;
+        border-bottom: 1px solid #f0f0f0;
+        background-color: #fff;
+      }
+
+      .lesson-item:last-child {
+        border-bottom: none;
+      }
+
+      .lesson-left {
+        display: flex;
+        align-items: center;
+        flex: 1;
+      }
+
+      .lesson-handle {
+        margin-right: 10px;
+        cursor: move;
+        color: #999;
+      }
+
+      .lesson-title {
+        font-weight: 500;
+      }
+
+      .lesson-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .add-item-btn {
+        width: 100%;
+        padding: 12px;
+        border: 2px dashed #ddd;
+        background-color: #f9f9f9;
+        color: #666;
+        text-align: center;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .add-item-btn:hover {
+        border-color: #5624d0;
+        color: #5624d0;
+      }
+
+      .add-item-btn i {
+        margin-right: 5px;
+      }
+
+      /* Pricing tab */
+      .price-input {
+        position: relative;
+      }
+
+      .price-input input {
+        padding-left: 30px;
+      }
+
+      .price-input::before {
+        content: "$";
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+      }
+
+      .pricing-options {
+        margin-top: 20px;
+      }
+
+      .pricing-option {
+        margin-bottom: 15px;
+      }
+
+      /* Settings tab */
+      .settings-row {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .settings-column {
+        flex: 1;
+      }
+
+      /* Lesson editor modal */
+      .lesson-editor-modal {
+        max-width: 800px;
+      }
+
+      .lesson-editor-modal .modal-body {
+        padding: 30px;
+      }
+
+      .modal-tabs {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 20px;
+      }
+
+      .modal-tab {
+        padding: 12px 20px;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+      }
+
+      .modal-tab.active {
+        border-bottom-color: #5624d0;
+        color: #5624d0;
+        font-weight: 600;
+      }
+
+      .modal-tab-content {
+        display: none;
+      }
+
+      .modal-tab-content.active {
+        display: block;
+      }
+
+      .video-upload-container {
+        margin-top: 15px;
+        background-color: #f9f9f9;
+        border: 2px dashed #ddd;
+        padding: 20px;
+        text-align: center;
+        border-radius: 4px;
+      }
+
+      .upload-icon {
+        font-size: 36px;
+        color: #999;
+        margin-bottom: 15px;
+      }
+
+      .upload-title {
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .upload-subtitle {
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .video-preview {
+        margin-top: 20px;
+        display: none;
+      }
+
+      .video-preview video {
+        max-width: 100%;
+        border-radius: 4px;
+      }
+
+      /* Action buttons */
+      .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      .action-buttons .btn {
+        padding: 12px 25px;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 992px) {
+        .settings-row {
+          flex-direction: column;
+          gap: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .editor-tabs {
+          flex-wrap: wrap;
+        }
+
+        .editor-tab {
+          padding: 12px 15px;
+        }
+
+        .editor-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .editor-actions {
+          margin-top: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header id="main-header">
+      <div class="container">
+        <div class="logo">
+          <h1><a href="../../index.html">EduLearn</a></h1>
+        </div>
+        <nav>
+          <ul class="main-nav">
+            <li><a href="../courses/browse.html">Courses</a></li>
+            <li><a href="courses.html">My Courses</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <div class="logged-in" id="loggedInMenu">
+            <a href="#" id="userDropdown">
+              <img
+                src="../../assets/images/default-avatar.png"
+                alt="Profile"
+                class="avatar"
+                id="userAvatar"
+              />
+              <span id="userName">User</span>
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="../dashboard/instructor.html">Dashboard</a></li>
+              <li><a href="../profile/settings.html">Profile Settings</a></li>
+              <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="editor-container">
+      <div class="editor-header">
+        <div class="editor-title">
+          <h1 id="editorTitle">Create New Course</h1>
+          <p id="editorSubtitle">Share your knowledge with the world</p>
+        </div>
+        <div class="editor-actions">
+          <button id="previewBtn" class="btn btn-outline">
+            <i class="fas fa-eye"></i> Preview
+          </button>
+          <button id="saveDraftBtn" class="btn btn-outline">
+            <i class="fas fa-save"></i> Save as Draft
+          </button>
+          <button id="publishBtn" class="btn btn-primary">
+            <i class="fas fa-upload"></i> Publish Course
+          </button>
+        </div>
+      </div>
+
+      <div class="editor-tabs">
+        <div class="editor-tab active" data-tab="basics">Course Basics</div>
+        <div class="editor-tab" data-tab="curriculum">Curriculum</div>
+        <div class="editor-tab" data-tab="pricing">Pricing</div>
+        <div class="editor-tab" data-tab="settings">Settings</div>
+      </div>
+
+      <div class="container">
+        <!-- Course Basics Tab -->
+        <div id="basicsTab" class="tab-content active">
+          <div class="editor-card">
+            <h2>Course Information</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="courseTitle">Course Title*</label>
+                <input
+                  type="text"
+                  id="courseTitle"
+                  placeholder="e.g. Complete JavaScript Developer Course"
+                  required
+                />
+                <div class="help-text">
+                  Your course title should be specific and descriptive.
+                </div>
+                <div class="form-error" id="courseTitleError"></div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="courseSubtitle">Course Subtitle</label>
+                <input
+                  type="text"
+                  id="courseSubtitle"
+                  placeholder="e.g. Learn JavaScript from scratch and become a professional developer"
+                />
+                <div class="help-text">
+                  A brief summary of what students will learn.
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="courseDescription">Course Description*</label>
+                <textarea
+                  id="courseDescription"
+                  placeholder="Describe your course in detail..."
+                  required
+                ></textarea>
+                <div class="help-text">
+                  Explain what the course is about, what students will learn,
+                  and why they should take it.
+                </div>
+                <div class="form-error" id="courseDescriptionError"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="editor-card">
+            <h2>Course Image</h2>
+            <div class="form-group">
+              <label for="courseThumbnail">Course Thumbnail*</label>
+              <div class="help-text">
+                Upload a high-quality image that represents your course.
+                Recommended size: 1280x720 pixels.
+              </div>
+              <div class="thumbnail-upload">
+                <div class="thumbnail-preview" id="thumbnailPreview">
+                  <div class="thumbnail-placeholder">
+                    <i class="fas fa-image"></i>
+                    <p>No image selected</p>
+                  </div>
+                </div>
+                <div class="file-input-wrapper">
+                  <button class="btn btn-outline">
+                    <i class="fas fa-upload"></i> Upload Thumbnail
+                  </button>
+                  <input type="file" id="thumbnailUpload" accept="image/*" />
+                </div>
+                <div class="form-error" id="courseThumbnailError"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="editor-card">
+            <h2>Course Category</h2>
+            <div class="form-group">
+              <label for="courseCategory">Primary Category*</label>
+              <select id="courseCategory" required>
+                <option value="">Select a category</option>
+                <option value="1">Web Development</option>
+                <option value="2">Mobile Development</option>
+                <option value="3">Programming Languages</option>
+                <option value="4">Game Development</option>
+                <option value="5">Database Design</option>
+                <option value="6">Software Testing</option>
+                <option value="7">Data Science</option>
+                <option value="8">Machine Learning</option>
+                <option value="9">Artificial Intelligence</option>
+                <option value="10">DevOps</option>
+              </select>
+              <div class="form-error" id="courseCategoryError"></div>
+            </div>
+            <div class="form-group">
+              <label for="courseLevel">Course Level*</label>
+              <select id="courseLevel" required>
+                <option value="">Select a level</option>
+                <option value="beginner">Beginner Level</option>
+                <option value="intermediate">Intermediate Level</option>
+                <option value="advanced">Advanced Level</option>
+                <option value="all-levels">All Levels</option>
+              </select>
+              <div class="form-error" id="courseLevelError"></div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button id="nextToContentBtn" class="btn btn-primary">
+              Continue to Curriculum <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Curriculum Tab -->
+        <div id="curriculumTab" class="tab-content">
+          <div class="editor-card">
+            <h2>Course Content</h2>
+            <p>
+              Build your course by creating sections and lessons. Drag and drop
+              to reorder.
+            </p>
+
+            <div class="curriculum-container" id="curriculumContainer">
+              <!-- Sections will be added here dynamically -->
+            </div>
+
+            <div class="add-item-btn" id="addSectionBtn">
+              <i class="fas fa-plus"></i> Add New Section
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button id="backToBasicsBtn" class="btn btn-outline">
+              <i class="fas fa-arrow-left"></i> Back to Basics
+            </button>
+            <button id="nextToPricingBtn" class="btn btn-primary">
+              Continue to Pricing <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Pricing Tab -->
+        <div id="pricingTab" class="tab-content">
+          <div class="editor-card">
+            <h2>Course Pricing</h2>
+            <div class="form-group">
+              <label for="coursePrice">Course Price*</label>
+              <div class="price-input">
+                <input
+                  type="number"
+                  id="coursePrice"
+                  min="0"
+                  step="0.01"
+                  value="0.00"
+                  required
+                />
+              </div>
+              <div class="help-text">
+                Set your course price. Enter 0 for a free course.
+              </div>
+              <div class="form-error" id="coursePriceError"></div>
+            </div>
+
+            <div class="pricing-options">
+              <div class="pricing-option">
+                <input type="checkbox" id="freeLessons" checked />
+                <label for="freeLessons"
+                  >Include some free preview lessons</label
+                >
+                <div class="help-text">
+                  Allowing students to preview some lessons can increase
+                  enrollment.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button id="backToCurriculumBtn" class="btn btn-outline">
+              <i class="fas fa-arrow-left"></i> Back to Curriculum
+            </button>
+            <button id="nextToSettingsBtn" class="btn btn-primary">
+              Continue to Settings <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settingsTab" class="tab-content">
+          <div class="editor-card">
+            <h2>Course Settings</h2>
+
+            <div class="settings-row">
+              <div class="settings-column">
+                <div class="form-group">
+                  <label for="welcomeMessage">Welcome Message</label>
+                  <textarea
+                    id="welcomeMessage"
+                    placeholder="Welcome message for your students..."
+                  ></textarea>
+                  <div class="help-text">
+                    This message will be sent to students when they enroll in
+                    your course.
+                  </div>
+                </div>
+              </div>
+              <div class="settings-column">
+                <div class="form-group">
+                  <label for="completionMessage">Completion Message</label>
+                  <textarea
+                    id="completionMessage"
+                    placeholder="Congratulations message for course completion..."
+                  ></textarea>
+                  <div class="help-text">
+                    This message will be shown to students when they complete
+                    your course.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="courseRequirements">Course Requirements</label>
+              <textarea
+                id="courseRequirements"
+                placeholder="List prerequisites or technical requirements for your course..."
+              ></textarea>
+              <div class="help-text">
+                Specify what students need to know or have before taking your
+                course.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="targetAudience">Target Audience</label>
+              <textarea
+                id="targetAudience"
+                placeholder="Describe who this course is for..."
+              ></textarea>
+              <div class="help-text">
+                Specify who will benefit most from taking your course.
+              </div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button id="backToPricingBtn" class="btn btn-outline">
+              <i class="fas fa-arrow-left"></i> Back to Pricing
+            </button>
+            <button id="saveAndExitBtn" class="btn btn-outline">
+              Save and Exit
+            </button>
+            <button id="finalPublishBtn" class="btn btn-primary">
+              <i class="fas fa-upload"></i> Publish Course
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lesson Editor Modal -->
+    <div class="modal" id="lessonEditorModal">
+      <div class="modal-content lesson-editor-modal">
+        <div class="modal-header">
+          <h3 id="lessonModalTitle">Add New Lesson</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="modal-tabs">
+            <div class="modal-tab active" data-tab="lessonDetails">
+              Basic Details
+            </div>
+            <div class="modal-tab" data-tab="lessonContent">Content</div>
+            <div class="modal-tab" data-tab="lessonSettings">Settings</div>
+          </div>
+
+          <div id="lessonDetailsTab" class="modal-tab-content active">
+            <div class="form-group">
+              <label for="lessonTitle">Lesson Title*</label>
+              <input
+                type="text"
+                id="lessonTitle"
+                placeholder="e.g. Introduction to JavaScript"
+                required
+              />
+              <div class="form-error" id="lessonTitleError"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="lessonDescription">Lesson Description</label>
+              <textarea
+                id="lessonDescription"
+                placeholder="Brief description of this lesson..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div id="lessonContentTab" class="modal-tab-content">
+            <div class="form-group">
+              <label for="lessonContentType">Content Type*</label>
+              <select id="lessonContentType">
+                <option value="video">Video</option>
+                <option value="text">Text</option>
+              </select>
+            </div>
+
+            <div id="videoContentOptions">
+              <div class="form-group">
+                <label for="lessonVideo">Upload Video*</label>
+                <div class="video-upload-container">
+                  <div class="upload-icon">
+                    <i class="fas fa-video"></i>
+                  </div>
+                  <div class="upload-title">Drag and drop your video here</div>
+                  <div class="upload-subtitle">or</div>
+                  <div class="file-input-wrapper">
+                    <button class="btn btn-outline">
+                      <i class="fas fa-upload"></i> Browse Files
+                    </button>
+                    <input
+                      type="file"
+                      id="lessonVideoUpload"
+                      accept="video/mp4,video/webm,video/ogg"
+                    />
+                  </div>
+                  <div class="help-text">
+                    Maximum file size: 500MB. Supported formats: MP4, WebM, OGG.
+                  </div>
+                  <div class="form-error" id="lessonVideoError"></div>
+                </div>
+                <div class="video-preview" id="videoPreview">
+                  <video controls>
+                    <source src="" type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="lessonDuration">Duration (minutes)</label>
+                <input
+                  type="number"
+                  id="lessonDuration"
+                  min="1"
+                  placeholder="e.g. 15"
+                />
+                <div class="help-text">Video duration in minutes.</div>
+              </div>
+            </div>
+
+            <div id="textContentOptions" style="display: none">
+              <div class="form-group">
+                <label for="lessonText">Lesson Content*</label>
+                <textarea
+                  id="lessonText"
+                  rows="15"
+                  placeholder="Write your lesson content here..."
+                ></textarea>
+                <div class="form-error" id="lessonTextError"></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="lessonSettingsTab" class="modal-tab-content">
+            <div class="form-group">
+              <input type="checkbox" id="isFreeLesson" />
+              <label for="isFreeLesson">Make this a free preview lesson</label>
+              <div class="help-text">
+                Free lessons can be viewed by non-enrolled students.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <input type="checkbox" id="requiresCompletion" checked />
+              <label for="requiresCompletion"
+                >Require completion before proceeding</label
+              >
+              <div class="help-text">
+                Students must complete this lesson before moving to the next
+                one.
+              </div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button id="cancelLessonBtn" class="btn btn-outline">Cancel</button>
+            <button id="saveLessonBtn" class="btn btn-primary">
+              Save Lesson
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteConfirmModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Confirm Deletion</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="deleteConfirmMessage">
+            Are you sure you want to delete this item? This action cannot be
+            undone.
+          </p>
+          <div class="action-buttons">
+            <button id="cancelDeleteBtn" class="btn btn-outline">Cancel</button>
+            <button id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Check auth status
+        if (!isAuthenticated()) {
+          window.location.href =
+            "../auth/login.html?return_to=" +
+            encodeURIComponent(window.location.href);
+          return;
+        }
+
+        // Get user data
+        const user = getUserFromLocalStorage();
+        updateUserInfo(user);
+
+        // Make sure user is an instructor or admin
+        if (user.role !== "instructor" && user.role !== "admin") {
+          window.location.href = "../dashboard/student.html";
+          return;
+        }
+
+        // Initialize the editor
+        initEditor();
+
+        // Add event listeners
+        document.getElementById("logoutBtn").addEventListener("click", (e) => {
+          e.preventDefault();
+          logout();
+        });
+      });
+
+      // Update user info
+      function updateUserInfo(user) {
+        if (user) {
+          document.getElementById("userName").textContent = user.username;
+        }
+      }
+
+      // Initialize editor
+      function initEditor() {
+        // Get query parameters
+        const params = getQueryParams();
+        const courseId = params.id;
+        const action = params.action;
+
+        // Track the current course data
+        window.courseData = {
+          sections: [],
+        };
+
+        // Set up tab navigation
+        setupTabNavigation();
+
+        // Set up form navigation
+        setupFormNavigation();
+
+        // Set up thumbnail upload
+        setupThumbnailUpload();
+
+        // Set up lesson editor modal
+        setupLessonEditorModal();
+
+        // Set up delete confirmation modal
+        setupDeleteConfirmationModal();
+
+        // Add initial curriculum section
+        addNewSection();
+
+        // Load course data if editing existing course
+        if (courseId) {
+          loadCourseData(courseId);
+        }
+
+        // Set up save and publish buttons
+        setupSaveButtons(courseId);
+      }
+
+      // Set up tab navigation
+      function setupTabNavigation() {
+        const tabs = document.querySelectorAll(".editor-tab");
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            // Remove active class from all tabs
+            tabs.forEach((t) => t.classList.remove("active"));
+
+            // Add active class to clicked tab
+            tab.classList.add("active");
+
+            // Show corresponding content
+            const tabName = tab.getAttribute("data-tab");
+            document.querySelectorAll(".tab-content").forEach((content) => {
+              content.classList.remove("active");
+            });
+            document.getElementById(`${tabName}Tab`).classList.add("active");
+          });
+        });
+      }
+
+      // Set up form navigation
+      function setupFormNavigation() {
+        // Next buttons
+        document
+          .getElementById("nextToContentBtn")
+          .addEventListener("click", () => {
+            // Validate basics tab
+            if (validateBasicsTab()) {
+              switchToTab("curriculum");
+            }
+          });
+
+        document
+          .getElementById("nextToPricingBtn")
+          .addEventListener("click", () => {
+            switchToTab("pricing");
+          });
+
+        document
+          .getElementById("nextToSettingsBtn")
+          .addEventListener("click", () => {
+            // Validate pricing tab
+            if (validatePricingTab()) {
+              switchToTab("settings");
+            }
+          });
+
+        // Back buttons
+        document
+          .getElementById("backToBasicsBtn")
+          .addEventListener("click", () => {
+            switchToTab("basics");
+          });
+
+        document
+          .getElementById("backToCurriculumBtn")
+          .addEventListener("click", () => {
+            switchToTab("curriculum");
+          });
+
+        document
+          .getElementById("backToPricingBtn")
+          .addEventListener("click", () => {
+            switchToTab("pricing");
+          });
+      }
+
+      // Switch to tab
+      function switchToTab(tabName) {
+        // Update tab buttons
+        document.querySelectorAll(".editor-tab").forEach((tab) => {
+          if (tab.getAttribute("data-tab") === tabName) {
+            tab.classList.add("active");
+          } else {
+            tab.classList.remove("active");
+          }
+        });
+
+        // Update tab content
+        document.querySelectorAll(".tab-content").forEach((content) => {
+          content.classList.remove("active");
+        });
+        document.getElementById(`${tabName}Tab`).classList.add("active");
+      }
+
+      // Validate basics tab
+      function validateBasicsTab() {
+        let isValid = true;
+
+        // Clear previous errors
+        document.getElementById("courseTitleError").textContent = "";
+        document.getElementById("courseDescriptionError").textContent = "";
+        document.getElementById("courseCategoryError").textContent = "";
+        document.getElementById("courseLevelError").textContent = "";
+
+        // Validate title
+        const titleInput = document.getElementById("courseTitle");
+        if (!titleInput.value.trim()) {
+          document.getElementById("courseTitleError").textContent =
+            "Course title is required";
+          isValid = false;
+        }
+
+        // Validate description
+        const descriptionInput = document.getElementById("courseDescription");
+        if (!descriptionInput.value.trim()) {
+          document.getElementById("courseDescriptionError").textContent =
+            "Course description is required";
+          isValid = false;
+        }
+
+        // Validate category
+        const categorySelect = document.getElementById("courseCategory");
+        if (!categorySelect.value) {
+          document.getElementById("courseCategoryError").textContent =
+            "Please select a category";
+          isValid = false;
+        }
+
+        // Validate level
+        const levelSelect = document.getElementById("courseLevel");
+        if (!levelSelect.value) {
+          document.getElementById("courseLevelError").textContent =
+            "Please select a course level";
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      // Validate pricing tab
+      function validatePricingTab() {
+        let isValid = true;
+
+        // Clear previous errors
+        document.getElementById("coursePriceError").textContent = "";
+
+        // Validate price
+        const priceInput = document.getElementById("coursePrice");
+        if (priceInput.value === "" || isNaN(parseFloat(priceInput.value))) {
+          document.getElementById("coursePriceError").textContent =
+            "Please enter a valid price";
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      // Set up thumbnail upload
+      function setupThumbnailUpload() {
+        const thumbnailUpload = document.getElementById("thumbnailUpload");
+        const thumbnailPreview = document.getElementById("thumbnailPreview");
+
+        thumbnailUpload.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+              thumbnailPreview.innerHTML = `<img src="${event.target.result}" alt="Thumbnail Preview">`;
+            };
+            reader.readAsDataURL(file);
+
+            // Store file for upload
+            window.thumbnailFile = file;
+          }
+        });
+      }
+
+      // Set up lesson editor modal
+      function setupLessonEditorModal() {
+        // Modal tab navigation
+        const modalTabs = document.querySelectorAll(".modal-tab");
+
+        modalTabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            // Remove active class from all tabs
+            modalTabs.forEach((t) => t.classList.remove("active"));
+
+            // Add active class to clicked tab
+            tab.classList.add("active");
+
+            // Show corresponding content
+            const tabName = tab.getAttribute("data-tab");
+            document
+              .querySelectorAll(".modal-tab-content")
+              .forEach((content) => {
+                content.classList.remove("active");
+              });
+            document.getElementById(`${tabName}Tab`).classList.add("active");
+          });
+        });
+
+        // Content type toggle
+        document
+          .getElementById("lessonContentType")
+          .addEventListener("change", function () {
+            const contentType = this.value;
+            if (contentType === "video") {
+              document.getElementById("videoContentOptions").style.display =
+                "block";
+              document.getElementById("textContentOptions").style.display =
+                "none";
+            } else if (contentType === "text") {
+              document.getElementById("videoContentOptions").style.display =
+                "none";
+              document.getElementById("textContentOptions").style.display =
+                "block";
+            }
+          });
+
+        // Video upload preview
+        const videoUpload = document.getElementById("lessonVideoUpload");
+        const videoPreview = document.getElementById("videoPreview");
+
+        videoUpload.addEventListener("change", (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const videoElement = videoPreview.querySelector("video");
+            videoElement.src = URL.createObjectURL(file);
+            videoPreview.style.display = "block";
+
+            // Store file for upload
+            window.lessonVideoFile = file;
+          }
+        });
+
+        // Close modal
+        document
+          .querySelector("#lessonEditorModal .close-modal")
+          .addEventListener("click", () => {
+            closeLessonModal();
+          });
+
+        // Cancel button
+        document
+          .getElementById("cancelLessonBtn")
+          .addEventListener("click", () => {
+            closeLessonModal();
+          });
+
+        // Save lesson button
+        document
+          .getElementById("saveLessonBtn")
+          .addEventListener("click", () => {
+            saveLesson();
+          });
+      }
+
+      // Set up delete confirmation modal
+      function setupDeleteConfirmationModal() {
+        // Close modal
+        document
+          .querySelector("#deleteConfirmModal .close-modal")
+          .addEventListener("click", () => {
+            closeDeleteModal();
+          });
+
+        // Cancel button
+        document
+          .getElementById("cancelDeleteBtn")
+          .addEventListener("click", () => {
+            closeDeleteModal();
+          });
+      }
+
+      // Open lesson modal for adding a new lesson
+      function openLessonModal(sectionIndex) {
+        // Set current section index
+        window.currentSectionIndex = sectionIndex;
+
+        // Reset lesson editor
+        document.getElementById("lessonModalTitle").textContent =
+          "Add New Lesson";
+        document.getElementById("lessonTitle").value = "";
+        document.getElementById("lessonDescription").value = "";
+        document.getElementById("lessonContentType").value = "video";
+        document.getElementById("lessonDuration").value = "";
+        document.getElementById("lessonText").value = "";
+        document.getElementById("isFreeLesson").checked = false;
+        document.getElementById("requiresCompletion").checked = true;
+        document.getElementById("videoPreview").style.display = "none";
+        document.getElementById("videoContentOptions").style.display = "block";
+        document.getElementById("textContentOptions").style.display = "none";
+
+        // Clear errors
+        document.getElementById("lessonTitleError").textContent = "";
+        document.getElementById("lessonVideoError").textContent = "";
+        document.getElementById("lessonTextError").textContent = "";
+
+        // Reset modal tabs
+        document.querySelectorAll(".modal-tab").forEach((tab) => {
+          tab.classList.remove("active");
+          if (tab.getAttribute("data-tab") === "lessonDetails") {
+            tab.classList.add("active");
+          }
+        });
+
+        document.querySelectorAll(".modal-tab-content").forEach((content) => {
+          content.classList.remove("active");
+        });
+        document.getElementById("lessonDetailsTab").classList.add("active");
+
+        // Show modal
+        document.getElementById("lessonEditorModal").style.display = "flex";
+      }
+
+      // Open lesson modal for editing an existing lesson
+      function openLessonEditModal(sectionIndex, lessonIndex) {
+        // Set current section and lesson indices
+        window.currentSectionIndex = sectionIndex;
+        window.currentLessonIndex = lessonIndex;
+
+        // Get lesson data
+        const lesson =
+          window.courseData.sections[sectionIndex].lessons[lessonIndex];
+
+        // Set modal title
+        document.getElementById("lessonModalTitle").textContent = "Edit Lesson";
+
+        // Fill in lesson details
+        document.getElementById("lessonTitle").value = lesson.title || "";
+        document.getElementById("lessonDescription").value =
+          lesson.description || "";
+        document.getElementById("lessonContentType").value =
+          lesson.content_type || "video";
+        document.getElementById("lessonDuration").value = lesson.duration
+          ? Math.round(lesson.duration / 60)
+          : "";
+        document.getElementById("lessonText").value = lesson.content_text || "";
+        document.getElementById("isFreeLesson").checked =
+          lesson.is_free || false;
+        document.getElementById("requiresCompletion").checked =
+          lesson.requires_completion !== false;
+
+        // Show/hide content options
+        if (lesson.content_type === "video") {
+          document.getElementById("videoContentOptions").style.display =
+            "block";
+          document.getElementById("textContentOptions").style.display = "none";
+        } else {
+          document.getElementById("videoContentOptions").style.display = "none";
+          document.getElementById("textContentOptions").style.display = "block";
+        }
+
+        // Show video preview if available
+        if (lesson.content_url) {
+          const videoPreview = document.getElementById("videoPreview");
+          const videoElement = videoPreview.querySelector("video");
+          videoElement.src = lesson.content_url;
+          videoPreview.style.display = "block";
+        } else {
+          document.getElementById("videoPreview").style.display = "none";
+        }
+
+        // Clear errors
+        document.getElementById("lessonTitleError").textContent = "";
+        document.getElementById("lessonVideoError").textContent = "";
+        document.getElementById("lessonTextError").textContent = "";
+
+        // Reset modal tabs
+        document.querySelectorAll(".modal-tab").forEach((tab) => {
+          tab.classList.remove("active");
+          if (tab.getAttribute("data-tab") === "lessonDetails") {
+            tab.classList.add("active");
+          }
+        });
+
+        document.querySelectorAll(".modal-tab-content").forEach((content) => {
+          content.classList.remove("active");
+        });
+        document.getElementById("lessonDetailsTab").classList.add("active");
+
+        // Show modal
+        document.getElementById("lessonEditorModal").style.display = "flex";
+      }
+
+      // Close lesson modal
+      function closeLessonModal() {
+        document.getElementById("lessonEditorModal").style.display = "none";
+
+        // Clear temporary file storage
+        delete window.lessonVideoFile;
+      }
+
+      // Save lesson
+      function saveLesson() {
+        // Validate lesson details
+        let isValid = true;
+
+        // Clear previous errors
+        document.getElementById("lessonTitleError").textContent = "";
+        document.getElementById("lessonVideoError").textContent = "";
+        document.getElementById("lessonTextError").textContent = "";
+
+        // Get form values
+        const title = document.getElementById("lessonTitle").value.trim();
+        const description = document
+          .getElementById("lessonDescription")
+          .value.trim();
+        const contentType = document.getElementById("lessonContentType").value;
+        const durationMin = document.getElementById("lessonDuration").value;
+        const duration = durationMin ? parseInt(durationMin) * 60 : null; // Convert to seconds
+        const contentText = document.getElementById("lessonText").value.trim();
+        const isFree = document.getElementById("isFreeLesson").checked;
+        const requiresCompletion =
+          document.getElementById("requiresCompletion").checked;
+
+        // Validate title
+        if (!title) {
+          document.getElementById("lessonTitleError").textContent =
+            "Lesson title is required";
+          isValid = false;
+        }
+
+        // Validate content based on type
+        if (contentType === "video") {
+          // Check for video only if this is a new lesson or a video file was selected for an existing lesson
+          if (!window.currentLessonIndex && !window.lessonVideoFile) {
+            document.getElementById("lessonVideoError").textContent =
+              "Please upload a video";
+            isValid = false;
+          }
+        } else if (contentType === "text") {
+          if (!contentText) {
+            document.getElementById("lessonTextError").textContent =
+              "Please enter lesson content";
+            isValid = false;
+          }
+        }
+
+        if (!isValid) {
+          return;
+        }
+
+        // Create lesson object
+        const lesson = {
+          title,
+          description,
+          content_type: contentType,
+          duration,
+          content_text: contentType === "text" ? contentText : null,
+          is_free: isFree,
+          requires_completion: requiresCompletion,
+        };
+
+        // Add or update lesson
+        if (window.currentLessonIndex !== undefined) {
+          // Update existing lesson
+          window.courseData.sections[window.currentSectionIndex].lessons[
+            window.currentLessonIndex
+          ] = {
+            ...window.courseData.sections[window.currentSectionIndex].lessons[
+              window.currentLessonIndex
+            ],
+            ...lesson,
+          };
+        } else {
+          // Add new lesson
+          if (!window.courseData.sections[window.currentSectionIndex].lessons) {
+            window.courseData.sections[window.currentSectionIndex].lessons = [];
+          }
+
+          window.courseData.sections[window.currentSectionIndex].lessons.push({
+            ...lesson,
+            id: "temp_" + Date.now(), // Temporary ID for new lessons
+            order_index:
+              window.courseData.sections[window.currentSectionIndex].lessons
+                .length + 1,
+          });
+        }
+
+        // Update UI
+        renderCurriculum();
+
+        // Close modal
+        closeLessonModal();
+
+        // Show confirmation message
+        showNotification("Lesson saved successfully", "success");
+      }
+
+      // Open delete confirmation modal
+      function openDeleteModal(type, sectionIndex, lessonIndex) {
+        window.deleteType = type;
+        window.deleteSectionIndex = sectionIndex;
+        window.deleteLessonIndex = lessonIndex;
+
+        let confirmMessage = "";
+        if (type === "section") {
+          confirmMessage =
+            "Are you sure you want to delete this section? All lessons within this section will also be deleted.";
+        } else if (type === "lesson") {
+          confirmMessage =
+            "Are you sure you want to delete this lesson? This action cannot be undone.";
+        }
+
+        document.getElementById("deleteConfirmMessage").textContent =
+          confirmMessage;
+        document.getElementById("deleteConfirmModal").style.display = "flex";
+
+        // Set up confirm button
+        document.getElementById("confirmDeleteBtn").onclick = () => {
+          if (type === "section") {
+            deleteSection(sectionIndex);
+          } else if (type === "lesson") {
+            deleteLesson(sectionIndex, lessonIndex);
+          }
+          closeDeleteModal();
+        };
+      }
+
+      // Close delete modal
+      function closeDeleteModal() {
+        document.getElementById("deleteConfirmModal").style.display = "none";
+      }
+
+      // Delete section
+      function deleteSection(sectionIndex) {
+        // Remove section from data
+        window.courseData.sections.splice(sectionIndex, 1);
+
+        // Update UI
+        renderCurriculum();
+
+        // Show confirmation message
+        showNotification("Section deleted successfully", "success");
+      }
+
+      // Delete lesson
+      function deleteLesson(sectionIndex, lessonIndex) {
+        // Remove lesson from data
+        window.courseData.sections[sectionIndex].lessons.splice(lessonIndex, 1);
+
+        // Update UI
+        renderCurriculum();
+
+        // Show confirmation message
+        showNotification("Lesson deleted successfully", "success");
+      }
+
+      // Add new section
+      function addNewSection() {
+        // Add section to data
+        window.courseData.sections.push({
+          title: "New Section",
+          order_index: window.courseData.sections.length + 1,
+          lessons: [],
+        });
+
+        // Update UI
+        renderCurriculum();
+      }
+
+      // Render curriculum
+      function renderCurriculum() {
+        const container = document.getElementById("curriculumContainer");
+        container.innerHTML = "";
+
+        if (window.courseData.sections.length === 0) {
+          // Add empty state
+          container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-list"></i></div>
+                        <h3>No sections yet</h3>
+                        <p>Start building your course by adding sections and lessons.</p>
+                    </div>
+                `;
+          return;
+        }
+
+        // Render each section
+        window.courseData.sections.forEach((section, sectionIndex) => {
+          const sectionElement = document.createElement("div");
+          sectionElement.className = "curriculum-section";
+
+          // Create section header
+          const sectionHeader = document.createElement("div");
+          sectionHeader.className = "section-header";
+          sectionHeader.innerHTML = `
+                    <input type="text" class="section-title-input" value="${section.title}" placeholder="Section Title">
+                    <div class="section-actions">
+                        <button class="btn btn-sm btn-outline section-edit-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger section-delete-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+
+          // Add event listener for section title
+          const titleInput = sectionHeader.querySelector(
+            ".section-title-input"
+          );
+          titleInput.addEventListener("change", () => {
+            section.title = titleInput.value;
+          });
+
+          // Add event listener for section delete
+          const deleteBtn = sectionHeader.querySelector(".section-delete-btn");
+          deleteBtn.addEventListener("click", () => {
+            openDeleteModal("section", sectionIndex);
+          });
+
+          sectionElement.appendChild(sectionHeader);
+
+          // Create section content
+          const sectionContent = document.createElement("div");
+          sectionContent.className = "section-content";
+
+          // Add lessons
+          if (section.lessons && section.lessons.length > 0) {
+            section.lessons.forEach((lesson, lessonIndex) => {
+              const lessonElement = document.createElement("div");
+              lessonElement.className = "lesson-item";
+              lessonElement.innerHTML = `
+                            <div class="lesson-left">
+                                <div class="lesson-handle">
+                                    <i class="fas fa-grip-lines"></i>
+                                </div>
+                                <div class="lesson-title">${lesson.title}</div>
+                            </div>
+                            <div class="lesson-actions">
+                                <button class="btn btn-sm btn-outline lesson-edit-btn">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger lesson-delete-btn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+
+              // Add event listener for lesson edit
+              const editBtn = lessonElement.querySelector(".lesson-edit-btn");
+              editBtn.addEventListener("click", () => {
+                openLessonEditModal(sectionIndex, lessonIndex);
+              });
+
+              // Add event listener for lesson delete
+              const deleteBtn =
+                lessonElement.querySelector(".lesson-delete-btn");
+              deleteBtn.addEventListener("click", () => {
+                openDeleteModal("lesson", sectionIndex, lessonIndex);
+              });
+
+              sectionContent.appendChild(lessonElement);
+            });
+          }
+
+          // Add 'add lesson' button
+          const addLessonBtn = document.createElement("div");
+          addLessonBtn.className = "add-item-btn";
+          addLessonBtn.innerHTML = '<i class="fas fa-plus"></i> Add Lesson';
+          addLessonBtn.addEventListener("click", () => {
+            openLessonModal(sectionIndex);
+          });
+
+          sectionContent.appendChild(addLessonBtn);
+          sectionElement.appendChild(sectionContent);
+
+          container.appendChild(sectionElement);
+        });
+      }
+
+      // Load course data for editing
+      async function loadCourseData(courseId) {
+        try {
+          // Update editor title
+          document.getElementById("editorTitle").textContent = "Edit Course";
+          document.getElementById("editorSubtitle").textContent =
+            "Update your course content and settings";
+
+          // Fetch course data
+          const response = await api.get(`/courses/${courseId}`);
+          const course = response.data;
+
+          // Update form fields
+          document.getElementById("courseTitle").value = course.title || "";
+          document.getElementById("courseSubtitle").value =
+            course.subtitle || "";
+          document.getElementById("courseDescription").value =
+            course.description || "";
+
+          // Set thumbnail preview if available
+          if (course.thumbnail) {
+            document.getElementById("thumbnailPreview").innerHTML = `
+                        <img src="${course.thumbnail}" alt="Course Thumbnail">
+                    `;
+          }
+
+          // Set category and level
+          if (course.categories && course.categories.length > 0) {
+            document.getElementById("courseCategory").value =
+              course.categories[0].id;
+          }
+
+          document.getElementById("courseLevel").value =
+            course.level || "all-levels";
+
+          // Set price
+          document.getElementById("coursePrice").value = course.price || 0;
+
+          // Set course data
+          window.courseData = {
+            id: course.id,
+            title: course.title,
+            subtitle: course.subtitle,
+            description: course.description,
+            thumbnail: course.thumbnail,
+            price: course.price,
+            level: course.level,
+            status: course.status,
+            sections: [],
+          };
+
+          // Process sections and lessons
+          if (course.sections && course.sections.length > 0) {
+            window.courseData.sections = course.sections.map((section) => ({
+              id: section.id,
+              title: section.title,
+              description: section.description,
+              order_index: section.order_index,
+              lessons: (section.lessons || []).map((lesson) => ({
+                id: lesson.id,
+                title: lesson.title,
+                description: lesson.description,
+                content_type: lesson.content_type || "video",
+                content_url: lesson.content_url,
+                content_text: lesson.content_text,
+                duration: lesson.duration,
+                is_free: lesson.is_free,
+                order_index: lesson.order_index,
+              })),
+            }));
+          }
+
+          // Render curriculum
+          renderCurriculum();
+        } catch (error) {
+          console.error("Error loading course data:", error);
+          showNotification(
+            "Failed to load course data. Please try again later.",
+            "error"
+          );
+        }
+      }
+
+      // Set up save buttons
+      function setupSaveButtons(courseId) {
+        // Save as draft button
+        document
+          .getElementById("saveDraftBtn")
+          .addEventListener("click", () => {
+            saveCourse("draft", courseId);
+          });
+
+        // Publish buttons
+        document.getElementById("publishBtn").addEventListener("click", () => {
+          saveCourse("published", courseId);
+        });
+
+        document
+          .getElementById("finalPublishBtn")
+          .addEventListener("click", () => {
+            saveCourse("published", courseId);
+          });
+
+        // Save and exit button
+        document
+          .getElementById("saveAndExitBtn")
+          .addEventListener("click", () => {
+            saveCourse("draft", courseId, true);
+          });
+      }
+
+      // Save course
+      async function saveCourse(status, courseId, exitAfterSave = false) {
+        // Validate form data
+        if (!validateBasicsTab() || !validatePricingTab()) {
+          showNotification("Please fill in all required fields", "error");
+          return;
+        }
+
+        // Get course data
+        const courseData = {
+          title: document.getElementById("courseTitle").value.trim(),
+          subtitle: document.getElementById("courseSubtitle").value.trim(),
+          description: document
+            .getElementById("courseDescription")
+            .value.trim(),
+          price: parseFloat(document.getElementById("coursePrice").value),
+          level: document.getElementById("courseLevel").value,
+          status: status,
+          categoryIds: [
+            parseInt(document.getElementById("courseCategory").value),
+          ],
+        };
+
+        try {
+          let response;
+
+          // Update or create course
+          if (courseId) {
+            // Update existing course
+            response = await api.patch(`/courses/${courseId}`, courseData);
+          } else {
+            // Create new course
+            response = await api.post("/courses", courseData);
+            courseId = response.data.id;
+          }
+
+          // Upload thumbnail if selected
+          if (window.thumbnailFile) {
+            await uploadThumbnail(courseId);
+          }
+
+          // Save curriculum sections and lessons
+          await saveCurriculum(courseId);
+
+          // Show success message
+          showNotification(
+            `Course ${
+              status === "published" ? "published" : "saved"
+            } successfully`,
+            "success"
+          );
+
+          // Redirect after save if requested
+          if (exitAfterSave) {
+            setTimeout(() => {
+              window.location.href = "courses.html";
+            }, 1500);
+          } else {
+            // Reload course data
+            await loadCourseData(courseId);
+          }
+        } catch (error) {
+          console.error("Error saving course:", error);
+          showNotification(
+            "Failed to save course. Please try again later.",
+            "error"
+          );
+        }
+      }
+
+      // Upload thumbnail
+      async function uploadThumbnail(courseId) {
+        if (!window.thumbnailFile) return;
+
+        try {
+          const formData = new FormData();
+          formData.append("thumbnail", window.thumbnailFile);
+
+          await api.uploadFile(`/courses/${courseId}/thumbnail`, formData);
+
+          // Clear file reference after upload
+          delete window.thumbnailFile;
+        } catch (error) {
+          console.error("Error uploading thumbnail:", error);
+          throw error;
+        }
+      }
+
+      // Save curriculum
+      async function saveCurriculum(courseId) {
+        // For simplicity in this demo, we'll just show a confirmation
+        // In a real app, you would save each section and lesson with proper error handling
+        console.log(`Saving curriculum for course ${courseId}`);
+        console.log("Sections:", window.courseData.sections);
+
+        // Here we'd typically:
+        // 1. Create/update sections
+        // 2. Create/update lessons for each section
+        // 3. Upload video content for lessons
+
+        return true;
+      }
+    </script>
+  </body>
+</html>

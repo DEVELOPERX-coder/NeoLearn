@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - EduLearn</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="../../assets/css/dashboard.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header id="main-header">
+      <div class="container">
+        <div class="logo">
+          <h1><a href="../../index.html">EduLearn</a></h1>
+        </div>
+        <nav>
+          <ul class="main-nav">
+            <li><a href="dashboard.html" class="active">Admin Dashboard</a></li>
+            <li>
+              <a href="../dashboard/instructor.html">Instructor Dashboard</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <div class="logged-in" id="loggedInMenu">
+            <a href="#" id="userDropdown">
+              <img
+                src="../../assets/images/default-avatar.png"
+                alt="Profile"
+                class="avatar"
+                id="userAvatar"
+              />
+              <span id="userName">Admin</span>
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="../profile/settings.html">Profile Settings</a></li>
+              <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard-container">
+      <aside class="dashboard-sidebar">
+        <nav class="sidebar-nav">
+          <ul>
+            <li class="active">
+              <a href="dashboard.html">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="users.html">
+                <i class="fas fa-users"></i>
+                Users
+              </a>
+            </li>
+            <li>
+              <a href="courses.html">
+                <i class="fas fa-book"></i>
+                Courses
+              </a>
+            </li>
+            <li>
+              <a href="categories.html">
+                <i class="fas fa-tags"></i>
+                Categories
+              </a>
+            </li>
+            <li>
+              <a href="payments.html">
+                <i class="fas fa-dollar-sign"></i>
+                Payments
+              </a>
+            </li>
+            <li>
+              <a href="reports.html">
+                <i class="fas fa-chart-bar"></i>
+                Reports
+              </a>
+            </li>
+            <li>
+              <a href="settings.html">
+                <i class="fas fa-cog"></i>
+                Settings
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="dashboard-content">
+        <div class="dashboard-header">
+          <h1>Admin Dashboard</h1>
+          <p>Welcome back, <span id="welcomeUserName">Admin</span>!</p>
+        </div>
+
+        <section class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total Users</h3>
+              <p id="totalUsersCount">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total Courses</h3>
+              <p id="totalCoursesCount">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total Enrollments</h3>
+              <p id="totalEnrollmentsCount">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total Revenue</h3>
+              <p id="totalRevenue">$0.00</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard-row">
+          <div class="dashboard-column">
+            <div class="dashboard-section">
+              <div class="section-header">
+                <h2>Recent Registrations</h2>
+                <a href="users.html" class="view-all">View All</a>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table" id="recentUsersTable">
+                  <thead>
+                    <tr>
+                      <th>User</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Joined</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="5" class="loading-row">
+                        <div class="loading-spinner"></div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard-column">
+            <div class="dashboard-section">
+              <div class="section-header">
+                <h2>Pending Course Approvals</h2>
+                <a href="courses.html?status=pending" class="view-all"
+                  >View All</a
+                >
+              </div>
+              <div class="table-responsive">
+                <table class="data-table" id="pendingCoursesTable">
+                  <thead>
+                    <tr>
+                      <th>Course</th>
+                      <th>Instructor</th>
+                      <th>Submitted</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="4" class="loading-row">
+                        <div class="loading-spinner"></div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard-row">
+          <div class="dashboard-column">
+            <div class="dashboard-section">
+              <div class="section-header">
+                <h2>Revenue Overview</h2>
+              </div>
+              <div class="chart-container" id="revenueChart">
+                <div class="loading-spinner"></div>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard-column">
+            <div class="dashboard-section">
+              <div class="section-header">
+                <h2>User Growth</h2>
+              </div>
+              <div class="chart-container" id="userGrowthChart">
+                <div class="loading-spinner"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard-section">
+          <div class="section-header">
+            <h2>Top Performing Courses</h2>
+            <a href="courses.html" class="view-all">View All Courses</a>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="topCoursesTable">
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Instructor</th>
+                  <th>Enrollments</th>
+                  <th>Rating</th>
+                  <th>Revenue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" class="loading-row">
+                    <div class="loading-spinner"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="dashboard-section">
+          <div class="section-header">
+            <h2>Quick Actions</h2>
+          </div>
+          <div class="quick-actions-grid">
+            <a href="users.html?action=new" class="quick-action-card">
+              <div class="quick-action-icon">
+                <i class="fas fa-user-plus"></i>
+              </div>
+              <h3>Add New User</h3>
+              <p>Create a new user account</p>
+            </a>
+            <a href="categories.html?action=new" class="quick-action-card">
+              <div class="quick-action-icon">
+                <i class="fas fa-folder-plus"></i>
+              </div>
+              <h3>Add Category</h3>
+              <p>Create a new course category</p>
+            </a>
+            <a href="courses.html?status=pending" class="quick-action-card">
+              <div class="quick-action-icon">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <h3>Review Courses</h3>
+              <p>Approve pending course submissions</p>
+            </a>
+            <a href="reports.html" class="quick-action-card">
+              <div class="quick-action-icon">
+                <i class="fas fa-file-export"></i>
+              </div>
+              <h3>Export Reports</h3>
+              <p>Generate platform reports</p>
+            </a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Check auth status
+        if (!isAuthenticated()) {
+          window.location.href =
+            "../auth/login.html?return_to=" +
+            encodeURIComponent(window.location.href);
+          return;
+        }
+
+        // Get user data
+        const user = getUserFromLocalStorage();
+        updateUserInfo(user);
+
+        // Make sure user is an admin
+        if (user.role !== "admin") {
+          window.location.href = "../dashboard/student.html";
+          return;
+        }
+
+        // Load dashboard data
+        await loadDashboardData();
+
+        // Add event listeners
+        document.getElementById("logoutBtn").addEventListener("click", (e) => {
+          e.preventDefault();
+          logout();
+        });
+      });
+
+      // Update user info
+      function updateUserInfo(user) {
+        if (user) {
+          document.getElementById("userName").textContent = user.username;
+          document.getElementById("welcomeUserName").textContent =
+            user.username;
+        }
+      }
+
+      // Load dashboard data
+      async function loadDashboardData() {
+        try {
+          // In a real app, we would fetch this data from the API
+          // For this demo, we'll simulate data
+
+          // Load dashboard stats
+          await loadDashboardStats();
+
+          // Load recent users
+          await loadRecentUsers();
+
+          // Load pending courses
+          await loadPendingCourses();
+
+          // Load top courses
+          await loadTopCourses();
+
+          // Load charts
+          loadRevenueChart();
+          loadUserGrowthChart();
+        } catch (error) {
+          console.error("Error loading dashboard data:", error);
+          showNotification(
+            "Failed to load dashboard data. Please try again later.",
+            "error"
+          );
+        }
+      }
+
+      // Load dashboard stats
+      async function loadDashboardStats() {
+        try {
+          // Fetch dashboard stats from API
+          // In a real app, we would make an API call to get these stats
+          // For this demo, we'll simulate data
+
+          // Simulate API response
+          const stats = {
+            total_users: 1245,
+            total_courses: 328,
+            total_enrollments: 8976,
+            total_revenue: 127650.75,
+          };
+
+          // Update UI
+          document.getElementById("totalUsersCount").textContent =
+            stats.total_users.toLocaleString();
+          document.getElementById("totalCoursesCount").textContent =
+            stats.total_courses.toLocaleString();
+          document.getElementById("totalEnrollmentsCount").textContent =
+            stats.total_enrollments.toLocaleString();
+          document.getElementById("totalRevenue").textContent = formatPrice(
+            stats.total_revenue
+          );
+        } catch (error) {
+          console.error("Error loading dashboard stats:", error);
+          showNotification("Failed to load dashboard statistics.", "error");
+        }
+      }
+
+      // Load recent users
+      async function loadRecentUsers() {
+        try {
+          // In a real app, we would fetch recent users from the API
+          // For this demo, we'll simulate data
+
+          const tableBody = document.querySelector("#recentUsersTable tbody");
+
+          // Simulate users data
+          const users = [
+            {
+              id: 1001,
+              username: "johndoe",
+              email: "john.doe@example.com",
+              role: "student",
+              created_at: new Date("2023-05-15T10:30:00"),
+            },
+            {
+              id: 1002,
+              username: "janedoe",
+              email: "jane.doe@example.com",
+              role: "instructor",
+              created_at: new Date("2023-05-14T14:45:00"),
+            },
+            {
+              id: 1003,
+              username: "michaelsmith",
+              email: "michael.smith@example.com",
+              role: "student",
+              created_at: new Date("2023-05-14T09:15:00"),
+            },
+            {
+              id: 1004,
+              username: "sarahjones",
+              email: "sarah.jones@example.com",
+              role: "instructor",
+              created_at: new Date("2023-05-13T16:20:00"),
+            },
+            {
+              id: 1005,
+              username: "robertbrown",
+              email: "robert.brown@example.com",
+              role: "student",
+              created_at: new Date("2023-05-13T11:55:00"),
+            },
+          ];
+
+          if (users.length === 0) {
+            tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="empty-table">No recent users</td>
+                        </tr>
+                    `;
+            return;
+          }
+
+          tableBody.innerHTML = "";
+
+          users.forEach((user) => {
+            const row = document.createElement("tr");
+
+            const roleClass =
+              user.role === "admin"
+                ? "role-admin"
+                : user.role === "instructor"
+                ? "role-instructor"
+                : "role-student";
+
+            row.innerHTML = `
+                        <td>
+                            <div class="user-cell">
+                                <img src="../../assets/images/default-avatar.png" alt="${
+                                  user.username
+                                }" class="user-avatar">
+                                <span>${user.username}</span>
+                            </div>
+                        </td>
+                        <td>${user.email}</td>
+                        <td><span class="role-badge ${roleClass}">${
+              user.role
+            }</span></td>
+                        <td>${formatDate(user.created_at)}</td>
+                        <td>
+                            <div class="table-actions">
+                                <a href="users.html?id=${
+                                  user.id
+                                }" class="btn btn-sm btn-outline" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="users.html?id=${
+                                  user.id
+                                }&action=edit" class="btn btn-sm btn-outline" title="Edit User">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    `;
+
+            tableBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Error loading recent users:", error);
+          document.querySelector("#recentUsersTable tbody").innerHTML = `
+                    <tr>
+                        <td colspan="5" class="error-row">Failed to load users data.</td>
+                    </tr>
+                `;
+        }
+      }
+
+      // Load pending courses
+      async function loadPendingCourses() {
+        try {
+          // In a real app, we would fetch pending courses from the API
+          // For this demo, we'll simulate data
+
+          const tableBody = document.querySelector(
+            "#pendingCoursesTable tbody"
+          );
+
+          // Simulate pending courses data
+          const pendingCourses = [
+            {
+              id: 201,
+              title: "Advanced JavaScript Techniques",
+              instructor: "Jane Doe",
+              submitted_at: new Date("2023-05-14T15:30:00"),
+            },
+            {
+              id: 202,
+              title: "Introduction to Machine Learning",
+              instructor: "Michael Smith",
+              submitted_at: new Date("2023-05-13T11:45:00"),
+            },
+            {
+              id: 203,
+              title: "React.js for Beginners",
+              instructor: "Sarah Jones",
+              submitted_at: new Date("2023-05-12T09:15:00"),
+            },
+          ];
+
+          if (pendingCourses.length === 0) {
+            tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="empty-table">No pending courses</td>
+                        </tr>
+                    `;
+            return;
+          }
+
+          tableBody.innerHTML = "";
+
+          pendingCourses.forEach((course) => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                        <td>${course.title}</td>
+                        <td>${course.instructor}</td>
+                        <td>${formatDate(course.submitted_at)}</td>
+                        <td>
+                            <div class="table-actions">
+                                <a href="../courses/details.html?id=${
+                                  course.id
+                                }" class="btn btn-sm btn-outline" title="View Course">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <button class="btn btn-sm btn-primary approve-course" data-id="${
+                                  course.id
+                                }" title="Approve">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger reject-course" data-id="${
+                                  course.id
+                                }" title="Reject">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+
+            tableBody.appendChild(row);
+          });
+
+          // Add event listeners for approve/reject buttons
+          document.querySelectorAll(".approve-course").forEach((button) => {
+            button.addEventListener("click", (e) => {
+              const courseId = e.target.closest("button").dataset.id;
+              approveCourse(courseId);
+            });
+          });
+
+          document.querySelectorAll(".reject-course").forEach((button) => {
+            button.addEventListener("click", (e) => {
+              const courseId = e.target.closest("button").dataset.id;
+              rejectCourse(courseId);
+            });
+          });
+        } catch (error) {
+          console.error("Error loading pending courses:", error);
+          document.querySelector("#pendingCoursesTable tbody").innerHTML = `
+                    <tr>
+                        <td colspan="4" class="error-row">Failed to load pending courses data.</td>
+                    </tr>
+                `;
+        }
+      }
+
+      // Load top courses
+      async function loadTopCourses() {
+        try {
+          // In a real app, we would fetch top courses from the API
+          // For this demo, we'll simulate data
+
+          const tableBody = document.querySelector("#topCoursesTable tbody");
+
+          // Simulate top courses data
+          const topCourses = [
+            {
+              id: 101,
+              title: "Complete Web Development Bootcamp",
+              instructor: "Jane Doe",
+              enrollments: 1245,
+              rating: 4.8,
+              revenue: 62250.0,
+            },
+            {
+              id: 102,
+              title: "Python for Data Science and Machine Learning",
+              instructor: "Michael Smith",
+              enrollments: 986,
+              rating: 4.7,
+              revenue: 49300.0,
+            },
+            {
+              id: 103,
+              title: "React.js - The Complete Guide",
+              instructor: "Sarah Jones",
+              enrollments: 879,
+              rating: 4.9,
+              revenue: 43950.0,
+            },
+            {
+              id: 104,
+              title: "Advanced JavaScript Concepts",
+              instructor: "Robert Brown",
+              enrollments: 752,
+              rating: 4.6,
+              revenue: 37600.0,
+            },
+            {
+              id: 105,
+              title: "Node.js, Express & MongoDB",
+              instructor: "Daniel Wilson",
+              enrollments: 645,
+              rating: 4.5,
+              revenue: 32250.0,
+            },
+          ];
+
+          if (topCourses.length === 0) {
+            tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="empty-table">No courses data available</td>
+                        </tr>
+                    `;
+            return;
+          }
+
+          tableBody.innerHTML = "";
+
+          topCourses.forEach((course) => {
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                        <td>
+                            <a href="../courses/details.html?id=${
+                              course.id
+                            }" class="table-link">
+                                ${course.title}
+                            </a>
+                        </td>
+                        <td>${course.instructor}</td>
+                        <td>${course.enrollments.toLocaleString()}</td>
+                        <td>
+                            <div class="rating-cell">
+                                <span class="rating-value">${course.rating.toFixed(
+                                  1
+                                )}</span>
+                                <div class="rating-stars">${generateStarRating(
+                                  course.rating
+                                )}</div>
+                            </div>
+                        </td>
+                        <td>${formatPrice(course.revenue)}</td>
+                    `;
+
+            tableBody.appendChild(row);
+          });
+        } catch (error) {
+          console.error("Error loading top courses:", error);
+          document.querySelector("#topCoursesTable tbody").innerHTML = `
+                    <tr>
+                        <td colspan="5" class="error-row">Failed to load top courses data.</td>
+                    </tr>
+                `;
+        }
+      }
+
+      // Load revenue chart
+      function loadRevenueChart() {
+        const chartContainer = document.getElementById("revenueChart");
+
+        // In a real app, we would use a proper charting library
+        // For this demo, we'll create a simple bar chart
+
+        // Simulate monthly revenue data
+        const monthlyRevenue = [
+          { month: "Jan", revenue: 8500 },
+          { month: "Feb", revenue: 9200 },
+          { month: "Mar", revenue: 11500 },
+          { month: "Apr", revenue: 10800 },
+          { month: "May", revenue: 12300 },
+        ];
+
+        // Create bar chart HTML
+        let chartHtml = `
+                <div class="bar-chart">
+                    <h3 class="chart-title">Monthly Revenue (2023)</h3>
+                    <div class="chart-container">
+            `;
+
+        // Find maximum revenue for scaling
+        const maxRevenue = Math.max(
+          ...monthlyRevenue.map((item) => item.revenue)
+        );
+
+        // Add bars
+        monthlyRevenue.forEach((item) => {
+          const percentage = (item.revenue / maxRevenue) * 100;
+
+          chartHtml += `
+                    <div class="chart-column">
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar" style="height: ${percentage}%"></div>
+                        </div>
+                        <div class="chart-label">${item.month}</div>
+                    </div>
+                `;
+        });
+
+        chartHtml += `
+                    </div>
+                    <div class="chart-y-axis">
+                        <div>${formatPrice(maxRevenue)}</div>
+                        <div>${formatPrice(maxRevenue / 2)}</div>
+                        <div>$0</div>
+                    </div>
+                </div>
+            `;
+
+        chartContainer.innerHTML = chartHtml;
+      }
+
+      // Load user growth chart
+      function loadUserGrowthChart() {
+        const chartContainer = document.getElementById("userGrowthChart");
+
+        // Simulate monthly user growth data
+        const monthlyGrowth = [
+          { month: "Jan", users: 125 },
+          { month: "Feb", users: 142 },
+          { month: "Mar", users: 167 },
+          { month: "Apr", users: 185 },
+          { month: "May", users: 214 },
+        ];
+
+        // Create bar chart HTML
+        let chartHtml = `
+                <div class="bar-chart">
+                    <h3 class="chart-title">Monthly New Users (2023)</h3>
+                    <div class="chart-container">
+            `;
+
+        // Find maximum user count for scaling
+        const maxUsers = Math.max(...monthlyGrowth.map((item) => item.users));
+
+        // Add bars
+        monthlyGrowth.forEach((item) => {
+          const percentage = (item.users / maxUsers) * 100;
+
+          chartHtml += `
+                    <div class="chart-column">
+                        <div class="chart-bar-wrapper">
+                            <div class="chart-bar chart-bar-blue" style="height: ${percentage}%"></div>
+                        </div>
+                        <div class="chart-label">${item.month}</div>
+                    </div>
+                `;
+        });
+
+        chartHtml += `
+                    </div>
+                    <div class="chart-y-axis">
+                        <div>${maxUsers}</div>
+                        <div>${Math.round(maxUsers / 2)}</div>
+                        <div>0</div>
+                    </div>
+                </div>
+            `;
+
+        chartContainer.innerHTML = chartHtml;
+      }
+
+      // Approve course
+      function approveCourse(courseId) {
+        // In a real app, we would call the API to approve the course
+        console.log(`Approving course ${courseId}`);
+
+        // Simulate API call success
+        showNotification("Course approved successfully", "success");
+
+        // Remove row from table
+        const button = document.querySelector(
+          `.approve-course[data-id="${courseId}"]`
+        );
+        if (button) {
+          const row = button.closest("tr");
+          row.style.backgroundColor = "#f0fff4";
+          row.style.opacity = "0.5";
+
+          // Disable buttons
+          row.querySelectorAll("button").forEach((btn) => {
+            btn.disabled = true;
+          });
+
+          // Remove row after animation
+          setTimeout(() => {
+            row.remove();
+
+            // Check if table is empty
+            const tableBody = document.querySelector(
+              "#pendingCoursesTable tbody"
+            );
+            if (tableBody.children.length === 0) {
+              tableBody.innerHTML = `
+                            <tr>
+                                <td colspan="4" class="empty-table">No pending courses</td>
+                            </tr>
+                        `;
+            }
+          }, 1000);
+        }
+      }
+
+      // Reject course
+      function rejectCourse(courseId) {
+        // In a real app, we would show a modal to enter rejection reason
+        // Then call the API to reject the course
+        console.log(`Rejecting course ${courseId}`);
+
+        // Simulate API call success
+        showNotification("Course rejected", "success");
+
+        // Remove row from table
+        const button = document.querySelector(
+          `.reject-course[data-id="${courseId}"]`
+        );
+        if (button) {
+          const row = button.closest("tr");
+          row.style.backgroundColor = "#fff2f0";
+          row.style.opacity = "0.5";
+
+          // Disable buttons
+          row.querySelectorAll("button").forEach((btn) => {
+            btn.disabled = true;
+          });
+
+          // Remove row after animation
+          setTimeout(() => {
+            row.remove();
+
+            // Check if table is empty
+            const tableBody = document.querySelector(
+              "#pendingCoursesTable tbody"
+            );
+            if (tableBody.children.length === 0) {
+              tableBody.innerHTML = `
+                            <tr>
+                                <td colspan="4" class="empty-table">No pending courses</td>
+                            </tr>
+                        `;
+            }
+          }, 1000);
+        }
+      }
+    </script>
+  </body>
+</html>

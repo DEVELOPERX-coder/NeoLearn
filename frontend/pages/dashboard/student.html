@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard - EduLearn</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="../../assets/css/dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header id="main-header">
+      <div class="container">
+        <div class="logo">
+          <h1><a href="../../index.html">EduLearn</a></h1>
+        </div>
+        <nav>
+          <ul class="main-nav">
+            <li><a href="../../pages/courses/browse.html">Courses</a></li>
+            <li>
+              <a href="../../pages/courses/browse.html?enrolled=true"
+                >My Learning</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <div class="logged-in" id="loggedInMenu">
+            <a href="#" id="userDropdown">
+              <img
+                src="../../assets/images/default-avatar.png"
+                alt="Profile"
+                class="avatar"
+                id="userAvatar"
+              />
+              <span id="userName">User</span>
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="student.html" class="active">Dashboard</a></li>
+              <li><a href="../profile/settings.html">Profile Settings</a></li>
+              <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard-container">
+      <aside class="dashboard-sidebar">
+        <nav class="sidebar-nav">
+          <ul>
+            <li class="active">
+              <a href="student.html">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="../courses/browse.html?enrolled=true">
+                <i class="fas fa-graduation-cap"></i>
+                My Courses
+              </a>
+            </li>
+            <li>
+              <a href="../profile/settings.html">
+                <i class="fas fa-user-cog"></i>
+                Profile Settings
+              </a>
+            </li>
+            <li>
+              <a href="../courses/browse.html">
+                <i class="fas fa-compass"></i>
+                Explore Courses
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fas fa-certificate"></i>
+                Certificates
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fas fa-star"></i>
+                My Reviews
+              </a>
+            </li>
+            <li>
+              <a href="../payments/history.html">
+                <i class="fas fa-credit-card"></i>
+                Payment History
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="dashboard-content">
+        <div class="dashboard-header">
+          <h1>Student Dashboard</h1>
+          <p>Welcome back, <span id="welcomeUserName">Student</span>!</p>
+        </div>
+
+        <section class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Enrolled Courses</h3>
+              <p id="enrolledCoursesCount">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Completed Courses</h3>
+              <p id="completedCoursesCount">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total Learning Hours</h3>
+              <p id="totalLearningHours">0 hrs</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-award"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Certificates Earned</h3>
+              <p id="certificatesCount">0</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard-section">
+          <div class="section-header">
+            <h2>In Progress Courses</h2>
+            <a href="../courses/browse.html?enrolled=true" class="view-all"
+              >View All</a
+            >
+          </div>
+          <div class="courses-progress-grid" id="inProgressCourses">
+            <div class="loading-spinner"></div>
+          </div>
+        </section>
+
+        <section class="dashboard-section">
+          <div class="section-header">
+            <h2>Recently Viewed</h2>
+          </div>
+          <div class="courses-grid" id="recentlyViewedCourses">
+            <div class="loading-spinner"></div>
+          </div>
+        </section>
+
+        <section class="dashboard-section">
+          <div class="section-header">
+            <h2>Recommended Courses</h2>
+          </div>
+          <div class="courses-grid" id="recommendedCourses">
+            <div class="loading-spinner"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <p>&copy; 2025 EduLearn. All rights reserved.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/dashboard.js"></script>
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Check auth status
+        if (!isAuthenticated()) {
+          window.location.href =
+            "../auth/login.html?return_to=" +
+            encodeURIComponent(window.location.href);
+          return;
+        }
+
+        // Get user data
+        const user = getUserFromLocalStorage();
+        updateUserInfo(user);
+
+        // Make sure user is a student
+        if (user.role === "instructor" || user.role === "admin") {
+          window.location.href = "instructor.html";
+          return;
+        }
+
+        // Load dashboard data
+        await loadDashboardData();
+
+        // Add event listeners
+        document.getElementById("logoutBtn").addEventListener("click", (e) => {
+          e.preventDefault();
+          logout();
+        });
+      });
+
+      // Update user info in the UI
+      function updateUserInfo(user) {
+        if (user) {
+          document.getElementById("userName").textContent = user.username;
+          document.getElementById("welcomeUserName").textContent =
+            user.username;
+        }
+      }
+
+      // Load dashboard data
+      async function loadDashboardData() {
+        try {
+          // Get user enrollments
+          const enrollmentsResponse = await api.get("/enrollments/users");
+
+          // Update stats
+          updateDashboardStats(enrollmentsResponse.data);
+
+          // Update in progress courses
+          displayInProgressCourses(enrollmentsResponse.data);
+
+          // Get recommended courses
+          await loadRecommendedCourses();
+
+          // Get recently viewed courses (simulated)
+          loadRecentlyViewedCourses();
+        } catch (error) {
+          console.error("Error loading dashboard data:", error);
+          showNotification(
+            "Failed to load dashboard data. Please try again later.",
+            "error"
+          );
+        }
+      }
+
+      // Update dashboard stats
+      function updateDashboardStats(enrollments) {
+        const totalEnrolled = enrollments.length;
+        const completedCourses = enrollments.filter(
+          (e) => e.status === "completed"
+        ).length;
+
+        // Calculate total learning hours (simulated)
+        let totalHours = 0;
+        enrollments.forEach((enrollment) => {
+          const progress = enrollment.progress_percentage || 0;
+          // Assume each course has about 10 hours of content on average
+          totalHours += Math.round((10 * progress) / 100);
+        });
+
+        // Update UI
+        document.getElementById("enrolledCoursesCount").textContent =
+          totalEnrolled;
+        document.getElementById("completedCoursesCount").textContent =
+          completedCourses;
+        document.getElementById(
+          "totalLearningHours"
+        ).textContent = `${totalHours} hrs`;
+        document.getElementById("certificatesCount").textContent =
+          completedCourses; // Assuming 1 certificate per completed course
+      }
+
+      // Display in progress courses
+      function displayInProgressCourses(enrollments) {
+        const inProgressCoursesContainer =
+          document.getElementById("inProgressCourses");
+
+        // Filter in-progress courses
+        const inProgressCourses = enrollments
+          .filter((e) => e.status === "active")
+          .sort((a, b) => b.progress_percentage - a.progress_percentage)
+          .slice(0, 4); // Show only first 4
+
+        if (inProgressCourses.length === 0) {
+          inProgressCoursesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <h3>No courses in progress</h3>
+                        <p>Explore and enroll in courses to start learning!</p>
+                        <a href="../courses/browse.html" class="btn btn-primary">Browse Courses</a>
+                    </div>
+                `;
+          return;
+        }
+
+        inProgressCoursesContainer.innerHTML = "";
+
+        inProgressCourses.forEach((course) => {
+          const progressCard = document.createElement("div");
+          progressCard.className = "progress-card";
+
+          const progressPercentage = course.progress_percentage || 0;
+          const thumbnailUrl =
+            course.thumbnail || "../../assets/images/default-thumbnail.jpg";
+
+          progressCard.innerHTML = `
+                    <a href="../courses/learn.html?course_id=${course.course_id}&enrollment_id=${course.id}">
+                        <div class="progress-card-header">
+                            <img src="${thumbnailUrl}" alt="${course.title}">
+                            <div class="progress-overlay">
+                                <div class="progress-circle" data-progress="${progressPercentage}">
+                                    <svg viewBox="0 0 36 36" class="progress-svg">
+                                        <path class="progress-circle-bg"
+                                            d="M18 2.0845
+                                            a 15.9155 15.9155 0 0 1 0 31.831
+                                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                                        />
+                                        <path class="progress-circle-fill"
+                                            d="M18 2.0845
+                                            a 15.9155 15.9155 0 0 1 0 31.831
+                                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                                            stroke-dasharray="${progressPercentage}, 100"
+                                        />
+                                    </svg>
+                                    <div class="progress-percentage">${progressPercentage}%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-card-content">
+                            <h3>${course.title}</h3>
+                            <p class="instructor">by ${course.instructor_name}</p>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: ${progressPercentage}%"></div>
+                            </div>
+                            <div class="progress-info">
+                                <span>${progressPercentage}% complete</span>
+                                <span>Continue Learning</span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+
+          inProgressCoursesContainer.appendChild(progressCard);
+        });
+      }
+
+      // Load recommended courses
+      async function loadRecommendedCourses() {
+        try {
+          const recommendedCoursesContainer =
+            document.getElementById("recommendedCourses");
+
+          // In a real app, this would call a personalized recommendations API
+          // For demo, we'll just get the latest courses
+          const response = await api.get("/courses", { limit: 4 });
+
+          if (response.status === "success" && response.data.length > 0) {
+            recommendedCoursesContainer.innerHTML = "";
+
+            response.data.forEach((course) => {
+              const courseElement = document.createElement("div");
+              courseElement.className = "course-card";
+
+              const thumbnailUrl =
+                course.thumbnail || "../../assets/images/default-thumbnail.jpg";
+              const rating = course.average_rating
+                ? parseFloat(course.average_rating).toFixed(1)
+                : "New";
+              const ratingStars = course.average_rating
+                ? generateStarRating(course.average_rating)
+                : "";
+
+              courseElement.innerHTML = `
+                            <a href="../courses/details.html?id=${course.id}">
+                                <div class="course-image">
+                                    <img src="${thumbnailUrl}" alt="${
+                course.title
+              }">
+                                </div>
+                                <div class="course-content">
+                                    <h3 class="course-title">${
+                                      course.title
+                                    }</h3>
+                                    <p class="course-instructor">${
+                                      course.instructor_name
+                                    }</p>
+                                    <div class="course-rating">
+                                        <span class="rating-score">${rating}</span>
+                                        <span class="rating-stars">${ratingStars}</span>
+                                        <span class="review-count">(${
+                                          course.review_count || 0
+                                        })</span>
+                                    </div>
+                                    <div class="course-price">$${course.price.toFixed(
+                                      2
+                                    )}</div>
+                                </div>
+                            </a>
+                        `;
+
+              recommendedCoursesContainer.appendChild(courseElement);
+            });
+          } else {
+            recommendedCoursesContainer.innerHTML =
+              "<p>No recommended courses available.</p>";
+          }
+        } catch (error) {
+          console.error("Error loading recommended courses:", error);
+          document.getElementById("recommendedCourses").innerHTML =
+            "<p>Failed to load recommended courses. Please try again later.</p>";
+        }
+      }
+
+      // Load recently viewed courses (simulated)
+      function loadRecentlyViewedCourses() {
+        const recentlyViewedContainer = document.getElementById(
+          "recentlyViewedCourses"
+        );
+
+        // In a real app, this would come from user activity history
+        // For demo, we'll simulate with static data
+        const recentlyViewed = [
+          {
+            id: 1,
+            title: "JavaScript Fundamentals",
+            instructor_name: "John Smith",
+            thumbnail: "../../assets/images/default-thumbnail.jpg",
+            price: 49.99,
+            average_rating: 4.5,
+            review_count: 120,
+          },
+          {
+            id: 2,
+            title: "React for Beginners",
+            instructor_name: "Sarah Johnson",
+            thumbnail: "../../assets/images/default-thumbnail.jpg",
+            price: 59.99,
+            average_rating: 4.8,
+            review_count: 85,
+          },
+        ];
+
+        if (recentlyViewed.length === 0) {
+          recentlyViewedContainer.innerHTML =
+            "<p>No recently viewed courses.</p>";
+          return;
+        }
+
+        recentlyViewedContainer.innerHTML = "";
+
+        recentlyViewed.forEach((course) => {
+          const courseElement = document.createElement("div");
+          courseElement.className = "course-card";
+
+          const thumbnailUrl =
+            course.thumbnail || "../../assets/images/default-thumbnail.jpg";
+          const rating = course.average_rating
+            ? parseFloat(course.average_rating).toFixed(1)
+            : "New";
+          const ratingStars = course.average_rating
+            ? generateStarRating(course.average_rating)
+            : "";
+
+          courseElement.innerHTML = `
+                    <a href="../courses/details.html?id=${course.id}">
+                        <div class="course-image">
+                            <img src="${thumbnailUrl}" alt="${course.title}">
+                        </div>
+                        <div class="course-content">
+                            <h3 class="course-title">${course.title}</h3>
+                            <p class="course-instructor">${
+                              course.instructor_name
+                            }</p>
+                            <div class="course-rating">
+                                <span class="rating-score">${rating}</span>
+                                <span class="rating-stars">${ratingStars}</span>
+                                <span class="review-count">(${
+                                  course.review_count || 0
+                                })</span>
+                            </div>
+                            <div class="course-price">$${course.price.toFixed(
+                              2
+                            )}</div>
+                        </div>
+                    </a>
+                `;
+
+          recentlyViewedContainer.appendChild(courseElement);
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Platform - Home</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header id="main-header">
+      <div class="container">
+        <div class="logo">
+          <h1><a href="index.html">EduLearn</a></h1>
+        </div>
+        <nav>
+          <ul class="main-nav">
+            <li><a href="pages/courses/browse.html">Courses</a></li>
+            <li>
+              <a href="#" id="categoriesDropdown"
+                >Categories <i class="fas fa-chevron-down"></i
+              ></a>
+              <ul class="dropdown-menu" id="categoriesList">
+                <!-- Categories will be loaded here -->
+                <li>
+                  <a href="pages/courses/browse.html?category=web-development"
+                    >Web Development</a
+                  >
+                </li>
+                <li>
+                  <a href="pages/courses/browse.html?category=data-science"
+                    >Data Science</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="pages/courses/browse.html?category=mobile-development"
+                    >Mobile Development</a
+                  >
+                </li>
+                <li><a href="pages/courses/browse.html">View All</a></li>
+              </ul>
+            </li>
+            <li><a href="#" id="becomeInstructor">Teach on EduLearn</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <div class="logged-out" id="loggedOutMenu">
+            <a href="pages/auth/login.html" class="btn btn-outline">Log In</a>
+            <a href="pages/auth/register.html" class="btn btn-primary"
+              >Sign Up</a
+            >
+          </div>
+          <div class="logged-in" id="loggedInMenu" style="display: none">
+            <a href="#" id="userDropdown">
+              <img
+                src="assets/images/default-avatar.png"
+                alt="Profile"
+                class="avatar"
+                id="userAvatar"
+              />
+              <span id="userName">User</span>
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="pages/dashboard/student.html" id="dashboardLink"
+                  >Dashboard</a
+                >
+              </li>
+              <li>
+                <a href="pages/courses/browse.html?enrolled=true"
+                  >My Learning</a
+                >
+              </li>
+              <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Learn Without Limits</h1>
+          <p>
+            Start, switch, or advance your career with thousands of courses from
+            expert instructors.
+          </p>
+          <div class="search-bar">
+            <input
+              type="text"
+              placeholder="What do you want to learn?"
+              id="homeSearchInput"
+            />
+            <button id="homeSearchBtn"><i class="fas fa-search"></i></button>
+          </div>
+          <div class="hero-categories">
+            <span>Popular Categories:</span>
+            <a href="pages/courses/browse.html?category=web-development"
+              >Web Development</a
+            >
+            <a href="pages/courses/browse.html?category=data-science"
+              >Data Science</a
+            >
+            <a href="pages/courses/browse.html?category=mobile-development"
+              >Mobile Development</a
+            >
+            <a href="pages/courses/browse.html?category=business">Business</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="featured-courses">
+      <div class="container">
+        <h2>Featured Courses</h2>
+        <div class="courses-grid" id="featuredCourses">
+          <!-- Featured courses will be loaded here -->
+          <div class="loading-spinner"></div>
+        </div>
+        <div class="view-all-link">
+          <a href="pages/courses/browse.html" class="btn btn-outline"
+            >View All Courses</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="categories-section">
+      <div class="container">
+        <h2>Top Categories</h2>
+        <div class="categories-grid" id="topCategories">
+          <!-- Categories will be loaded here -->
+          <div class="loading-spinner"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works">
+      <div class="container">
+        <h2>How It Works</h2>
+        <div class="steps-grid">
+          <div class="step">
+            <div class="step-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <h3>Find Your Course</h3>
+            <p>
+              Choose from thousands of courses in various categories taught by
+              expert instructors.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-icon">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            <h3>Enroll & Pay</h3>
+            <p>
+              Enroll in the course with a one-time payment. Get lifetime access
+              to the course materials.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-icon">
+              <i class="fas fa-laptop"></i>
+            </div>
+            <h3>Learn at Your Pace</h3>
+            <p>
+              Watch video lectures, complete assignments, and track your
+              progress at your own pace.
+            </p>
+          </div>
+          <div class="step">
+            <div class="step-icon">
+              <i class="fas fa-certificate"></i>
+            </div>
+            <h3>Get Certified</h3>
+            <p>
+              Complete the course and receive a certificate of completion to
+              showcase your skills.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="become-instructor">
+      <div class="container">
+        <div class="instructor-cta">
+          <div class="content">
+            <h2>Become an Instructor</h2>
+            <p>
+              Share your knowledge with the world. Create and publish courses on
+              our platform and reach thousands of students.
+            </p>
+            <a href="#" id="startTeachingBtn" class="btn btn-primary"
+              >Start Teaching Today</a
+            >
+          </div>
+          <div class="image">
+            <img
+              src="assets/images/instructor.jpg"
+              alt="Become an Instructor"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-logo">
+            <h2>EduLearn</h2>
+            <p>Learn Without Limits</p>
+          </div>
+          <div class="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="pages/courses/browse.html">Courses</a></li>
+              <li>
+                <a href="#" id="footerBecomeInstructor">Become an Instructor</a>
+              </li>
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h3>Categories</h3>
+            <ul id="footerCategories">
+              <!-- Categories will be loaded here -->
+              <li>
+                <a href="pages/courses/browse.html?category=web-development"
+                  >Web Development</a
+                >
+              </li>
+              <li>
+                <a href="pages/courses/browse.html?category=data-science"
+                  >Data Science</a
+                >
+              </li>
+              <li>
+                <a href="pages/courses/browse.html?category=mobile-development"
+                  >Mobile Development</a
+                >
+              </li>
+              <li><a href="pages/courses/browse.html">View All</a></li>
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h3>Help & Support</h3>
+            <ul>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 EduLearn. All rights reserved.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Check if user is logged in
+        checkAuthStatus();
+
+        // Load featured courses
+        loadFeaturedCourses();
+
+        // Load categories
+        loadCategories();
+
+        // Add event listeners
+        document
+          .getElementById("homeSearchBtn")
+          .addEventListener("click", handleHomeSearch);
+        document
+          .getElementById("homeSearchInput")
+          .addEventListener("keypress", (e) => {
+            if (e.key === "Enter") handleHomeSearch();
+          });
+
+        document
+          .getElementById("becomeInstructor")
+          .addEventListener("click", handleBecomeInstructor);
+        document
+          .getElementById("footerBecomeInstructor")
+          .addEventListener("click", handleBecomeInstructor);
+        document
+          .getElementById("startTeachingBtn")
+          .addEventListener("click", handleBecomeInstructor);
+
+        if (document.getElementById("logoutBtn")) {
+          document
+            .getElementById("logoutBtn")
+            .addEventListener("click", handleLogout);
+        }
+      });
+
+      // Load featured courses
+      async function loadFeaturedCourses() {
+        try {
+          const featuredCoursesContainer =
+            document.getElementById("featuredCourses");
+          featuredCoursesContainer.innerHTML =
+            '<div class="loading-spinner"></div>';
+
+          const response = await api.get("/courses", { limit: 8 });
+
+          if (response.status === "success" && response.data.length > 0) {
+            featuredCoursesContainer.innerHTML = "";
+
+            response.data.forEach((course) => {
+              const courseElement = createCourseCard(course);
+              featuredCoursesContainer.appendChild(courseElement);
+            });
+          } else {
+            featuredCoursesContainer.innerHTML = "<p>No courses found.</p>";
+          }
+        } catch (error) {
+          console.error("Error loading featured courses:", error);
+          document.getElementById("featuredCourses").innerHTML =
+            "<p>Failed to load courses. Please try again later.</p>";
+        }
+      }
+
+      // Load categories
+      async function loadCategories() {
+        try {
+          const response = await api.get("/admin/categories");
+
+          if (response.status === "success" && response.data.length > 0) {
+            // Populate categories dropdown in header
+            const categoriesList = document.getElementById("categoriesList");
+            categoriesList.innerHTML = "";
+
+            response.data.slice(0, 6).forEach((category) => {
+              const li = document.createElement("li");
+              li.innerHTML = `<a href="pages/courses/browse.html?category=${category.name
+                .toLowerCase()
+                .replace(/\s+/g, "-")}">${category.name}</a>`;
+              categoriesList.appendChild(li);
+            });
+
+            const viewAllLi = document.createElement("li");
+            viewAllLi.innerHTML =
+              '<a href="pages/courses/browse.html">View All</a>';
+            categoriesList.appendChild(viewAllLi);
+
+            // Populate categories grid
+            const topCategoriesContainer =
+              document.getElementById("topCategories");
+            topCategoriesContainer.innerHTML = "";
+
+            response.data.slice(0, 8).forEach((category) => {
+              const categoryElement = createCategoryCard(category);
+              topCategoriesContainer.appendChild(categoryElement);
+            });
+
+            // Populate footer categories
+            const footerCategories =
+              document.getElementById("footerCategories");
+            footerCategories.innerHTML = "";
+
+            response.data.slice(0, 4).forEach((category) => {
+              const li = document.createElement("li");
+              li.innerHTML = `<a href="pages/courses/browse.html?category=${category.name
+                .toLowerCase()
+                .replace(/\s+/g, "-")}">${category.name}</a>`;
+              footerCategories.appendChild(li);
+            });
+
+            const footerViewAllLi = document.createElement("li");
+            footerViewAllLi.innerHTML =
+              '<a href="pages/courses/browse.html">View All</a>';
+            footerCategories.appendChild(footerViewAllLi);
+          }
+        } catch (error) {
+          console.error("Error loading categories:", error);
+        }
+      }
+
+      // Create course card element
+      function createCourseCard(course) {
+        const card = document.createElement("div");
+        card.className = "course-card";
+
+        const thumbnailUrl =
+          course.thumbnail || "assets/images/default-thumbnail.jpg";
+        const rating = course.average_rating
+          ? parseFloat(course.average_rating).toFixed(1)
+          : "New";
+        const ratingStars = course.average_rating
+          ? generateRatingStars(course.average_rating)
+          : "";
+
+        card.innerHTML = `
+                <a href="pages/courses/details.html?id=${course.id}">
+                    <div class="course-image">
+                        <img src="${thumbnailUrl}" alt="${course.title}">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">${course.title}</h3>
+                        <p class="course-instructor">${
+                          course.instructor_name
+                        }</p>
+                        <div class="course-rating">
+                            <span class="rating-score">${rating}</span>
+                            <span class="rating-stars">${ratingStars}</span>
+                            <span class="review-count">(${
+                              course.review_count || 0
+                            })</span>
+                        </div>
+                        <div class="course-price">$${course.price.toFixed(
+                          2
+                        )}</div>
+                    </div>
+                </a>
+            `;
+
+        return card;
+      }
+
+      // Create category card element
+      function createCategoryCard(category) {
+        const card = document.createElement("div");
+        card.className = "category-card";
+
+        card.innerHTML = `
+                <a href="pages/courses/browse.html?category=${category.name
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")}">
+                    <div class="category-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>${category.name}</h3>
+                    <p>${category.course_count} Courses</p>
+                </a>
+            `;
+
+        return card;
+      }
+
+      // Generate rating stars based on rating value
+      function generateRatingStars(rating) {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 >= 0.5;
+        const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+        let stars = "";
+
+        for (let i = 0; i < fullStars; i++) {
+          stars += '<i class="fas fa-star"></i>';
+        }
+
+        if (halfStar) {
+          stars += '<i class="fas fa-star-half-alt"></i>';
+        }
+
+        for (let i = 0; i < emptyStars; i++) {
+          stars += '<i class="far fa-star"></i>';
+        }
+
+        return stars;
+      }
+
+      // Handle home search
+      function handleHomeSearch() {
+        const searchQuery = document
+          .getElementById("homeSearchInput")
+          .value.trim();
+        if (searchQuery) {
+          window.location.href = `pages/courses/browse.html?search=${encodeURIComponent(
+            searchQuery
+          )}`;
+        }
+      }
+
+      // Handle become instructor links
+      function handleBecomeInstructor(e) {
+        e.preventDefault();
+
+        const user = getUserFromLocalStorage();
+
+        if (!user) {
+          // Not logged in, redirect to login with return URL
+          window.location.href = `pages/auth/login.html?return_to=${encodeURIComponent(
+            "pages/auth/become-instructor.html"
+          )}`;
+          return;
+        }
+
+        if (user.role === "instructor" || user.role === "admin") {
+          // Already an instructor, redirect to instructor dashboard
+          window.location.href = "pages/dashboard/instructor.html";
+          return;
+        }
+
+        // Regular student, redirect to become instructor page
+        window.location.href = "pages/auth/become-instructor.html";
+      }
+
+      // Handle logout
+      function handleLogout(e) {
+        e.preventDefault();
+        logout();
+      }
+    </script>
+  </body>
+</html>

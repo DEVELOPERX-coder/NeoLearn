@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Course Details - EduLearn</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="../../assets/css/course.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header id="main-header">
+      <div class="container">
+        <div class="logo">
+          <h1><a href="../../index.html">EduLearn</a></h1>
+        </div>
+        <nav>
+          <ul class="main-nav">
+            <li><a href="browse.html">Courses</a></li>
+            <li>
+              <a href="#" id="categoriesDropdown"
+                >Categories <i class="fas fa-chevron-down"></i
+              ></a>
+              <ul class="dropdown-menu" id="categoriesList">
+                <!-- Categories will be loaded here -->
+              </ul>
+            </li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <div class="logged-out" id="loggedOutMenu">
+            <a href="../auth/login.html" class="btn btn-outline">Log In</a>
+            <a href="../auth/register.html" class="btn btn-primary">Sign Up</a>
+          </div>
+          <div class="logged-in" id="loggedInMenu" style="display: none">
+            <a href="#" id="userDropdown">
+              <img
+                src="../../assets/images/default-avatar.png"
+                alt="Profile"
+                class="avatar"
+                id="userAvatar"
+              />
+              <span id="userName">User</span>
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="../dashboard/student.html" id="dashboardLink"
+                  >Dashboard</a
+                >
+              </li>
+              <li><a href="browse.html?enrolled=true">My Learning</a></li>
+              <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="course-details-container">
+      <!-- Course header will be loaded dynamically -->
+      <div id="courseHeader" class="course-header">
+        <div class="loading-spinner"></div>
+      </div>
+
+      <div class="container">
+        <div class="course-details-grid">
+          <div class="course-details-main">
+            <div class="course-section what-youll-learn">
+              <h2>What You'll Learn</h2>
+              <ul id="whatYoullLearn" class="learning-objectives">
+                <li><i class="fas fa-check"></i> Content is loading...</li>
+              </ul>
+            </div>
+
+            <div class="course-section course-content">
+              <h2>Course Content</h2>
+              <div class="content-stats" id="contentStats">
+                <span class="sections-count">0 sections</span>
+                <span class="lectures-count">0 lectures</span>
+                <span class="duration">0h total length</span>
+                <button id="expandAllSections" class="expand-all">
+                  Expand all sections
+                </button>
+              </div>
+              <div class="curriculum-accordion" id="curriculumAccordion">
+                <div class="loading-spinner"></div>
+              </div>
+            </div>
+
+            <div class="course-section requirements">
+              <h2>Requirements</h2>
+              <ul id="courseRequirements">
+                <li>Loading requirements...</li>
+              </ul>
+            </div>
+
+            <div class="course-section description">
+              <h2>Description</h2>
+              <div id="courseDescription">
+                <p>Loading course description...</p>
+              </div>
+            </div>
+
+            <div class="course-section instructor">
+              <h2>Instructor</h2>
+              <div class="instructor-profile" id="instructorProfile">
+                <div class="loading-spinner"></div>
+              </div>
+            </div>
+
+            <div class="course-section reviews">
+              <div class="reviews-header">
+                <h2>Student Reviews</h2>
+                <div class="reviews-summary" id="reviewsSummary">
+                  <div class="loading-spinner"></div>
+                </div>
+              </div>
+              <div class="reviews-list" id="reviewsList">
+                <div class="loading-spinner"></div>
+              </div>
+              <div class="reviews-pagination" id="reviewsPagination"></div>
+            </div>
+          </div>
+
+          <aside class="course-details-sidebar">
+            <div class="course-card" id="courseSidebar">
+              <div class="loading-spinner"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-logo">
+            <h2>EduLearn</h2>
+            <p>Learn Without Limits</p>
+          </div>
+          <div class="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="../../index.html">Home</a></li>
+              <li><a href="browse.html">Courses</a></li>
+              <li><a href="#">Become an Instructor</a></li>
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h3>Categories</h3>
+            <ul id="footerCategories">
+              <!-- Categories will be loaded here -->
+            </ul>
+          </div>
+          <div class="footer-links">
+            <h3>Help & Support</h3>
+            <ul>
+              <li><a href="#">FAQ</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 EduLearn. All rights reserved.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Review Modal -->
+    <div class="modal" id="reviewModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Write a Review</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="reviewForm">
+            <div class="form-group">
+              <label>Rating</label>
+              <div class="rating-input">
+                <i class="far fa-star" data-rating="1"></i>
+                <i class="far fa-star" data-rating="2"></i>
+                <i class="far fa-star" data-rating="3"></i>
+                <i class="far fa-star" data-rating="4"></i>
+                <i class="far fa-star" data-rating="5"></i>
+              </div>
+              <input type="hidden" id="ratingInput" name="rating" value="0" />
+            </div>
+            <div class="form-group">
+              <label for="reviewText">Review</label>
+              <textarea
+                id="reviewText"
+                name="reviewText"
+                rows="5"
+                placeholder="Tell others what you thought about this course..."
+              ></textarea>
+            </div>
+            <div class="form-error" id="reviewError"></div>
+            <button type="submit" class="btn btn-primary" id="submitReviewBtn">
+              Submit Review
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Check auth status
+        checkAuthStatus();
+
+        // Get course ID from URL
+        const params = getQueryParams();
+        const courseId = params.id;
+
+        if (!courseId) {
+          window.location.href = "browse.html";
+          return;
+        }
+
+        // Load course details
+        await loadCourseDetails(courseId);
+
+        // Load categories for navigation
+        loadCategories();
+
+        // Add event listeners
+        if (document.getElementById("logoutBtn")) {
+          document
+            .getElementById("logoutBtn")
+            .addEventListener("click", (e) => {
+              e.preventDefault();
+              logout();
+            });
+        }
+
+        // Toggle sections in curriculum
+        document.addEventListener("click", (e) => {
+          if (
+            e.target.matches(".section-header") ||
+            e.target.closest(".section-header")
+          ) {
+            const header = e.target.matches(".section-header")
+              ? e.target
+              : e.target.closest(".section-header");
+
+            const content = header.nextElementSibling;
+            const icon = header.querySelector(".toggle-icon i");
+
+            // Toggle class
+            content.classList.toggle("expanded");
+
+            // Update icon
+            if (content.classList.contains("expanded")) {
+              icon.classList.remove("fa-chevron-down");
+              icon.classList.add("fa-chevron-up");
+            } else {
+              icon.classList.remove("fa-chevron-up");
+              icon.classList.add("fa-chevron-down");
+            }
+          }
+        });
+
+        // Expand all sections
+        document
+          .getElementById("expandAllSections")
+          .addEventListener("click", () => {
+            const allContents = document.querySelectorAll(".section-content");
+            const allIcons = document.querySelectorAll(".toggle-icon i");
+            const expandBtn = document.getElementById("expandAllSections");
+
+            // Check if all sections are expanded
+            const allExpanded = Array.from(allContents).every((content) =>
+              content.classList.contains("expanded")
+            );
+
+            if (allExpanded) {
+              // Collapse all sections
+              allContents.forEach((content) => {
+                content.classList.remove("expanded");
+              });
+
+              allIcons.forEach((icon) => {
+                icon.classList.remove("fa-chevron-up");
+                icon.classList.add("fa-chevron-down");
+              });
+
+              expandBtn.textContent = "Expand all sections";
+            } else {
+              // Expand all sections
+              allContents.forEach((content) => {
+                content.classList.add("expanded");
+              });
+
+              allIcons.forEach((icon) => {
+                icon.classList.remove("fa-chevron-down");
+                icon.classList.add("fa-chevron-up");
+              });
+
+              expandBtn.textContent = "Collapse all sections";
+            }
+          });
+
+        // Handle enroll/buy button
+        document.addEventListener("click", (e) => {
+          if (
+            e.target.id === "enrollButton" ||
+            e.target.id === "buyNowButton"
+          ) {
+            handleEnrollment(courseId);
+          }
+        });
+
+        // Handle review modal
+        document.addEventListener("click", (e) => {
+          if (e.target.id === "writeReviewBtn") {
+            openReviewModal();
+          }
+
+          if (e.target.classList.contains("close-modal")) {
+            closeReviewModal();
+          }
+
+          if (
+            e.target.classList.contains("rating-input") ||
+            e.target.closest(".rating-input")
+          ) {
+            if (e.target.dataset.rating) {
+              handleRatingSelection(parseInt(e.target.dataset.rating));
+            }
+          }
+        });
+
+        // Submit review form
+        document
+          .getElementById("reviewForm")
+          .addEventListener("submit", (e) => {
+            e.preventDefault();
+            submitReview(courseId);
+          });
+
+        // Close modal when clicking outside
+        window.addEventListener("click", (e) => {
+          const modal = document.getElementById("reviewModal");
+          if (e.target === modal) {
+            closeReviewModal();
+          }
+        });
+      });
+
+      // Load course details
+      async function loadCourseDetails(courseId) {
+        try {
+          // Fetch course details
+          const response = await api.get(`/courses/${courseId}`);
+          const course = response.data;
+
+          // Update page title
+          document.title = `${course.title} - EduLearn`;
+
+          // Update course header
+          updateCourseHeader(course);
+
+          // Update course sidebar
+          updateCourseSidebar(course);
+
+          // Update curriculum
+          updateCourseCurriculum(course);
+
+          // Update instructor section
+          updateInstructorSection(course);
+
+          // Update requirements and description
+          updateCourseDetails(course);
+
+          // Load reviews
+          loadCourseReviews(courseId);
+        } catch (error) {
+          console.error("Error loading course details:", error);
+          showNotification(
+            "Failed to load course details. Please try again later.",
+            "error"
+          );
+        }
+      }
+
+      // Update course header
+      function updateCourseHeader(course) {
+        const headerElement = document.getElementById("courseHeader");
+
+        const thumbnailUrl =
+          course.thumbnail || "../../assets/images/default-thumbnail.jpg";
+        const rating = course.average_rating
+          ? parseFloat(course.average_rating).toFixed(1)
+          : "New";
+        const ratingStars = course.average_rating
+          ? generateStarRating(course.average_rating)
+          : "";
+
+        headerElement.innerHTML = `
+                <div class="container">
+                    <div class="course-header-content">
+                        <div class="course-breadcrumb">
+                            <a href="browse.html">All Courses</a> 
+                            ${
+                              course.categories && course.categories.length > 0
+                                ? `&gt; <a href="browse.html?category=${course.categories[0].name.toLowerCase()}">${
+                                    course.categories[0].name
+                                  }</a>`
+                                : ""
+                            }
+                        </div>
+                        <h1>${course.title}</h1>
+                        <p class="course-subtitle">${course.subtitle || ""}</p>
+                        <div class="course-meta">
+                            <div class="course-rating">
+                                <span class="rating-score">${rating}</span>
+                                <span class="rating-stars">${ratingStars}</span>
+                                <span class="review-count">(${
+                                  course.review_count || 0
+                                } reviews)</span>
+                            </div>
+                            <div class="course-students">
+                                <i class="fas fa-user-graduate"></i> ${
+                                  course.student_count || 0
+                                } students
+                            </div>
+                            <div class="course-updated">
+                                <i class="fas fa-sync-alt"></i> Last updated ${formatDate(
+                                  course.updated_at
+                                )}
+                            </div>
+                        </div>
+                        <div class="course-author">
+                            Created by <a href="#">${course.instructor_name}</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+      }
+
+      // Update course sidebar
+      function updateCourseSidebar(course) {
+        const sidebarElement = document.getElementById("courseSidebar");
+
+        const thumbnailUrl =
+          course.thumbnail || "../../assets/images/default-thumbnail.jpg";
+        const isEnrolled = course.isEnrolled;
+
+        // Calculate total duration
+        let totalDuration = 0;
+        let totalLessons = 0;
+
+        if (course.sections) {
+          course.sections.forEach((section) => {
+            if (section.lessons) {
+              section.lessons.forEach((lesson) => {
+                totalLessons++;
+                if (lesson.duration) {
+                  totalDuration += lesson.duration;
+                }
+              });
+            }
+          });
+        }
+
+        const formattedDuration = formatDuration(totalDuration);
+
+        // Generate action button based on enrollment status
+        let actionButton = "";
+
+        if (isEnrolled) {
+          actionButton = `
+                    <a href="learn.html?course_id=${course.id}" class="btn btn-primary btn-block">
+                        Go to Course
+                    </a>
+                `;
+        } else {
+          if (course.price > 0) {
+            actionButton = `
+                        <button id="buyNowButton" class="btn btn-primary btn-block">
+                            Buy Now
+                        </button>
+                    `;
+          } else {
+            actionButton = `
+                        <button id="enrollButton" class="btn btn-primary btn-block">
+                            Enroll Now - Free
+                        </button>
+                    `;
+          }
+        }
+
+        sidebarElement.innerHTML = `
+                <div class="course-preview">
+                    <img src="${thumbnailUrl}" alt="${course.title}">
+                    <div class="preview-overlay">
+                        <button class="preview-button">
+                            <i class="fas fa-play"></i>
+                            <span>Preview this course</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="course-sidebar-content">
+                    <div class="course-price">
+                        ${
+                          course.price > 0
+                            ? `$${course.price.toFixed(2)}`
+                            : "Free"
+                        }
+                    </div>
+                    ${actionButton}
+                    <div class="course-guarantee">30-Day Money-Back Guarantee</div>
+                    <div class="course-includes">
+                        <h3>This course includes:</h3>
+                        <ul>
+                            <li><i class="fas fa-video"></i> ${totalLessons} on-demand videos</li>
+                            <li><i class="fas fa-clock"></i> ${formattedDuration} of content</li>
+                            <li><i class="fas fa-infinity"></i> Full lifetime access</li>
+                            <li><i class="fas fa-mobile-alt"></i> Access on mobile and TV</li>
+                            <li><i class="fas fa-certificate"></i> Certificate of completion</li>
+                        </ul>
+                    </div>
+                    <div class="course-share">
+                        <button class="btn btn-outline btn-block">
+                            <i class="fas fa-share"></i> Share
+                        </button>
+                    </div>
+                </div>
+            `;
+      }
+
+      // Update course curriculum
+      function updateCourseCurriculum(course) {
+        const accordionElement = document.getElementById("curriculumAccordion");
+        const contentStatsElement = document.getElementById("contentStats");
+
+        if (!course.sections || course.sections.length === 0) {
+          accordionElement.innerHTML =
+            "<p>No curriculum available for this course yet.</p>";
+          return;
+        }
+
+        // Calculate stats
+        let totalLessons = 0;
+        let totalDuration = 0;
+
+        course.sections.forEach((section) => {
+          if (section.lessons) {
+            totalLessons += section.lessons.length;
+            section.lessons.forEach((lesson) => {
+              if (lesson.duration) {
+                totalDuration += lesson.duration;
+              }
+            });
+          }
+        });
+
+        // Update content stats
+        contentStatsElement.innerHTML = `
+                <span class="sections-count">${
+                  course.sections.length
+                } sections</span>
+                <span class="lectures-count">${totalLessons} lectures</span>
+                <span class="duration">${formatDuration(
+                  totalDuration
+                )} total length</span>
+                <button id="expandAllSections" class="expand-all">Expand all sections</button>
+            `;
+
+        // Generate curriculum HTML
+        let curriculumHtml = "";
+
+        course.sections.forEach((section, index) => {
+          // Calculate section duration
+          let sectionDuration = 0;
+          let sectionLessons = section.lessons || [];
+
+          sectionLessons.forEach((lesson) => {
+            if (lesson.duration) {
+              sectionDuration += lesson.duration;
+            }
+          });
+
+          curriculumHtml += `
+                    <div class="curriculum-section">
+                        <div class="section-header">
+                            <div class="section-left">
+                                <div class="toggle-icon">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <h3>Section ${index + 1}: ${section.title}</h3>
+                            </div>
+                            <div class="section-info">
+                                <span>${sectionLessons.length} lectures</span>
+                                <span>${formatDuration(sectionDuration)}</span>
+                            </div>
+                        </div>
+                        <div class="section-content">
+                            <ul class="lessons-list">
+                `;
+
+          // Add lessons
+          sectionLessons.forEach((lesson, lessonIndex) => {
+            const isLocked = !lesson.is_free && !course.isEnrolled;
+            const lockIcon = isLocked ? '<i class="fas fa-lock"></i>' : "";
+            const previewText =
+              lesson.is_free && !course.isEnrolled ? "(Preview)" : "";
+
+            curriculumHtml += `
+                        <li>
+                            <div class="lesson-left">
+                                <div class="lesson-icon">
+                                    ${
+                                      lesson.content_type === "video"
+                                        ? '<i class="fas fa-play-circle"></i>'
+                                        : '<i class="fas fa-file-alt"></i>'
+                                    }
+                                </div>
+                                <span class="lesson-title">${
+                                  lesson.title
+                                } ${previewText}</span>
+                            </div>
+                            <div class="lesson-right">
+                                ${
+                                  lesson.duration
+                                    ? formatDuration(lesson.duration)
+                                    : ""
+                                }
+                                ${lockIcon}
+                            </div>
+                        </li>
+                    `;
+          });
+
+          curriculumHtml += `
+                            </ul>
+                        </div>
+                    </div>
+                `;
+        });
+
+        accordionElement.innerHTML = curriculumHtml;
+      }
+
+      // Update instructor section
+      function updateInstructorSection(course) {
+        const instructorElement = document.getElementById("instructorProfile");
+
+        // Fetch instructor details (in a real app, you'd fetch more details)
+        const instructor = {
+          id: course.instructor_id,
+          name: course.instructor_name,
+          avatar: "../../assets/images/default-avatar.png",
+          bio: "Instructor bio not available.",
+        };
+
+        instructorElement.innerHTML = `
+                <div class="instructor-header">
+                    <img src="${instructor.avatar}" alt="${instructor.name}" class="instructor-avatar">
+                    <div class="instructor-info">
+                        <h3>${instructor.name}</h3>
+                        <div class="instructor-meta">
+                            <div><i class="fas fa-star"></i> 4.8 Instructor Rating</div>
+                            <div><i class="fas fa-award"></i> 12,345 Reviews</div>
+                            <div><i class="fas fa-user-graduate"></i> 45,678 Students</div>
+                            <div><i class="fas fa-play-circle"></i> 15 Courses</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="instructor-bio">
+                    <p>${instructor.bio}</p>
+                </div>
+            `;
+      }
+
+      // Update course details (requirements & description)
+      function updateCourseDetails(course) {
+        // Update what you'll learn section
+        const whatYoullLearnElement = document.getElementById("whatYoullLearn");
+
+        // This would normally come from the API, simulating for now
+        const learningObjectives = [
+          "Build real-world applications with this comprehensive course",
+          "Understand core concepts and best practices",
+          "Create responsive and interactive user interfaces",
+          "Implement secure authentication and authorization",
+          "Deploy your applications to production environments",
+        ];
+
+        whatYoullLearnElement.innerHTML = "";
+        learningObjectives.forEach((objective) => {
+          whatYoullLearnElement.innerHTML += `
+                    <li><i class="fas fa-check"></i> ${objective}</li>
+                `;
+        });
+
+        // Update requirements section
+        const requirementsElement =
+          document.getElementById("courseRequirements");
+
+        // This would normally come from the API, simulating for now
+        const requirements = [
+          "Basic programming knowledge",
+          "A computer with an internet connection",
+          "Enthusiasm and willingness to learn",
+        ];
+
+        requirementsElement.innerHTML = "";
+        requirements.forEach((requirement) => {
+          requirementsElement.innerHTML += `<li>${requirement}</li>`;
+        });
+
+        // Update description section
+        const descriptionElement = document.getElementById("courseDescription");
+
+        // Use course description or a placeholder
+        const description =
+          course.description || "No description available for this course.";
+
+        // Simple formatting for description (convert newlines to paragraphs)
+        const formattedDescription = description
+          .split("\n\n")
+          .map((paragraph) => `<p>${paragraph}</p>`)
+          .join("");
+
+        descriptionElement.innerHTML = formattedDescription;
+      }
+
+      // Load course reviews
+      async function loadCourseReviews(courseId, page = 1) {
+        try {
+          const reviewsContainer = document.getElementById("reviewsList");
+          const reviewsSummary = document.getElementById("reviewsSummary");
+
+          // Fetch reviews from API
+          const response = await api.get(
+            `/enrollments/courses/${courseId}/reviews`,
+            {
+              page,
+              limit: 5,
+            }
+          );
+
+          if (response.status === "success") {
+            // Update reviews summary
+            updateReviewsSummary(response.rating_summary);
+
+            // Update reviews list
+            updateReviewsList(response.data, courseId);
+
+            // Update pagination
+            updateReviewsPagination(response.pagination, courseId);
+          } else {
+            reviewsContainer.innerHTML =
+              "<p>No reviews available for this course yet.</p>";
+            reviewsSummary.innerHTML = "<p>No ratings yet</p>";
+          }
+        } catch (error) {
+          console.error("Error loading reviews:", error);
+          document.getElementById("reviewsList").innerHTML =
+            "<p>Failed to load reviews. Please try again later.</p>";
+        }
+      }
+
+      // Update reviews summary
+      function updateReviewsSummary(summary) {
+        const summaryElement = document.getElementById("reviewsSummary");
+
+        if (!summary || !summary.total_reviews) {
+          summaryElement.innerHTML = `
+                    <div class="reviews-summary-content">
+                        <p>No ratings yet</p>
+                    </div>
+                    <button id="writeReviewBtn" class="btn btn-outline">Write a Review</button>
+                `;
+          return;
+        }
+
+        const average = parseFloat(summary.average_rating).toFixed(1);
+        const stars = generateStarRating(summary.average_rating);
+
+        // Calculate percentage for each rating
+        const fivePercent =
+          Math.round((summary.five_star / summary.total_reviews) * 100) || 0;
+        const fourPercent =
+          Math.round((summary.four_star / summary.total_reviews) * 100) || 0;
+        const threePercent =
+          Math.round((summary.three_star / summary.total_reviews) * 100) || 0;
+        const twoPercent =
+          Math.round((summary.two_star / summary.total_reviews) * 100) || 0;
+        const onePercent =
+          Math.round((summary.one_star / summary.total_reviews) * 100) || 0;
+
+        summaryElement.innerHTML = `
+                <div class="reviews-summary-content">
+                    <div class="summary-left">
+                        <div class="average-rating">${average}</div>
+                        <div class="stars">${stars}</div>
+                        <div class="total-reviews">Course Rating · ${summary.total_reviews} reviews</div>
+                    </div>
+                    <div class="summary-right">
+                        <div class="rating-bar">
+                            <div class="rating-label">5 stars</div>
+                            <div class="rating-progress">
+                                <div class="rating-progress-fill" style="width: ${fivePercent}%"></div>
+                            </div>
+                            <div class="rating-percent">${fivePercent}%</div>
+                        </div>
+                        <div class="rating-bar">
+                            <div class="rating-label">4 stars</div>
+                            <div class="rating-progress">
+                                <div class="rating-progress-fill" style="width: ${fourPercent}%"></div>
+                            </div>
+                            <div class="rating-percent">${fourPercent}%</div>
+                        </div>
+                        <div class="rating-bar">
+                            <div class="rating-label">3 stars</div>
+                            <div class="rating-progress">
+                                <div class="rating-progress-fill" style="width: ${threePercent}%"></div>
+                            </div>
+                            <div class="rating-percent">${threePercent}%</div>
+                        </div>
+                        <div class="rating-bar">
+                            <div class="rating-label">2 stars</div>
+                            <div class="rating-progress">
+                                <div class="rating-progress-fill" style="width: ${twoPercent}%"></div>
+                            </div>
+                            <div class="rating-percent">${twoPercent}%</div>
+                        </div>
+                        <div class="rating-bar">
+                            <div class="rating-label">1 star</div>
+                            <div class="rating-progress">
+                                <div class="rating-progress-fill" style="width: ${onePercent}%"></div>
+                            </div>
+                            <div class="rating-percent">${onePercent}%</div>
+                        </div>
+                    </div>
+                </div>
+                <button id="writeReviewBtn" class="btn btn-outline">Write a Review</button>
+            `;
+      }
+
+      // Update reviews list
+      function updateReviewsList(reviews, courseId) {
+        const reviewsContainer = document.getElementById("reviewsList");
+
+        if (!reviews || reviews.length === 0) {
+          reviewsContainer.innerHTML = `
+                    <div class="empty-reviews">
+                        <p>No reviews yet. Be the first to review this course!</p>
+                    </div>
+                `;
+          return;
+        }
+
+        reviewsContainer.innerHTML = "";
+
+        reviews.forEach((review) => {
+          const reviewElement = document.createElement("div");
+          reviewElement.className = "review-item";
+
+          const profilePic =
+            review.profile_picture || "../../assets/images/default-avatar.png";
+          const stars = generateStarRating(review.rating);
+          const reviewDate = formatDate(review.created_at);
+
+          reviewElement.innerHTML = `
+                    <div class="review-header">
+                        <img src="${profilePic}" alt="${
+            review.username
+          }" class="reviewer-avatar">
+                        <div class="reviewer-info">
+                            <h4>${review.username}</h4>
+                            <div class="review-rating">
+                                <div class="stars">${stars}</div>
+                                <div class="review-date">${reviewDate}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-body">
+                        <p>${review.review_text || "No written review."}</p>
+                    </div>
+                `;
+
+          reviewsContainer.appendChild(reviewElement);
+        });
+      }
+
+      // Update reviews pagination
+      function updateReviewsPagination(pagination, courseId) {
+        const paginationElement = document.getElementById("reviewsPagination");
+
+        if (!pagination || pagination.pages <= 1) {
+          paginationElement.innerHTML = "";
+          return;
+        }
+
+        const baseUrl = `?id=${courseId}`;
+        const paginationHtml = createPagination(pagination, baseUrl);
+
+        paginationElement.innerHTML = "";
+        paginationElement.appendChild(paginationHtml);
+
+        // Add event listeners to pagination links
+        const paginationLinks = paginationElement.querySelectorAll("a");
+        paginationLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const url = new URL(link.href);
+            const pageParam = url.searchParams.get("page");
+            if (pageParam) {
+              loadCourseReviews(courseId, parseInt(pageParam));
+            }
+          });
+        });
+      }
+
+      // Handle enrollment/purchase
+      async function handleEnrollment(courseId) {
+        // Check if user is logged in
+        if (!isAuthenticated()) {
+          // Redirect to login page with return URL
+          window.location.href = `../auth/login.html?return_to=${encodeURIComponent(
+            window.location.href
+          )}`;
+          return;
+        }
+
+        try {
+          // Show loading state
+          const enrollButton = document.getElementById("enrollButton");
+          const buyNowButton = document.getElementById("buyNowButton");
+          const actionButton = enrollButton || buyNowButton;
+
+          if (actionButton) {
+            const originalText = actionButton.textContent;
+            actionButton.disabled = true;
+            actionButton.innerHTML =
+              '<i class="fas fa-spinner fa-spin"></i> Processing...';
+          }
+
+          if (buyNowButton) {
+            // If it's a paid course, first handle payment
+            const paymentResponse = await api.post(
+              `/payments/courses/${courseId}`
+            );
+
+            if (paymentResponse.status !== "success") {
+              throw new Error("Payment processing failed");
+            }
+          } else {
+            // For free courses, directly enroll
+            await api.post(`/enrollments/courses/${courseId}`);
+          }
+
+          // Show success message
+          showNotification("Successfully enrolled in the course!", "success");
+
+          // Redirect to the learning page after a short delay
+          setTimeout(() => {
+            window.location.href = `learn.html?course_id=${courseId}`;
+          }, 1500);
+        } catch (error) {
+          console.error("Enrollment error:", error);
+          showNotification(
+            error.message ||
+              "Failed to enroll in the course. Please try again.",
+            "error"
+          );
+
+          // Reset button state
+          const actionButton =
+            document.getElementById("enrollButton") ||
+            document.getElementById("buyNowButton");
+          if (actionButton) {
+            actionButton.disabled = false;
+            actionButton.textContent =
+              actionButton.id === "enrollButton"
+                ? "Enroll Now - Free"
+                : "Buy Now";
+          }
+        }
+      }
+
+      // Handle review modal
+      function openReviewModal() {
+        // Check if user is logged in
+        if (!isAuthenticated()) {
+          // Redirect to login page with return URL
+          window.location.href = `../auth/login.html?return_to=${encodeURIComponent(
+            window.location.href
+          )}`;
+          return;
+        }
+
+        // Show modal
+        document.getElementById("reviewModal").style.display = "flex";
+
+        // Reset form
+        document.getElementById("reviewForm").reset();
+        document.getElementById("ratingInput").value = 0;
+        document.getElementById("reviewError").textContent = "";
+
+        // Reset rating stars
+        const ratingStars = document.querySelectorAll(".rating-input i");
+        ratingStars.forEach((star) => {
+          star.className = "far fa-star";
+        });
+      }
+
+      function closeReviewModal() {
+        document.getElementById("reviewModal").style.display = "none";
+      }
+
+      function handleRatingSelection(rating) {
+        document.getElementById("ratingInput").value = rating;
+
+        const ratingStars = document.querySelectorAll(".rating-input i");
+        ratingStars.forEach((star, index) => {
+          if (index < rating) {
+            star.className = "fas fa-star";
+          } else {
+            star.className = "far fa-star";
+          }
+        });
+      }
+
+      // Submit review
+      async function submitReview(courseId) {
+        const rating = parseInt(document.getElementById("ratingInput").value);
+        const reviewText = document.getElementById("reviewText").value.trim();
+        const errorElement = document.getElementById("reviewError");
+        const submitButton = document.getElementById("submitReviewBtn");
+
+        // Validate rating
+        if (rating < 1 || rating > 5) {
+          errorElement.textContent = "Please select a rating";
+          return;
+        }
+
+        // Disable button and show loading state
+        submitButton.disabled = true;
+        submitButton.innerHTML =
+          '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        errorElement.textContent = "";
+
+        try {
+          // Submit review
+          await api.post(`/enrollments/courses/${courseId}/reviews`, {
+            rating,
+            reviewText,
+          });
+
+          // Close modal
+          closeReviewModal();
+
+          // Show success message
+          showNotification(
+            "Your review has been submitted successfully!",
+            "success"
+          );
+
+          // Reload reviews
+          loadCourseReviews(courseId);
+        } catch (error) {
+          console.error("Submit review error:", error);
+          errorElement.textContent =
+            error.message || "Failed to submit review. Please try again.";
+
+          // Reset button state
+          submitButton.disabled = false;
+          submitButton.textContent = "Submit Review";
+        }
+      }
+
+      // Load categories for navigation
+      async function loadCategories() {
+        try {
+          const response = await api.get("/admin/categories");
+
+          if (response.status === "success") {
+            // Populate header categories dropdown
+            const categoriesList = document.getElementById("categoriesList");
+            categoriesList.innerHTML = "";
+
+            response.data.slice(0, 6).forEach((category) => {
+              const li = document.createElement("li");
+              li.innerHTML = `<a href="browse.html?category=${category.name
+                .toLowerCase()
+                .replace(/\s+/g, "-")}">${category.name}</a>`;
+              categoriesList.appendChild(li);
+            });
+
+            // Add "View All" link
+            const viewAllLi = document.createElement("li");
+            viewAllLi.innerHTML = '<a href="browse.html">View All</a>';
+            categoriesList.appendChild(viewAllLi);
+
+            // Populate footer categories
+            const footerCategories =
+              document.getElementById("footerCategories");
+            footerCategories.innerHTML = "";
+
+            response.data.slice(0, 4).forEach((category) => {
+              const li = document.createElement("li");
+              li.innerHTML = `<a href="browse.html?category=${category.name
+                .toLowerCase()
+                .replace(/\s+/g, "-")}">${category.name}</a>`;
+              footerCategories.appendChild(li);
+            });
+
+            // Add "View All" link to footer
+            const footerViewAllLi = document.createElement("li");
+            footerViewAllLi.innerHTML = '<a href="browse.html">View All</a>';
+            footerCategories.appendChild(footerViewAllLi);
+          }
+        } catch (error) {
+          console.error("Error loading categories:", error);
+        }
+      }
+    </script>
+  </body>
+</html>

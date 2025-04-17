@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Course - EduLearn</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="../../assets/css/course.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      body {
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <header id="main-header" style="position: relative; z-index: 10">
+      <div class="container">
+        <div class="logo">
+          <h1><a href="../../index.html">EduLearn</a></h1>
+        </div>
+        <nav>
+          <ul class="main-nav">
+            <li>
+              <a href="#" id="toggleSidebar"
+                ><i class="fas fa-bars"></i> Contents</a
+              >
+            </li>
+            <li><a href="#" id="courseTitle">Course Title</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <div class="logged-in" id="loggedInMenu">
+            <a href="#" id="userDropdown">
+              <img
+                src="../../assets/images/default-avatar.png"
+                alt="Profile"
+                class="avatar"
+                id="userAvatar"
+              />
+              <span id="userName">User</span>
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="../dashboard/student.html" id="dashboardLink"
+                  >Dashboard</a
+                >
+              </li>
+              <li><a href="browse.html?enrolled=true">My Learning</a></li>
+              <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="course-learning-container">
+      <div class="course-content-main" id="courseContent">
+        <div class="loading-spinner-container">
+          <div class="loading-spinner"></div>
+          <p>Loading course content...</p>
+        </div>
+      </div>
+
+      <aside class="course-sidebar" id="courseSidebar">
+        <div class="course-sidebar-header">
+          <div class="course-progress">
+            <div class="progress-bar">
+              <div
+                class="progress-bar-fill"
+                id="progressBarFill"
+                style="width: 0%"
+              ></div>
+            </div>
+            <div class="progress-text" id="progressText">0% complete</div>
+          </div>
+          <h3 class="sidebar-title" id="sidebarCourseTitle">Course Title</h3>
+          <div class="sidebar-actions">
+            <button class="action-button" id="noteButton">
+              <i class="fas fa-sticky-note"></i> Notes
+            </button>
+            <button class="action-button" id="announceButton">
+              <i class="fas fa-bullhorn"></i> Announcements
+            </button>
+          </div>
+        </div>
+
+        <div class="curriculum-list" id="curriculumList">
+          <div class="loading-spinner"></div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Note Taking Modal -->
+    <div class="modal" id="noteModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>My Notes</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="notes-header">
+            <p>
+              Notes for: <strong id="notesLessonTitle">Current Lesson</strong>
+            </p>
+          </div>
+          <textarea
+            id="notesContent"
+            rows="10"
+            placeholder="Take notes for this lesson..."
+          ></textarea>
+          <div class="notes-actions">
+            <button id="saveNotesBtn" class="btn btn-primary">
+              Save Notes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completion Modal -->
+    <div class="modal" id="completionModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Congratulations!</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="completion-message">
+            <div class="completion-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Lesson Completed!</h3>
+            <p>
+              You've completed this lesson. Would you like to mark it as
+              complete and move to the next lesson?
+            </p>
+            <div class="completion-actions">
+              <button id="markCompleteBtn" class="btn btn-primary">
+                Mark Complete & Continue
+              </button>
+              <button id="stayBtn" class="btn btn-outline">
+                Stay on This Lesson
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Check auth status
+        if (!isAuthenticated()) {
+          window.location.href =
+            "../auth/login.html?return_to=" +
+            encodeURIComponent(window.location.href);
+          return;
+        }
+
+        // Get course ID and enrollment ID from URL
+        const params = getQueryParams();
+        const courseId = params.course_id;
+        let enrollmentId = params.enrollment_id;
+
+        if (!courseId) {
+          window.location.href = "../dashboard/student.html";
+          return;
+        }
+
+        // Get user data
+        const user = getUserFromLocalStorage();
+        updateUserInfo(user);
+
+        // Load course data and enrollment if needed
+        try {
+          // If enrollment ID is not provided, get it from API
+          if (!enrollmentId) {
+            const enrollmentsResponse = await api.get("/enrollments/users");
+            const enrollment = enrollmentsResponse.data.find(
+              (e) => e.course_id == courseId
+            );
+
+            if (enrollment) {
+              enrollmentId = enrollment.id;
+            } else {
+              // User is not enrolled, redirect to course details
+              window.location.href = `details.html?id=${courseId}`;
+              return;
+            }
+          }
+
+          // Load course data
+          const courseResponse = await api.get(`/courses/${courseId}`);
+          const course = courseResponse.data;
+
+          // Update course title
+          document.title = `${course.title} - Learning - EduLearn`;
+          document.getElementById("courseTitle").textContent = course.title;
+          document.getElementById("sidebarCourseTitle").textContent =
+            course.title;
+
+          // Load curriculum
+          await loadCurriculum(course, enrollmentId);
+
+          // Load first lesson or last viewed lesson
+          if (course.sections && course.sections.length > 0) {
+            const firstSection = course.sections[0];
+            if (firstSection.lessons && firstSection.lessons.length > 0) {
+              loadLesson(firstSection.lessons[0].id, enrollmentId);
+            }
+          }
+
+          // Update progress
+          updateProgress(course, enrollmentId);
+        } catch (error) {
+          console.error("Error loading course data:", error);
+          showNotification(
+            "Failed to load course data. Please try again later.",
+            "error"
+          );
+        }
+
+        // Add event listeners
+        document.getElementById("logoutBtn").addEventListener("click", (e) => {
+          e.preventDefault();
+          logout();
+        });
+
+        document
+          .getElementById("toggleSidebar")
+          .addEventListener("click", (e) => {
+            e.preventDefault();
+            toggleSidebar();
+          });
+
+        document.getElementById("noteButton").addEventListener("click", () => {
+          openNotesModal();
+        });
+
+        document.addEventListener("click", (e) => {
+          if (e.target.closest(".close-modal")) {
+            closeModals();
+          }
+
+          if (e.target.id === "saveNotesBtn") {
+            saveNotes();
+          }
+
+          if (e.target.id === "markCompleteBtn") {
+            markLessonComplete(true);
+          }
+
+          if (e.target.id === "stayBtn") {
+            markLessonComplete(false);
+          }
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener("click", (e) => {
+          if (e.target.classList.contains("modal")) {
+            closeModals();
+          }
+        });
+      });
+
+      // Update user info
+      function updateUserInfo(user) {
+        if (user) {
+          document.getElementById("userName").textContent = user.username;
+        }
+      }
+
+      // Load curriculum
+      async function loadCurriculum(course, enrollmentId) {
+        const curriculumList = document.getElementById("curriculumList");
+
+        if (!course.sections || course.sections.length === 0) {
+          curriculumList.innerHTML =
+            '<p class="empty-curriculum">No content available for this course yet.</p>';
+          return;
+        }
+
+        curriculumList.innerHTML = "";
+
+        // Keep track of completed lessons
+        let totalLessons = 0;
+        let completedLessons = 0;
+
+        // Generate curriculum HTML
+        course.sections.forEach((section, sectionIndex) => {
+          const sectionElement = document.createElement("div");
+          sectionElement.className = "curriculum-section";
+
+          sectionElement.innerHTML = `
+                    <div class="curriculum-section-header">
+                        Section ${sectionIndex + 1}: ${section.title}
+                    </div>
+                `;
+
+          if (section.lessons && section.lessons.length > 0) {
+            const lessonsList = document.createElement("div");
+            lessonsList.className = "lessons-list";
+
+            section.lessons.forEach((lesson, lessonIndex) => {
+              totalLessons++;
+
+              const progress = lesson.progress;
+              const isCompleted = progress && progress.completed;
+
+              if (isCompleted) {
+                completedLessons++;
+              }
+
+              const lessonElement = document.createElement("div");
+              lessonElement.className = `lesson-item${
+                isCompleted ? " completed" : ""
+              }`;
+              lessonElement.setAttribute("data-lesson-id", lesson.id);
+
+              lessonElement.innerHTML = `
+                            <i class="${
+                              isCompleted
+                                ? "fas fa-check-circle"
+                                : "far fa-circle"
+                            }"></i>
+                            <div class="lesson-content">
+                                <div class="lesson-title">${lesson.title}</div>
+                                ${
+                                  lesson.duration
+                                    ? `<div class="lesson-duration">${formatDuration(
+                                        lesson.duration
+                                      )}</div>`
+                                    : ""
+                                }
+                            </div>
+                        `;
+
+              // Add event listener to load lesson
+              lessonElement.addEventListener("click", () => {
+                loadLesson(lesson.id, enrollmentId);
+              });
+
+              lessonsList.appendChild(lessonElement);
+            });
+
+            sectionElement.appendChild(lessonsList);
+          }
+
+          curriculumList.appendChild(sectionElement);
+        });
+
+        // Update progress after loading curriculum
+        updateProgressUI(completedLessons, totalLessons);
+      }
+
+      // Update progress UI
+      function updateProgressUI(completed, total) {
+        const percentage =
+          total > 0 ? Math.round((completed / total) * 100) : 0;
+
+        document.getElementById(
+          "progressBarFill"
+        ).style.width = `${percentage}%`;
+        document.getElementById(
+          "progressText"
+        ).textContent = `${percentage}% complete`;
+      }
+
+      // Load lesson
+      async function loadLesson(lessonId, enrollmentId) {
+        try {
+          // Show loading spinner
+          document.getElementById("courseContent").innerHTML = `
+                    <div class="loading-spinner-container">
+                        <div class="loading-spinner"></div>
+                        <p>Loading lesson content...</p>
+                    </div>
+                `;
+
+          // Set active lesson in sidebar
+          setActiveLessonInSidebar(lessonId);
+
+          // Fetch lesson details
+          const response = await api.get(`/courses/lessons/${lessonId}`);
+          const lesson = response.data;
+
+          // Update current lesson ID (for notes and completion)
+          window.currentLessonId = lessonId;
+          window.currentEnrollmentId = enrollmentId;
+
+          // Update lesson content
+          updateLessonContent(lesson);
+
+          // Update progress if user already watched
+          if (lesson.progress && lesson.progress.last_watched_position) {
+            const videoElement = document.querySelector("video");
+            if (videoElement) {
+              videoElement.currentTime = lesson.progress.last_watched_position;
+            }
+          }
+        } catch (error) {
+          console.error("Error loading lesson:", error);
+          showNotification(
+            "Failed to load lesson content. Please try again later.",
+            "error"
+          );
+        }
+      }
+
+      // Set active lesson in sidebar
+      function setActiveLessonInSidebar(lessonId) {
+        // Remove active class from all lessons
+        const allLessons = document.querySelectorAll(".lesson-item");
+        allLessons.forEach((item) => {
+          item.classList.remove("active");
+        });
+
+        // Add active class to current lesson
+        const activeLesson = document.querySelector(
+          `.lesson-item[data-lesson-id="${lessonId}"]`
+        );
+        if (activeLesson) {
+          activeLesson.classList.add("active");
+
+          // Scroll to active lesson
+          activeLesson.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+
+      // Update lesson content
+      function updateLessonContent(lesson) {
+        const contentElement = document.getElementById("courseContent");
+
+        // Determine content based on lesson type
+        let contentHtml = "";
+
+        if (lesson.content_type === "video") {
+          contentHtml = `
+                    <div class="video-container">
+                        <video id="lessonVideo" controls>
+                            <source src="${API_URL}${lesson.content_url}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                `;
+        } else {
+          // Text content
+          contentHtml = `
+                    <div class="text-content">
+                        ${
+                          lesson.content_text ||
+                          "<p>No content available for this lesson.</p>"
+                        }
+                    </div>
+                `;
+        }
+
+        // Create content area
+        contentElement.innerHTML = `
+                <div class="content-area">
+                    <div class="content-header">
+                        <h1>${lesson.title}</h1>
+                        <div class="lesson-meta">
+                            <span class="lesson-section">${
+                              lesson.section_title
+                            }</span>
+                            ${
+                              lesson.duration
+                                ? `<span class="lesson-duration">${formatDuration(
+                                    lesson.duration
+                                  )}</span>`
+                                : ""
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="content-body">
+                        ${contentHtml}
+                    </div>
+                    
+                    <div class="content-navigation">
+                        <button id="prevLessonBtn" class="btn btn-outline">
+                            <i class="fas fa-arrow-left"></i> Previous Lesson
+                        </button>
+                        <button id="markCompleteBtn" class="btn btn-primary">
+                            ${
+                              lesson.progress && lesson.progress.completed
+                                ? "Completed"
+                                : "Mark as Complete"
+                            }
+                        </button>
+                        <button id="nextLessonBtn" class="btn btn-outline">
+                            Next Lesson <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+        // Set up video event listeners
+        const videoElement = document.getElementById("lessonVideo");
+        if (videoElement) {
+          // Update progress periodically
+          let progressUpdateInterval;
+
+          videoElement.addEventListener("play", () => {
+            // Start interval to update progress
+            progressUpdateInterval = setInterval(() => {
+              updateLessonProgress(lesson.id, false, videoElement.currentTime);
+            }, 30000); // Update every 30 seconds
+          });
+
+          videoElement.addEventListener("pause", () => {
+            // Clear interval when video is paused
+            clearInterval(progressUpdateInterval);
+
+            // Update progress immediately
+            updateLessonProgress(lesson.id, false, videoElement.currentTime);
+          });
+
+          videoElement.addEventListener("ended", () => {
+            // Clear interval when video ends
+            clearInterval(progressUpdateInterval);
+
+            // Show completion modal
+            showCompletionModal();
+          });
+        }
+
+        // Set up navigation buttons
+        setupNavigationButtons(lesson);
+
+        // Disable mark complete button if already completed
+        if (lesson.progress && lesson.progress.completed) {
+          document.getElementById("markCompleteBtn").disabled = true;
+        } else {
+          document
+            .getElementById("markCompleteBtn")
+            .addEventListener("click", () => {
+              markLessonComplete(true);
+            });
+        }
+      }
+
+      // Setup navigation buttons
+      function setupNavigationButtons(lesson) {
+        const prevButton = document.getElementById("prevLessonBtn");
+        const nextButton = document.getElementById("nextLessonBtn");
+
+        // Find previous and next lessons
+        const allLessons = Array.from(
+          document.querySelectorAll(".lesson-item")
+        );
+        const currentIndex = allLessons.findIndex(
+          (item) => item.getAttribute("data-lesson-id") == lesson.id
+        );
+
+        // Disable previous button if first lesson
+        if (currentIndex <= 0) {
+          prevButton.disabled = true;
+          prevButton.classList.add("disabled");
+        } else {
+          prevButton.addEventListener("click", () => {
+            const prevLesson = allLessons[currentIndex - 1];
+            const prevLessonId = prevLesson.getAttribute("data-lesson-id");
+            loadLesson(prevLessonId, window.currentEnrollmentId);
+          });
+        }
+
+        // Disable next button if last lesson
+        if (currentIndex >= allLessons.length - 1) {
+          nextButton.disabled = true;
+          nextButton.classList.add("disabled");
+        } else {
+          nextButton.addEventListener("click", () => {
+            const nextLesson = allLessons[currentIndex + 1];
+            const nextLessonId = nextLesson.getAttribute("data-lesson-id");
+            loadLesson(nextLessonId, window.currentEnrollmentId);
+          });
+        }
+      }
+
+      // Update lesson progress
+      async function updateLessonProgress(
+        lessonId,
+        completed,
+        lastWatchedPosition
+      ) {
+        try {
+          // Don't update if no enrollment ID
+          if (!window.currentEnrollmentId) return;
+
+          // Update progress on server
+          await api.post(`/enrollments/lessons/${lessonId}/progress`, {
+            completed: completed || false,
+            lastWatchedPosition: lastWatchedPosition || 0,
+          });
+
+          // If marked as completed, update UI
+          if (completed) {
+            // Update lesson item in sidebar
+            const lessonItem = document.querySelector(
+              `.lesson-item[data-lesson-id="${lessonId}"]`
+            );
+            if (lessonItem) {
+              lessonItem.classList.add("completed");
+              const icon = lessonItem.querySelector("i");
+              icon.className = "fas fa-check-circle";
+            }
+
+            // Update mark complete button
+            const completeButton = document.getElementById("markCompleteBtn");
+            if (completeButton) {
+              completeButton.textContent = "Completed";
+              completeButton.disabled = true;
+            }
+
+            // Update progress
+            recalculateProgress();
+          }
+        } catch (error) {
+          console.error("Error updating progress:", error);
+          // Don't show notification for background progress updates
+          if (completed) {
+            showNotification(
+              "Failed to update progress. Please try again.",
+              "error"
+            );
+          }
+        }
+      }
+
+      // Recalculate and update progress
+      function recalculateProgress() {
+        const allLessons = document.querySelectorAll(".lesson-item");
+        const completedLessons = document.querySelectorAll(
+          ".lesson-item.completed"
+        );
+
+        updateProgressUI(completedLessons.length, allLessons.length);
+      }
+
+      // Toggle sidebar
+      function toggleSidebar() {
+        const sidebar = document.getElementById("courseSidebar");
+        sidebar.classList.toggle("collapsed");
+
+        if (sidebar.classList.contains("collapsed")) {
+          sidebar.style.width = "0";
+          document.getElementById("courseContent").style.marginLeft = "0";
+        } else {
+          sidebar.style.width = "320px";
+          document.getElementById("courseContent").style.marginLeft = "320px";
+        }
+      }
+
+      // Open notes modal
+      function openNotesModal() {
+        // Get current lesson title
+        const activeLesson = document.querySelector(".lesson-item.active");
+        const lessonTitle = activeLesson
+          ? activeLesson.querySelector(".lesson-title").textContent
+          : "Current Lesson";
+
+        document.getElementById("notesLessonTitle").textContent = lessonTitle;
+
+        // Load saved notes for this lesson
+        const savedNotes = localStorage.getItem(
+          `notes_${window.currentLessonId}`
+        );
+        document.getElementById("notesContent").value = savedNotes || "";
+
+        // Show modal
+        document.getElementById("noteModal").style.display = "flex";
+      }
+
+      // Show completion modal
+      function showCompletionModal() {
+        document.getElementById("completionModal").style.display = "flex";
+      }
+
+      // Close all modals
+      function closeModals() {
+        document.getElementById("noteModal").style.display = "none";
+        document.getElementById("completionModal").style.display = "none";
+      }
+
+      // Save notes
+      function saveNotes() {
+        const notesContent = document.getElementById("notesContent").value;
+
+        // Save to local storage
+        localStorage.setItem(`notes_${window.currentLessonId}`, notesContent);
+
+        // Show confirmation and close modal
+        showNotification("Notes saved successfully!", "success");
+        closeModals();
+      }
+
+      // Mark lesson as complete
+      async function markLessonComplete(navigateToNext) {
+        if (!window.currentLessonId) return;
+
+        try {
+          // Update progress on server
+          await updateLessonProgress(window.currentLessonId, true);
+
+          // Close modal
+          closeModals();
+
+          // Show confirmation
+          showNotification("Lesson marked as complete!", "success");
+
+          // Navigate to next lesson if requested
+          if (navigateToNext) {
+            const allLessons = Array.from(
+              document.querySelectorAll(".lesson-item")
+            );
+            const currentIndex = allLessons.findIndex(
+              (item) =>
+                item.getAttribute("data-lesson-id") == window.currentLessonId
+            );
+
+            if (currentIndex < allLessons.length - 1) {
+              const nextLesson = allLessons[currentIndex + 1];
+              const nextLessonId = nextLesson.getAttribute("data-lesson-id");
+              loadLesson(nextLessonId, window.currentEnrollmentId);
+            }
+          }
+        } catch (error) {
+          console.error("Error marking lesson as complete:", error);
+          showNotification(
+            "Failed to mark lesson as complete. Please try again.",
+            "error"
+          );
+          closeModals();
+        }
+      }
+
+      // Update course progress
+      async function updateProgress(course, enrollmentId) {
+        try {
+          // Get enrollment details
+          const response = await api.get(`/enrollments/${enrollmentId}`);
+
+          if (response.status === "success") {
+            const progress = response.data.progress;
+
+            // Update progress UI
+            updateProgressUI(
+              progress.completed_lessons,
+              progress.total_lessons
+            );
+          }
+        } catch (error) {
+          console.error("Error updating progress:", error);
+        }
+      }
+    </script>
+
+    <style>
+      /* Additional Styles for Learning Page */
+      .loading-spinner-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 50px;
+      }
+
+      .loading-spinner-container p {
+        margin-top: 20px;
+        color: #666;
+      }
+
+      .course-sidebar.collapsed {
+        width: 0;
+        overflow: hidden;
+      }
+
+      .content-area {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+
+      .lesson-meta {
+        display: flex;
+        gap: 20px;
+        color: #666;
+        margin-bottom: 30px;
+      }
+
+      .content-navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 1px solid #eee;
+      }
+
+      .lesson-duration {
+        color: #666;
+        font-size: 14px;
+        margin-top: 5px;
+      }
+
+      .btn.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Video Player */
+      .video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+        background-color: #000;
+        margin-bottom: 30px;
+        border-radius: 8px;
+      }
+
+      .video-container video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        outline: none;
+      }
+
+      /* Text Content */
+      .text-content {
+        line-height: 1.8;
+        font-size: 16px;
+      }
+
+      .text-content h2 {
+        margin-top: 30px;
+        margin-bottom: 15px;
+      }
+
+      .text-content p {
+        margin-bottom: 20px;
+      }
+
+      .text-content ul,
+      .text-content ol {
+        margin-bottom: 20px;
+        padding-left: 25px;
+      }
+
+      .text-content li {
+        margin-bottom: 10px;
+      }
+
+      /* Notes Modal */
+      #notesContent {
+        width: 100%;
+        padding: 15px;
+        font-family: inherit;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        resize: vertical;
+        margin-top: 10px;
+        margin-bottom: 20px;
+      }
+
+      .notes-header {
+        margin-bottom: 15px;
+      }
+
+      /* Completion Modal */
+      .completion-message {
+        text-align: center;
+        padding: 20px 0;
+      }
+
+      .completion-icon {
+        font-size: 64px;
+        color: #52c41a;
+        margin-bottom: 20px;
+      }
+
+      .completion-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+      }
+
+      /* Empty Curriculum */
+      .empty-curriculum {
+        padding: 20px;
+        text-align: center;
+        color: #666;
+      }
+    </style>
+  </body>
+</html>

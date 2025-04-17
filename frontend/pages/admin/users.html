@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management - EduLearn Admin</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="../../assets/css/dashboard.css" />
+    <link rel="stylesheet" href="../../assets/css/admin.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header id="main-header">
+      <div class="container">
+        <div class="logo">
+          <h1><a href="../../index.html">EduLearn</a></h1>
+        </div>
+        <nav>
+          <ul class="main-nav">
+            <li><a href="dashboard.html">Admin Dashboard</a></li>
+            <li><a href="users.html" class="active">Users</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <div class="logged-in" id="loggedInMenu">
+            <a href="#" id="userDropdown">
+              <img
+                src="../../assets/images/default-avatar.png"
+                alt="Profile"
+                class="avatar"
+                id="userAvatar"
+              />
+              <span id="userName">Admin</span>
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="../profile/settings.html">Profile Settings</a></li>
+              <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard-container">
+      <aside class="dashboard-sidebar">
+        <nav class="sidebar-nav">
+          <ul>
+            <li>
+              <a href="dashboard.html">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+              </a>
+            </li>
+            <li class="active">
+              <a href="users.html">
+                <i class="fas fa-users"></i>
+                Users
+              </a>
+            </li>
+            <li>
+              <a href="courses.html">
+                <i class="fas fa-book"></i>
+                Courses
+              </a>
+            </li>
+            <li>
+              <a href="categories.html">
+                <i class="fas fa-tags"></i>
+                Categories
+              </a>
+            </li>
+            <li>
+              <a href="payments.html">
+                <i class="fas fa-dollar-sign"></i>
+                Payments
+              </a>
+            </li>
+            <li>
+              <a href="reports.html">
+                <i class="fas fa-chart-bar"></i>
+                Reports
+              </a>
+            </li>
+            <li>
+              <a href="settings.html">
+                <i class="fas fa-cog"></i>
+                Settings
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="dashboard-content">
+        <div class="dashboard-header">
+          <h1>User Management</h1>
+          <button id="addUserBtn" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> Add New User
+          </button>
+        </div>
+
+        <section class="dashboard-section">
+          <div class="filters-bar">
+            <div class="search-box">
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search users..."
+              />
+              <button id="searchBtn">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+            <div class="filters">
+              <div class="filter-group">
+                <label for="roleFilter">Role:</label>
+                <select id="roleFilter">
+                  <option value="">All Roles</option>
+                  <option value="student">Students</option>
+                  <option value="instructor">Instructors</option>
+                  <option value="admin">Admins</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label for="statusFilter">Status:</label>
+                <select id="statusFilter">
+                  <option value="">All Status</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="usersTable">
+              <thead>
+                <tr>
+                  <th>
+                    <input type="checkbox" id="selectAllUsers" />
+                  </th>
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="7" class="loading-row">
+                    <div class="loading-spinner"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <div class="bulk-actions">
+              <select id="bulkActionSelect" disabled>
+                <option value="">Bulk Actions</option>
+                <option value="activate">Activate</option>
+                <option value="deactivate">Deactivate</option>
+                <option value="delete">Delete</option>
+              </select>
+              <button
+                id="applyBulkAction"
+                class="btn btn-sm btn-outline"
+                disabled
+              >
+                Apply
+              </button>
+            </div>
+            <div class="pagination" id="usersPagination">
+              <!-- Pagination will be generated here -->
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- User Form Modal -->
+    <div class="modal" id="userFormModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="userFormTitle">Add New User</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="userForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="username">Username*</label>
+                <input type="text" id="username" name="username" required />
+                <div class="form-error" id="usernameError"></div>
+              </div>
+              <div class="form-group">
+                <label for="email">Email*</label>
+                <input type="email" id="email" name="email" required />
+                <div class="form-error" id="emailError"></div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" />
+              </div>
+              <div class="form-group">
+                <label for="role">Role*</label>
+                <select id="role" name="role" required>
+                  <option value="student">Student</option>
+                  <option value="instructor">Instructor</option>
+                  <option value="admin">Admin</option>
+                </select>
+                <div class="form-error" id="roleError"></div>
+              </div>
+            </div>
+
+            <div class="form-group password-group">
+              <label for="password">Password*</label>
+              <div class="password-input">
+                <input type="password" id="password" name="password" />
+                <button type="button" class="toggle-password">
+                  <i class="far fa-eye"></i>
+                </button>
+              </div>
+              <div class="help-text">
+                Leave blank to keep current password when editing.
+              </div>
+              <div class="form-error" id="passwordError"></div>
+            </div>
+
+            <div class="form-group">
+              <label>Status</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input type="radio" name="status" value="active" checked />
+                  Active
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="status" value="inactive" /> Inactive
+                </label>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="profileBio">Bio</label>
+                <textarea id="profileBio" name="profileBio" rows="3"></textarea>
+              </div>
+            </div>
+
+            <div class="action-buttons">
+              <button type="button" id="cancelUserForm" class="btn btn-outline">
+                Cancel
+              </button>
+              <button type="submit" id="saveUserBtn" class="btn btn-primary">
+                Save User
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div class="modal" id="confirmDeleteModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Confirm Deletion</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p id="deleteMessage">
+            Are you sure you want to delete this user? This action cannot be
+            undone.
+          </p>
+          <div class="action-buttons">
+            <button id="cancelDeleteBtn" class="btn btn-outline">Cancel</button>
+            <button id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Check auth status
+        if (!isAuthenticated()) {
+          window.location.href =
+            "../auth/login.html?return_to=" +
+            encodeURIComponent(window.location.href);
+          return;
+        }
+
+        // Get user data
+        const user = getUserFromLocalStorage();
+        updateUserInfo(user);
+
+        // Make sure user is an admin
+        if (user.role !== "admin") {
+          window.location.href = "../dashboard/student.html";
+          return;
+        }
+
+        // Initialize page
+        initUserManagement();
+
+        // Add event listeners
+        document.getElementById("logoutBtn").addEventListener("click", (e) => {
+          e.preventDefault();
+          logout();
+        });
+      });
+
+      // Update user info
+      function updateUserInfo(user) {
+        if (user) {
+          document.getElementById("userName").textContent = user.username;
+        }
+      }
+
+      // Initialize user management
+      function initUserManagement() {
+        // Load users
+        loadUsers();
+
+        // Set up event listeners
+        setupEventListeners();
+      }
+
+      // Set up event listeners
+      function setupEventListeners() {
+        // Search and filter
+        document.getElementById("searchBtn").addEventListener("click", () => {
+          loadUsers(1);
+        });
+
+        document
+          .getElementById("searchInput")
+          .addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+              loadUsers(1);
+            }
+          });
+
+        document.getElementById("roleFilter").addEventListener("change", () => {
+          loadUsers(1);
+        });
+
+        document
+          .getElementById("statusFilter")
+          .addEventListener("change", () => {
+            loadUsers(1);
+          });
+
+        // Select all checkbox
+        document
+          .getElementById("selectAllUsers")
+          .addEventListener("change", (e) => {
+            const checkboxes = document.querySelectorAll(
+              '#usersTable tbody input[type="checkbox"]'
+            );
+            checkboxes.forEach((checkbox) => {
+              checkbox.checked = e.target.checked;
+            });
+
+            updateBulkActionState();
+          });
+
+        // Bulk actions
+        document
+          .getElementById("applyBulkAction")
+          .addEventListener("click", () => {
+            const action = document.getElementById("bulkActionSelect").value;
+            if (!action) return;
+
+            const selectedUsers = getSelectedUserIds();
+            if (selectedUsers.length === 0) return;
+
+            applyBulkAction(action, selectedUsers);
+          });
+
+        // Add user button
+        document.getElementById("addUserBtn").addEventListener("click", () => {
+          openUserFormModal();
+        });
+
+        // User form modal
+        document
+          .querySelector("#userFormModal .close-modal")
+          .addEventListener("click", () => {
+            closeUserFormModal();
+          });
+
+        document
+          .getElementById("cancelUserForm")
+          .addEventListener("click", () => {
+            closeUserFormModal();
+          });
+
+        // Toggle password visibility
+        document
+          .querySelector(".toggle-password")
+          .addEventListener("click", () => {
+            const passwordInput = document.getElementById("password");
+            const type =
+              passwordInput.getAttribute("type") === "password"
+                ? "text"
+                : "password";
+            passwordInput.setAttribute("type", type);
+
+            const icon = document.querySelector(".toggle-password i");
+            icon.classList.toggle("fa-eye");
+            icon.classList.toggle("fa-eye-slash");
+          });
+
+        // User form submission
+        document.getElementById("userForm").addEventListener("submit", (e) => {
+          e.preventDefault();
+          saveUser();
+        });
+
+        // Confirm delete modal
+        document
+          .querySelector("#confirmDeleteModal .close-modal")
+          .addEventListener("click", () => {
+            closeDeleteModal();
+          });
+
+        document
+          .getElementById("cancelDeleteBtn")
+          .addEventListener("click", () => {
+            closeDeleteModal();
+          });
+      }
+
+      // Load users
+      async function loadUsers(page = 1) {
+        try {
+          const tableBody = document.querySelector("#usersTable tbody");
+          tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="loading-row">
+                            <div class="loading-spinner"></div>
+                        </td>
+                    </tr>
+                `;
+
+          // Get filters
+          const search = document.getElementById("searchInput").value.trim();
+          const role = document.getElementById("roleFilter").value;
+          const status = document.getElementById("statusFilter").value;
+
+          // In a real app, we would fetch users from the API with these parameters
+          // For this demo, we'll simulate data
+
+          // Simulate API call delay
+          await new Promise((resolve) => setTimeout(resolve, 500));
+
+          // Simulate user data
+          const users = generateMockUsers(50);
+
+          // Apply filters (in a real app, the API would handle this)
+          let filteredUsers = users;
+
+          if (search) {
+            filteredUsers = filteredUsers.filter(
+              (user) =>
+                user.username.includes(search) ||
+                user.email.includes(search) ||
+                user.full_name.includes(search)
+            );
+          }
+
+          if (role) {
+            filteredUsers = filteredUsers.filter((user) => user.role === role);
+          }
+
+          if (status) {
+            filteredUsers = filteredUsers.filter(
+              (user) =>
+                (status === "active" && user.is_active) ||
+                (status === "inactive" && !user.is_active)
+            );
+          }
+
+          // Pagination
+          const limit = 10;
+          const totalPages = Math.ceil(filteredUsers.length / limit);
+          const offset = (page - 1) * limit;
+          const paginatedUsers = filteredUsers.slice(offset, offset + limit);
+
+          // Check if no results
+          if (paginatedUsers.length === 0) {
+            tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="empty-table">No users found</td>
+                        </tr>
+                    `;
+
+            // Clear pagination
+            document.getElementById("usersPagination").innerHTML = "";
+            return;
+          }
+
+          tableBody.innerHTML = "";
+
+          // Render user rows
+          paginatedUsers.forEach((user) => {
+            const row = document.createElement("tr");
+
+            const statusClass = user.is_active
+              ? "status-active"
+              : "status-inactive";
+            const statusText = user.is_active ? "Active" : "Inactive";
+
+            const roleClass =
+              user.role === "admin"
+                ? "role-admin"
+                : user.role === "instructor"
+                ? "role-instructor"
+                : "role-student";
+
+            row.innerHTML = `
+                        <td>
+                            <input type="checkbox" class="user-checkbox" data-id="${
+                              user.id
+                            }">
+                        </td>
+                        <td>
+                            <div class="user-cell">
+                                <img src="${
+                                  user.profile_picture ||
+                                  "../../assets/images/default-avatar.png"
+                                }" alt="${user.username}" class="user-avatar">
+                                <div class="user-info">
+                                    <div class="user-name">${
+                                      user.username
+                                    }</div>
+                                    <div class="user-fullname">${
+                                      user.full_name
+                                    }</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${user.email}</td>
+                        <td><span class="role-badge ${roleClass}">${
+              user.role
+            }</span></td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${formatDate(user.created_at)}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn btn-sm btn-outline edit-user" data-id="${
+                                  user.id
+                                }" title="Edit User">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm ${
+                                  user.is_active ? "btn-outline" : "btn-primary"
+                                } toggle-status" data-id="${
+              user.id
+            }" data-active="${user.is_active}" title="${
+              user.is_active ? "Deactivate" : "Activate"
+            }">
+                                    <i class="fas ${
+                                      user.is_active
+                                        ? "fa-user-slash"
+                                        : "fa-user-check"
+                                    }"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-user" data-id="${
+                                  user.id
+                                }" title="Delete User">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+
+            tableBody.appendChild(row);
+          });
+
+          // Add event listeners for user actions
+          document.querySelectorAll(".edit-user").forEach((button) => {
+            button.addEventListener("click", (e) => {
+              const userId = e.currentTarget.dataset.id;
+              editUser(userId);
+            });
+          });
+
+          document.querySelectorAll(".toggle-status").forEach((button) => {
+            button.addEventListener("click", (e) => {
+              const userId = e.currentTarget.dataset.id;
+              const isActive = e.currentTarget.dataset.active === "true";
+              toggleUserStatus(userId, isActive);
+            });
+          });
+
+          document.querySelectorAll(".delete-user").forEach((button) => {
+            button.addEventListener("click", (e) => {
+              const userId = e.currentTarget.dataset.id;
+              openDeleteModal(userId);
+            });
+          });
+
+          // User checkboxes change event
+          document.querySelectorAll(".user-checkbox").forEach((checkbox) => {
+            checkbox.addEventListener("change", () => {
+              updateBulkActionState();
+            });
+          });
+
+          // Render pagination
+          renderPagination(page, totalPages, filteredUsers.length, limit);
+        } catch (error) {
+          console.error("Error loading users:", error);
+          document.querySelector("#usersTable tbody").innerHTML = `
+                    <tr>
+                        <td colspan="7" class="error-row">Failed to load users. Please try again later.</td>
+                    </tr>
+                `;
+        }
+      }
+
+      // Generate mock users for demo
+      function generateMockUsers(count) {
+        const roles = ["student", "instructor", "admin"];
+        const users = [];
+
+        for (let i = 1; i <= count; i++) {
+          const role =
+            roles[
+              Math.floor(Math.random() * (roles.length - (i > 45 ? 0 : 1)))
+            ]; // Ensure some admins
+          const isActive = Math.random() > 0.2; // 80% active users
+
+          users.push({
+            id: i,
+            username: `user${i}`,
+            email: `user${i}@example.com`,
+            full_name: `User ${i}`,
+            role: role,
+            is_active: isActive,
+            created_at: new Date(
+              Date.now() - Math.floor(Math.random() * 10000000000)
+            ), // Random date in the past
+            profile_picture: null,
+          });
+        }
+
+        return users;
+      }
+
+      // Render pagination
+      function renderPagination(
+        currentPage,
+        totalPages,
+        totalItems,
+        itemsPerPage
+      ) {
+        const paginationElement = document.getElementById("usersPagination");
+
+        // Calculate range
+        const startItem = (currentPage - 1) * itemsPerPage + 1;
+        const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+
+        let paginationHtml = `
+                <div class="pagination-info">
+                    Showing ${startItem}-${endItem} of ${totalItems} users
+                </div>
+                <div class="pagination-controls">
+            `;
+
+        // Previous button
+        if (currentPage > 1) {
+          paginationHtml += `<button class="pagination-btn" data-page="${
+            currentPage - 1
+          }"><i class="fas fa-chevron-left"></i></button>`;
+        } else {
+          paginationHtml += `<button class="pagination-btn disabled"><i class="fas fa-chevron-left"></i></button>`;
+        }
+
+        // Page numbers
+        const maxPageButtons = 5;
+        let startPage = Math.max(1, currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
+
+        if (endPage - startPage + 1 < maxPageButtons) {
+          startPage = Math.max(1, endPage - maxPageButtons + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+          if (i === currentPage) {
+            paginationHtml += `<button class="pagination-btn active">${i}</button>`;
+          } else {
+            paginationHtml += `<button class="pagination-btn" data-page="${i}">${i}</button>`;
+          }
+        }
+
+        // Next button
+        if (currentPage < totalPages) {
+          paginationHtml += `<button class="pagination-btn" data-page="${
+            currentPage + 1
+          }"><i class="fas fa-chevron-right"></i></button>`;
+        } else {
+          paginationHtml += `<button class="pagination-btn disabled"><i class="fas fa-chevron-right"></i></button>`;
+        }
+
+        paginationHtml += `</div>`;
+
+        paginationElement.innerHTML = paginationHtml;
+
+        // Add event listeners to pagination buttons
+        document
+          .querySelectorAll(".pagination-btn[data-page]")
+          .forEach((button) => {
+            button.addEventListener("click", (e) => {
+              const page = parseInt(e.currentTarget.dataset.page);
+              loadUsers(page);
+            });
+          });
+      }
+
+      // Update bulk action state
+      function updateBulkActionState() {
+        const checkboxes = document.querySelectorAll(".user-checkbox:checked");
+        const selectAllCheckbox = document.getElementById("selectAllUsers");
+        const allCheckboxes = document.querySelectorAll(".user-checkbox");
+
+        // Update select all checkbox state
+        if (allCheckboxes.length > 0) {
+          selectAllCheckbox.checked =
+            checkboxes.length === allCheckboxes.length;
+          selectAllCheckbox.indeterminate =
+            checkboxes.length > 0 && checkboxes.length < allCheckboxes.length;
+        }
+
+        // Enable/disable bulk actions
+        const bulkActionSelect = document.getElementById("bulkActionSelect");
+        const applyBulkActionBtn = document.getElementById("applyBulkAction");
+
+        if (checkboxes.length > 0) {
+          bulkActionSelect.disabled = false;
+          applyBulkActionBtn.disabled = false;
+        } else {
+          bulkActionSelect.disabled = true;
+          applyBulkActionBtn.disabled = true;
+        }
+      }
+
+      // Get selected user IDs
+      function getSelectedUserIds() {
+        const checkboxes = document.querySelectorAll(".user-checkbox:checked");
+        return Array.from(checkboxes).map((checkbox) => checkbox.dataset.id);
+      }
+
+      // Apply bulk action
+      function applyBulkAction(action, userIds) {
+        // In a real app, we would call the API to apply the action
+        console.log(`Applying ${action} to users: ${userIds.join(", ")}`);
+
+        if (action === "delete") {
+          // Show confirmation dialog
+          openDeleteModal(userIds);
+          return;
+        }
+
+        // Simulate API call success
+        showNotification(
+          `Applied ${action} to ${userIds.length} users`,
+          "success"
+        );
+
+        // Reload users
+        loadUsers();
+      }
+
+      // Open user form modal for creating a new user
+      function openUserFormModal(userId = null) {
+        // Reset form
+        document.getElementById("userForm").reset();
+        document.getElementById("usernameError").textContent = "";
+        document.getElementById("emailError").textContent = "";
+        document.getElementById("passwordError").textContent = "";
+
+        // Set title based on whether we're editing or creating
+        document.getElementById("userFormTitle").textContent = userId
+          ? "Edit User"
+          : "Add New User";
+
+        // Store current user ID for edit mode
+        window.currentEditUserId = userId;
+
+        // Make password required for new users
+        const passwordLabel = document.querySelector('label[for="password"]');
+        if (userId) {
+          passwordLabel.textContent = "Password";
+          document.querySelector(".password-group .help-text").style.display =
+            "block";
+        } else {
+          passwordLabel.textContent = "Password*";
+          document.querySelector(".password-group .help-text").style.display =
+            "none";
+        }
+
+        // Fill form data if editing
+        if (userId) {
+          // In a real app, we would fetch user data from API
+          // Simulating for demo
+          fetchUserData(userId).then((userData) => {
+            document.getElementById("username").value = userData.username;
+            document.getElementById("email").value = userData.email;
+            document.getElementById("fullName").value = userData.full_name;
+            document.getElementById("role").value = userData.role;
+            document.getElementById("profileBio").value = userData.bio || "";
+
+            // Set status radio
+            const statusRadios = document.getElementsByName("status");
+            for (const radio of statusRadios) {
+              if (
+                radio.value === (userData.is_active ? "active" : "inactive")
+              ) {
+                radio.checked = true;
+                break;
+              }
+            }
+          });
+        }
+
+        // Show modal
+        document.getElementById("userFormModal").style.display = "flex";
+      }
+
+      // Close user form modal
+      function closeUserFormModal() {
+        document.getElementById("userFormModal").style.display = "none";
+        window.currentEditUserId = null;
+      }
+
+      // Simulate fetching user data
+      async function fetchUserData(userId) {
+        // In a real app, we would fetch this from the API
+        // Simulating API call delay
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        // Return mock data
+        return {
+          id: userId,
+          username: `user${userId}`,
+          email: `user${userId}@example.com`,
+          full_name: `User ${userId}`,
+          role:
+            userId % 5 === 0
+              ? "admin"
+              : userId % 3 === 0
+              ? "instructor"
+              : "student",
+          is_active: true,
+          bio: "This is a sample user bio.",
+        };
+      }
+
+      // Save user (create or update)
+      async function saveUser() {
+        // Validate form
+        if (!validateUserForm()) {
+          return;
+        }
+
+        // Get form data
+        const userData = {
+          username: document.getElementById("username").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          fullName: document.getElementById("fullName").value.trim(),
+          role: document.getElementById("role").value,
+          password: document.getElementById("password").value,
+          status: document.querySelector('input[name="status"]:checked').value,
+          bio: document.getElementById("profileBio").value.trim(),
+        };
+
+        try {
+          // Show loading state
+          const saveButton = document.getElementById("saveUserBtn");
+          saveButton.disabled = true;
+          saveButton.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+          // In a real app, we would call the API to save the user
+          // Simulate API call
+          await new Promise((resolve) => setTimeout(resolve, 800));
+
+          // Simulate API response
+          const isEditing = !!window.currentEditUserId;
+          const action = isEditing ? "updated" : "created";
+
+          // Show success message
+          showNotification(`User ${action} successfully`, "success");
+
+          // Close modal
+          closeUserFormModal();
+
+          // Reload users
+          loadUsers();
+        } catch (error) {
+          console.error("Error saving user:", error);
+          showNotification("Failed to save user. Please try again.", "error");
+
+          // Reset button
+          const saveButton = document.getElementById("saveUserBtn");
+          saveButton.disabled = false;
+          saveButton.textContent = "Save User";
+        }
+      }
+
+      // Validate user form
+      function validateUserForm() {
+        let isValid = true;
+
+        // Clear previous errors
+        document.getElementById("usernameError").textContent = "";
+        document.getElementById("emailError").textContent = "";
+        document.getElementById("passwordError").textContent = "";
+
+        // Validate username
+        const username = document.getElementById("username").value.trim();
+        if (!username) {
+          document.getElementById("usernameError").textContent =
+            "Username is required";
+          isValid = false;
+        }
+
+        // Validate email
+        const email = document.getElementById("email").value.trim();
+        if (!email) {
+          document.getElementById("emailError").textContent =
+            "Email is required";
+          isValid = false;
+        } else if (!isValidEmail(email)) {
+          document.getElementById("emailError").textContent =
+            "Please enter a valid email address";
+          isValid = false;
+        }
+
+        // Validate password (only required for new users)
+        const password = document.getElementById("password").value;
+        if (!window.currentEditUserId && !password) {
+          document.getElementById("passwordError").textContent =
+            "Password is required for new users";
+          isValid = false;
+        } else if (password && password.length < 6) {
+          document.getElementById("passwordError").textContent =
+            "Password must be at least 6 characters long";
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      // Validate email format
+      function isValidEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+
+      // Edit user
+      function editUser(userId) {
+        openUserFormModal(userId);
+      }
+
+      // Toggle user status (activate/deactivate)
+      async function toggleUserStatus(userId, isCurrentlyActive) {
+        try {
+          // In a real app, we would call API to update status
+          console.log(
+            `Toggling status for user ${userId}, current status: ${isCurrentlyActive}`
+          );
+
+          // Simulate API call
+          await new Promise((resolve) => setTimeout(resolve, 500));
+
+          // Show success message
+          const newStatus = isCurrentlyActive ? "deactivated" : "activated";
+          showNotification(`User ${newStatus} successfully`, "success");
+
+          // Reload users
+          loadUsers();
+        } catch (error) {
+          console.error("Error toggling user status:", error);
+          showNotification(
+            "Failed to update user status. Please try again.",
+            "error"
+          );
+        }
+      }
+
+      // Open delete confirmation modal
+      function openDeleteModal(userIds) {
+        // Store user IDs to delete
+        window.userIdsToDelete = Array.isArray(userIds) ? userIds : [userIds];
+
+        // Update confirmation message
+        const message =
+          window.userIdsToDelete.length > 1
+            ? `Are you sure you want to delete ${window.userIdsToDelete.length} users? This action cannot be undone.`
+            : "Are you sure you want to delete this user? This action cannot be undone.";
+
+        document.getElementById("deleteMessage").textContent = message;
+
+        // Set up confirm button
+        document.getElementById("confirmDeleteBtn").onclick = deleteUsers;
+
+        // Show modal
+        document.getElementById("confirmDeleteModal").style.display = "flex";
+      }
+
+      // Close delete confirmation modal
+      function closeDeleteModal() {
+        document.getElementById("confirmDeleteModal").style.display = "none";
+        window.userIdsToDelete = null;
+      }
+
+      // Delete users
+      async function deleteUsers() {
+        if (!window.userIdsToDelete || window.userIdsToDelete.length === 0) {
+          closeDeleteModal();
+          return;
+        }
+
+        try {
+          // Show loading state
+          const deleteButton = document.getElementById("confirmDeleteBtn");
+          deleteButton.disabled = true;
+          deleteButton.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+
+          // In a real app, we would call API to delete users
+          console.log(`Deleting users: ${window.userIdsToDelete.join(", ")}`);
+
+          // Simulate API call
+          await new Promise((resolve) => setTimeout(resolve, 800));
+
+          // Show success message
+          const message =
+            window.userIdsToDelete.length > 1
+              ? `${window.userIdsToDelete.length} users deleted successfully`
+              : "User deleted successfully";
+          showNotification(message, "success");
+
+          // Close modal
+          closeDeleteModal();
+
+          // Reload users
+          loadUsers();
+        } catch (error) {
+          console.error("Error deleting users:", error);
+          showNotification(
+            "Failed to delete users. Please try again.",
+            "error"
+          );
+
+          // Reset button
+          const deleteButton = document.getElementById("confirmDeleteBtn");
+          deleteButton.disabled = false;
+          deleteButton.textContent = "Delete";
+        }
+      }
+    </script>
+  </body>
+</html>

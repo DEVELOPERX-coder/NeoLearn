@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instructor Dashboard - EduLearn</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="../../assets/css/dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header id="main-header">
+      <div class="container">
+        <div class="logo">
+          <h1><a href="../../index.html">EduLearn</a></h1>
+        </div>
+        <nav>
+          <ul class="main-nav">
+            <li><a href="../../pages/courses/browse.html">Courses</a></li>
+            <li>
+              <a href="../../pages/instructor/courses.html">My Courses</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <div class="logged-in" id="loggedInMenu">
+            <a href="#" id="userDropdown">
+              <img
+                src="../../assets/images/default-avatar.png"
+                alt="Profile"
+                class="avatar"
+                id="userAvatar"
+              />
+              <span id="userName">User</span>
+              <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="instructor.html" class="active">Dashboard</a></li>
+              <li><a href="../profile/settings.html">Profile Settings</a></li>
+              <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="dashboard-container">
+      <aside class="dashboard-sidebar">
+        <nav class="sidebar-nav">
+          <ul>
+            <li class="active">
+              <a href="instructor.html">
+                <i class="fas fa-tachometer-alt"></i>
+                Dashboard
+              </a>
+            </li>
+            <li>
+              <a href="../instructor/courses.html">
+                <i class="fas fa-book"></i>
+                My Courses
+              </a>
+            </li>
+            <li>
+              <a href="../instructor/course-editor.html?action=new">
+                <i class="fas fa-plus-circle"></i>
+                Create Course
+              </a>
+            </li>
+            <li>
+              <a href="../instructor/analytics.html">
+                <i class="fas fa-chart-line"></i>
+                Analytics
+              </a>
+            </li>
+            <li>
+              <a href="../instructor/announcements.html">
+                <i class="fas fa-bullhorn"></i>
+                Announcements
+              </a>
+            </li>
+            <li>
+              <a href="../instructor/reviews.html">
+                <i class="fas fa-star"></i>
+                Reviews
+              </a>
+            </li>
+            <li>
+              <a href="../instructor/earnings.html">
+                <i class="fas fa-dollar-sign"></i>
+                Earnings
+              </a>
+            </li>
+            <li>
+              <a href="../profile/settings.html">
+                <i class="fas fa-user-cog"></i>
+                Profile Settings
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="dashboard-content">
+        <div class="dashboard-header">
+          <h1>Instructor Dashboard</h1>
+          <p>Welcome back, <span id="welcomeUserName">Instructor</span>!</p>
+        </div>
+
+        <section class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total Students</h3>
+              <p id="totalStudentsCount">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Active Courses</h3>
+              <p id="activeCourseCount">0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Average Rating</h3>
+              <p id="averageRating">0.0</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total Revenue</h3>
+              <p id="totalRevenue">$0.00</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard-section">
+          <div class="section-header">
+            <h2>Recent Enrollments</h2>
+            <a href="../instructor/analytics.html" class="view-all">View All</a>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="recentEnrollmentsTable">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Course</th>
+                  <th>Date</th>
+                  <th>Revenue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="4" class="loading-row">
+                    <div class="loading-spinner"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="dashboard-row">
+          <div class="dashboard-column">
+            <div class="dashboard-section">
+              <div class="section-header">
+                <h2>Course Performance</h2>
+              </div>
+              <div class="chart-container" id="performanceChart">
+                <div class="loading-spinner"></div>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard-column">
+            <div class="dashboard-section">
+              <div class="section-header">
+                <h2>Recent Reviews</h2>
+                <a href="../instructor/reviews.html" class="view-all"
+                  >View All</a
+                >
+              </div>
+              <div class="reviews-list" id="recentReviewsList">
+                <div class="loading-spinner"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="dashboard-section">
+          <div class="section-header">
+            <h2>My Courses</h2>
+            <a href="../instructor/courses.html" class="view-all">View All</a>
+          </div>
+          <div
+            class="courses-grid instructor-courses-grid"
+            id="instructorCourses"
+          >
+            <div class="loading-spinner"></div>
+          </div>
+          <div class="center-button">
+            <a
+              href="../instructor/course-editor.html?action=new"
+              class="btn btn-primary"
+            >
+              <i class="fas fa-plus"></i> Create New Course
+            </a>
+          </div>
+        </section>
+
+        <section class="dashboard-section tasks-section">
+          <div class="section-header">
+            <h2>To-Do List</h2>
+          </div>
+          <div class="tasks-list" id="todoList">
+            <div class="loading-spinner"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <p>&copy; 2025 EduLearn. All rights reserved.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/utils.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        // Check auth status
+        if (!isAuthenticated()) {
+          window.location.href =
+            "../auth/login.html?return_to=" +
+            encodeURIComponent(window.location.href);
+          return;
+        }
+
+        // Get user data
+        const user = getUserFromLocalStorage();
+        updateUserInfo(user);
+
+        // Make sure user is an instructor or admin
+        if (user.role !== "instructor" && user.role !== "admin") {
+          window.location.href = "student.html";
+          return;
+        }
+
+        // Load dashboard data
+        await loadDashboardData();
+
+        // Add event listeners
+        document.getElementById("logoutBtn").addEventListener("click", (e) => {
+          e.preventDefault();
+          logout();
+        });
+      });
+
+      // Update user info
+      function updateUserInfo(user) {
+        if (user) {
+          document.getElementById("userName").textContent = user.username;
+          document.getElementById("welcomeUserName").textContent =
+            user.username;
+        }
+      }
+
+      // Load dashboard data
+      async function loadDashboardData() {
+        try {
+          // Get instructor courses
+          const coursesResponse = await api.get("/courses/instructor");
+          const courses = coursesResponse.data;
+
+          // Update stats
+          updateDashboardStats(courses);
+
+          // Update instructor courses
+          displayInstructorCourses(courses);
+
+          // Load recent enrollments, reviews, and charts
+          loadRecentEnrollments(courses);
+          loadRecentReviews(courses);
+          loadPerformanceChart(courses);
+          loadTodoList(courses);
+        } catch (error) {
+          console.error("Error loading dashboard data:", error);
+          showNotification(
+            "Failed to load dashboard data. Please try again later.",
+            "error"
+          );
+        }
+      }
+
+      // Update dashboard stats
+      function updateDashboardStats(courses) {
+        let totalStudents = 0;
+        let activeCourses = 0;
+        let totalRating = 0;
+        let ratingCount = 0;
+        let totalRevenue = 0;
+
+        // Calculate stats from courses
+        courses.forEach((course) => {
+          totalStudents += course.student_count || 0;
+
+          if (course.status === "published") {
+            activeCourses++;
+          }
+
+          if (course.average_rating) {
+            totalRating +=
+              parseFloat(course.average_rating) * (course.review_count || 0);
+            ratingCount += course.review_count || 0;
+          }
+
+          // Calculate revenue (simple calculation for demo)
+          totalRevenue += (course.student_count || 0) * course.price;
+        });
+
+        // Calculate average rating
+        const averageRating =
+          ratingCount > 0 ? (totalRating / ratingCount).toFixed(1) : "N/A";
+
+        // Update UI
+        document.getElementById("totalStudentsCount").textContent =
+          totalStudents;
+        document.getElementById("activeCourseCount").textContent =
+          activeCourses;
+        document.getElementById("averageRating").textContent = averageRating;
+        document.getElementById("totalRevenue").textContent =
+          formatPrice(totalRevenue);
+      }
+
+      // Display instructor courses
+      function displayInstructorCourses(courses) {
+        const coursesContainer = document.getElementById("instructorCourses");
+
+        if (courses.length === 0) {
+          coursesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-book"></i></div>
+                        <h3>No courses yet</h3>
+                        <p>Create your first course to share your knowledge with students worldwide!</p>
+                        <a href="../instructor/course-editor.html?action=new" class="btn btn-primary">Create a Course</a>
+                    </div>
+                `;
+          return;
+        }
+
+        coursesContainer.innerHTML = "";
+
+        // Show up to 3 courses
+        courses.slice(0, 3).forEach((course) => {
+          const courseElement = document.createElement("div");
+          courseElement.className = "instructor-course-card";
+
+          const thumbnailUrl =
+            course.thumbnail || "../../assets/images/default-thumbnail.jpg";
+          const statusClass =
+            course.status === "published" ? "status-published" : "status-draft";
+          const statusText =
+            course.status === "published" ? "Published" : "Draft";
+
+          courseElement.innerHTML = `
+                    <div class="course-thumbnail">
+                        <img src="${thumbnailUrl}" alt="${course.title}">
+                    </div>
+                    <div class="course-content">
+                        <div class="course-header">
+                            <h3>${course.title}</h3>
+                            <span class="course-status ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-user-graduate"></i> ${
+                                  course.student_count || 0
+                                } students
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-star"></i> ${
+                                  course.average_rating
+                                    ? parseFloat(course.average_rating).toFixed(
+                                        1
+                                      )
+                                    : "No ratings"
+                                }
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-dollar-sign"></i> ${formatPrice(
+                                  course.price
+                                )}
+                            </div>
+                        </div>
+                        <div class="course-actions">
+                            <a href="../instructor/course-editor.html?id=${
+                              course.id
+                            }" class="btn btn-sm btn-outline">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="../courses/details.html?id=${
+                              course.id
+                            }" class="btn btn-sm btn-outline">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                            <a href="../instructor/analytics.html?id=${
+                              course.id
+                            }" class="btn btn-sm btn-outline">
+                                <i class="fas fa-chart-line"></i> Analytics
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+          coursesContainer.appendChild(courseElement);
+        });
+      }
+
+      // Load recent enrollments
+      function loadRecentEnrollments(courses) {
+        const tableBody = document.querySelector(
+          "#recentEnrollmentsTable tbody"
+        );
+
+        // Simulate enrollments data (in a real app, this would be from API)
+        // Get course IDs for reference
+        const courseIds = courses.map((course) => course.id);
+
+        // Generate mock enrollment data for demo
+        const enrollments = courseIds.flatMap((courseId) => {
+          const course = courses.find((c) => c.id === courseId);
+          if (!course) return [];
+
+          return Array(Math.floor(Math.random() * 3))
+            .fill(0)
+            .map((_, index) => {
+              return {
+                student_name: `Student ${Math.floor(Math.random() * 1000) + 1}`,
+                course_title: course.title,
+                date: new Date(
+                  Date.now() -
+                    Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000
+                ),
+                revenue: course.price,
+              };
+            });
+        });
+
+        // Sort by date (most recent first)
+        enrollments.sort((a, b) => b.date - a.date);
+
+        // Display enrollments
+        if (enrollments.length === 0) {
+          tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="empty-table">No enrollments yet</td>
+                    </tr>
+                `;
+          return;
+        }
+
+        tableBody.innerHTML = "";
+
+        // Show up to 5 recent enrollments
+        enrollments.slice(0, 5).forEach((enrollment) => {
+          const row = document.createElement("tr");
+
+          row.innerHTML = `
+                    <td>${enrollment.student_name}</td>
+                    <td>${enrollment.course_title}</td>
+                    <td>${formatDate(enrollment.date)}</td>
+                    <td>${formatPrice(enrollment.revenue)}</td>
+                `;
+
+          tableBody.appendChild(row);
+        });
+      }
+
+      // Load recent reviews
+      function loadRecentReviews(courses) {
+        const reviewsContainer = document.getElementById("recentReviewsList");
+
+        // Simulate reviews data (in a real app, this would be from API)
+        // Get course IDs for reference
+        const courseIds = courses.map((course) => course.id);
+
+        // Generate mock review data for demo
+        const reviews = courseIds.flatMap((courseId) => {
+          const course = courses.find((c) => c.id === courseId);
+          if (!course) return [];
+
+          return Array(Math.floor(Math.random() * 2))
+            .fill(0)
+            .map((_, index) => {
+              return {
+                student_name: `Student ${Math.floor(Math.random() * 1000) + 1}`,
+                course_title: course.title,
+                date: new Date(
+                  Date.now() -
+                    Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000
+                ),
+                rating: Math.floor(Math.random() * 2) + 4, // 4 or 5 stars for demo
+                review_text:
+                  "This course was excellent! The instructor explained everything very clearly and the exercises were very helpful.",
+              };
+            });
+        });
+
+        // Sort by date (most recent first)
+        reviews.sort((a, b) => b.date - a.date);
+
+        // Display reviews
+        if (reviews.length === 0) {
+          reviewsContainer.innerHTML = `
+                    <div class="empty-reviews">
+                        <p>No reviews yet</p>
+                    </div>
+                `;
+          return;
+        }
+
+        reviewsContainer.innerHTML = "";
+
+        // Show up to 3 recent reviews
+        reviews.slice(0, 3).forEach((review) => {
+          const reviewElement = document.createElement("div");
+          reviewElement.className = "dashboard-review-item";
+
+          const stars = generateStarRating(review.rating);
+
+          reviewElement.innerHTML = `
+                    <div class="review-header">
+                        <div class="review-info">
+                            <div class="review-course">${
+                              review.course_title
+                            }</div>
+                            <div class="review-rating">
+                                <div class="stars">${stars}</div>
+                                <div class="review-date">${formatDate(
+                                  review.date
+                                )}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-body">
+                        <p>${review.review_text}</p>
+                    </div>
+                    <div class="review-footer">
+                        <div class="reviewer">${review.student_name}</div>
+                    </div>
+                `;
+
+          reviewsContainer.appendChild(reviewElement);
+        });
+      }
+
+      // Load performance chart
+      function loadPerformanceChart(courses) {
+        const chartContainer = document.getElementById("performanceChart");
+
+        if (courses.length === 0) {
+          chartContainer.innerHTML = `
+                    <div class="empty-chart">
+                        <p>No data available for chart</p>
+                    </div>
+                `;
+          return;
+        }
+
+        // In a real app, you would use a charting library like Chart.js
+        // For this demo, we'll create a simple bar chart using HTML/CSS
+
+        // Sort courses by student count
+        const sortedCourses = [...courses].sort(
+          (a, b) => (b.student_count || 0) - (a.student_count || 0)
+        );
+
+        // Take top 5 courses
+        const topCourses = sortedCourses.slice(0, 5);
+
+        // Find maximum student count for scaling
+        const maxStudents = Math.max(
+          ...topCourses.map((course) => course.student_count || 0)
+        );
+
+        let chartHtml = `
+                <div class="bar-chart">
+                    <div class="chart-title">Top Courses by Enrollment</div>
+            `;
+
+        topCourses.forEach((course) => {
+          const percentage =
+            maxStudents > 0
+              ? Math.round(((course.student_count || 0) / maxStudents) * 100)
+              : 0;
+
+          chartHtml += `
+                    <div class="chart-row">
+                        <div class="chart-label" title="${
+                          course.title
+                        }">${truncateText(course.title, 25)}</div>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar" style="width: ${percentage}%"></div>
+                            <div class="chart-value">${
+                              course.student_count || 0
+                            }</div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        chartHtml += `</div>`;
+        chartContainer.innerHTML = chartHtml;
+      }
+
+      // Load todo list
+      function loadTodoList(courses) {
+        const todoContainer = document.getElementById("todoList");
+
+        // Generate todo items based on course status
+        const todoItems = [];
+
+        // Add items for draft courses
+        const draftCourses = courses.filter(
+          (course) => course.status === "draft"
+        );
+        draftCourses.forEach((course) => {
+          todoItems.push({
+            text: `Complete and publish "${course.title}"`,
+            priority: "high",
+            link: `../instructor/course-editor.html?id=${course.id}`,
+            linkText: "Edit Course",
+          });
+        });
+
+        // Add items for courses with few lessons
+        const coursesWithFewLessons = courses.filter((course) => {
+          // Simplistic check - in real app, would check actual lesson count
+          return Math.random() < 0.3; // 30% chance for demo
+        });
+
+        coursesWithFewLessons.forEach((course) => {
+          todoItems.push({
+            text: `Add more content to "${course.title}"`,
+            priority: "medium",
+            link: `../instructor/course-editor.html?id=${course.id}`,
+            linkText: "Add Content",
+          });
+        });
+
+        // Add other random tasks
+        todoItems.push({
+          text: "Update your instructor profile with latest experience",
+          priority: "low",
+          link: "../profile/settings.html",
+          linkText: "Edit Profile",
+        });
+
+        if (courses.length > 0) {
+          todoItems.push({
+            text: "Review student feedback on your courses",
+            priority: "medium",
+            link: "../instructor/reviews.html",
+            linkText: "View Reviews",
+          });
+        }
+
+        if (courses.length < 3) {
+          todoItems.push({
+            text: "Create a new course to expand your teaching portfolio",
+            priority: "medium",
+            link: "../instructor/course-editor.html?action=new",
+            linkText: "Create Course",
+          });
+        }
+
+        // Display todo items
+        if (todoItems.length === 0) {
+          todoContainer.innerHTML = `
+                    <div class="empty-tasks">
+                        <p>No tasks pending - great job!</p>
+                    </div>
+                `;
+          return;
+        }
+
+        todoContainer.innerHTML = "";
+
+        todoItems.forEach((item) => {
+          const taskElement = document.createElement("div");
+          taskElement.className = `task-item priority-${item.priority}`;
+
+          taskElement.innerHTML = `
+                    <div class="task-content">
+                        <div class="task-check">
+                            <input type="checkbox" id="task-${todoItems.indexOf(
+                              item
+                            )}">
+                            <label for="task-${todoItems.indexOf(
+                              item
+                            )}"></label>
+                        </div>
+                        <div class="task-text">${item.text}</div>
+                    </div>
+                    <div class="task-action">
+                        <a href="${item.link}" class="btn btn-sm btn-outline">${
+            item.linkText
+          }</a>
+                    </div>
+                `;
+
+          todoContainer.appendChild(taskElement);
+
+          // Add event listener for checkbox
+          const checkbox = taskElement.querySelector('input[type="checkbox"]');
+          checkbox.addEventListener("change", function () {
+            if (this.checked) {
+              taskElement.classList.add("completed");
+            } else {
+              taskElement.classList.remove("completed");
+            }
+          });
+        });
+      }
+    </script>
+
+    <style>
+      /* Additional styles for instructor dashboard */
+      .dashboard-row {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+
+      .dashboard-column {
+        flex: 1;
+        min-width: 0; /* Fix for flexbox overflow */
+      }
+
+      .instructor-course-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        display: flex;
+        overflow: hidden;
+      }
+
+      .course-thumbnail {
+        width: 200px;
+        flex-shrink: 0;
+      }
+
+      .course-thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .course-content {
+        flex: 1;
+        padding: 20px;
+      }
+
+      .course-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+      }
+
+      .course-header h3 {
+        margin: 0;
+        font-size: 18px;
+        flex: 1;
+        margin-right: 10px;
+      }
+
+      .course-status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .status-published {
+        background-color: #e6f7ff;
+        color: #1890ff;
+      }
+
+      .status-draft {
+        background-color: #f9f0ff;
+        color: #722ed1;
+      }
+
+      .course-meta {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 15px;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+      }
+
+      .meta-item i {
+        margin-right: 5px;
+      }
+
+      .course-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .instructor-courses-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .center-button {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      /* Table styles */
+      .table-responsive {
+        overflow-x: auto;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .data-table th {
+        background-color: #f5f5f5;
+        padding: 12px 15px;
+        text-align: left;
+        font-weight: 600;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .data-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .loading-row {
+        text-align: center;
+        padding: 20px !important;
+      }
+
+      .empty-table {
+        text-align: center;
+        color: #666;
+        padding: 30px !important;
+      }
+
+      /* Review styles */
+      .dashboard-review-item {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .dashboard-review-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .review-course {
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .review-rating {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+
+      .review-date {
+        color: #666;
+      }
+
+      .review-body {
+        margin-bottom: 10px;
+      }
+
+      .review-body p {
+        margin: 0;
+      }
+
+      .review-footer {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .empty-reviews {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+      }
+
+      /* Chart styles */
+      .bar-chart {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .chart-title {
+        font-weight: 600;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .chart-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+
+      .chart-label {
+        width: 150px;
+        font-size: 14px;
+        margin-right: 15px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .chart-bar-container {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        height: 30px;
+      }
+
+      .chart-bar {
+        background-color: #5624d0;
+        height: 100%;
+        border-radius: 4px;
+        min-width: 5px;
+        transition: width 0.5s ease;
+      }
+
+      .chart-value {
+        margin-left: 10px;
+        font-weight: 600;
+      }
+
+      .empty-chart {
+        text-align: center;
+        padding: 40px 20px;
+        color: #666;
+      }
+
+      /* Task list styles */
+      .tasks-section {
+        margin-bottom: 0;
+      }
+
+      .task-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        border-left: 4px solid #ddd;
+        transition: all 0.3s ease;
+      }
+
+      .task-item.priority-high {
+        border-left-color: #f5222d;
+      }
+
+      .task-item.priority-medium {
+        border-left-color: #fa8c16;
+      }
+
+      .task-item.priority-low {
+        border-left-color: #52c41a;
+      }
+
+      .task-item.completed {
+        opacity: 0.6;
+      }
+
+      .task-item.completed .task-text {
+        text-decoration: line-through;
+      }
+
+      .task-content {
+        display: flex;
+        align-items: center;
+        flex: 1;
+      }
+
+      .task-check {
+        margin-right: 15px;
+      }
+
+      .task-check input[type="checkbox"] {
+        display: none;
+      }
+
+      .task-check label {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .task-check input[type="checkbox"]:checked + label:after {
+        content: "\f00c";
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #5624d0;
+      }
+
+      .task-text {
+        font-size: 15px;
+      }
+
+      .task-action {
+        margin-left: 15px;
+      }
+
+      .empty-tasks {
+        text-align: center;
+        padding: 20px;
+        color: #666;
+      }
+
+      /* Responsive styles */
+      @media (max-width: 992px) {
+        .dashboard-row {
+          flex-direction: column;
+        }
+
+        .course-thumbnail {
+          width: 120px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .instructor-course-card {
+          flex-direction: column;
+        }
+
+        .course-thumbnail {
+          width: 100%;
+          height: 150px;
+        }
+
+        .task-item {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .task-action {
+          margin-left: 35px;
+          margin-top: 10px;
+        }
+      }
+    </style>
+  </body>
+</html>
